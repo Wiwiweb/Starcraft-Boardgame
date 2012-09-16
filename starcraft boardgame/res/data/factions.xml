@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<factions>
+	
+	<faction name="Overmind">
+		<base>Zerg Base</base>
+		<startingUnits>
+			<workers>8</workers>
+			<transports>1</transports>
+			<unit type="Zergling">4</unit>
+			<unit type="Hydralisk">1</unit>
+		</startingUnits>
+	</faction>
+	
+	<faction name="Queen of Blades">
+		<base>Zerg Base</base>
+		<startingUnits>
+			<workers>7</workers>
+			<transports>1</transports>
+			<unit type="Zergling">3</unit>
+			<unit type="Hydralisk">2</unit>
+		</startingUnits>
+	</faction>
+	
+</factions>

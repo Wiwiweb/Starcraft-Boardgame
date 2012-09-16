@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildings>
+
+	<building name="Spawning Pool">
+		<maxLevel>3</maxLevel>
+		<prices>
+			<level1>
+				<minerals>0</minerals>
+				<gas>0</gas>
+			</level1>
+			<level2>
+				<minerals>1</minerals>
+				<gas>0</gas>
+			</level2>
+			<level3>
+				<minerals>2</minerals>
+				<gas>0</gas>
+			</level3>
+		</prices>
+		<units>
+			<level1>Zergling</level1>
+			<level2>Hydralisk</level2>
+			<level3>Ultralisk</level3>
+		</units>
+	</building>
+	
+	<building name="Queen's Nest">
+		<maxLevel>2</maxLevel>
+		<prices>
+			<level1>
+				<minerals>0</minerals>
+				<gas>1</gas>
+			</level1>
+			<level2>
+				<minerals>1</minerals>
+				<gas>1</gas>
+			</level2>
+		</prices>
+		<units>
+			<level1>Queen</level1>
+			<level2>Defiler</level2>
+		</units>
+	</building>
+	
+	<building name="Spire">
+		<maxLevel>2</maxLevel>
+		<prices>
+			<level1>
+				<minerals>2</minerals>
+				<gas>0</gas>
+			</level1>
+			<level2>
+				<minerals>1</minerals>
+				<gas>1</gas>
+			</level2>
+		</prices>
+		<units>
+			<level1>Scourge</level1>
+			<level2>Mutalisk</level2>
+		</units>
+	</building>
+	
+</buildings>

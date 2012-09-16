@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bases>
+	
+	<base name="Zerg Base">
+		<buildings>
+			<building1>Spawning Pool</building1>
+			<building2>Queen's Nest</building2>
+			<building3>Spire</building3>
+		</buildings>
+		
+		<modulesMaxNum>3</modulesMaxNum>
+		<availableModules>
+			<module>Research &amp; Development</module>
+			<module>Air Support</module>
+		</availableModules>
+		
+		<permanentResources>
+			<resource type="MINERALS">4</resource>
+			<resource type="GAS">2</resource>
+		</permanentResources>
+		
+		<workersMaxNum>15</workersMaxNum>
+		<workerPrice>
+			<minerals>1</minerals>
+			<gas>0</gas>
+		</workerPrice>
+		
+		<transportsMaxNum>7</transportsMaxNum>
+		<transportPrice>
+			<minerals>1</minerals>
+			<gas>0</gas>
+		</transportPrice>
+		
+		<basesMaxNum>6</basesMaxNum>
+		<basePrice>
+			<minerals>2</minerals>
+			<gas>0</gas>
+		</basePrice>
+	</base>
+
+</bases>
