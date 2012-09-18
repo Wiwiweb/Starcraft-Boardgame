@@ -11,7 +11,6 @@ import org.w3c.dom.NodeList;
 
 import abstraction.Area;
 import abstraction.Faction;
-import abstraction.Galaxy;
 import abstraction.Planet;
 import abstraction.Planet.Cardinal;
 import abstraction.Price;
@@ -19,6 +18,7 @@ import abstraction.Resource;
 import abstraction.Resource.ResourceType;
 import abstraction.creators.BaseCreator;
 import abstraction.creators.BuildingCreator;
+import abstraction.creators.FactionCreator;
 import abstraction.creators.UnitCreator;
 import abstraction.patterns.BasePattern;
 import abstraction.patterns.BuildingPattern;
@@ -256,7 +256,7 @@ public class XmlParser {
 				}
 
 				Faction pattern = new Faction(name, baseName, startingWorkers, startingTransports, startingUnitTypes, startingUnitNumbers);
-				Faction.addFaction(name, pattern);
+				FactionCreator.addFaction(name, pattern);
 			}		
 		} catch (NullPointerException e) {
 			System.err.println("XML syntax error in faction.xml");

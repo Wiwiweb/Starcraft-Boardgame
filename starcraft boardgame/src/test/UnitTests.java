@@ -15,13 +15,13 @@ import tools.XmlParser;
 import abstraction.Area;
 import abstraction.Base;
 import abstraction.Building;
-import abstraction.Faction;
 import abstraction.Galaxy;
 import abstraction.Game;
 import abstraction.Planet;
 import abstraction.Planet.Cardinal;
 import abstraction.Player;
 import abstraction.creators.BuildingCreator;
+import abstraction.creators.FactionCreator;
 import abstraction.creators.UnitCreator;
 
 public class UnitTests {
@@ -60,7 +60,7 @@ public class UnitTests {
 	@Test
 	public void testBuildUnit() {
 		Player wiwi = new Player("Wiwi");
-		wiwi.setFaction(Faction.getFaction("Overmind"));
+		wiwi.setFaction(FactionCreator.getFaction("Overmind"));
 		
 		assertEquals("Zergling", wiwi.getBase().getBuilding(0).getUnitForLevel(1));
 		
@@ -77,9 +77,9 @@ public class UnitTests {
 	@Test
 	public void testFactions() {		
 		Player wiwi = new Player("Wiwi");
-		wiwi.setFaction(Faction.getFaction("Overmind"));
+		wiwi.setFaction(FactionCreator.getFaction("Overmind"));
 		Player lolo = new Player("Lolo");
-		lolo.setFaction(Faction.getFaction("Queen of Blades"));
+		lolo.setFaction(FactionCreator.getFaction("Queen of Blades"));
 	
 		assertEquals("Wiwi", wiwi.getName());
 		assertEquals("Overmind", wiwi.getFaction().getName());
@@ -90,7 +90,7 @@ public class UnitTests {
 	@Test
 	public void testBases() {
 		Player wiwi = new Player("Wiwi");
-		wiwi.setFaction(Faction.getFaction("Overmind"));
+		wiwi.setFaction(FactionCreator.getFaction("Overmind"));
 		Base zergBase = wiwi.getBase();
 		
 		assertEquals(2, zergBase.getBasePrice().getMinerals());
