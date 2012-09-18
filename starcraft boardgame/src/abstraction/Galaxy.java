@@ -1,15 +1,10 @@
 package abstraction;
 
-import java.util.HashMap;
-
 import tools.BidirectionalMap;
 import tools.PlanetPosition;
-
 import abstraction.Planet.Cardinal;
 
 public class Galaxy {
-	
-	private static HashMap<String, Planet> listPlanets = new HashMap<String, Planet>();
 	
 	private BidirectionalMap<Planet, PlanetPosition> planetPositions = new BidirectionalMap<Planet, PlanetPosition>();
 	private PlanetPosition topLeft = new PlanetPosition(0, 0);
@@ -56,14 +51,6 @@ public class Galaxy {
 	
 	public Planet getPlanetAt(PlanetPosition pos) {
 		return planetPositions.getKey(pos);
-	}
-	
-	public static void addPlanet(String name, Planet p) {
-		listPlanets.put(name, p);
-	}
-	
-	public static Planet getPlanet(String name) {
-		return listPlanets.get(name);
 	}
 	
 	@Override

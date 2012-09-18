@@ -13,17 +13,14 @@ public class Player {
 
 	private String name;
 	
-	private final Faction faction;
-	private final Base base;
+	private Faction faction;
+	private Base base;
 	
 	private List<Unit> units = new ArrayList<Unit>();
 	private List<Resource> controlledResources = new ArrayList<Resource>();
 	
-	public Player(String name, Faction faction) {
+	public Player(String name) {
 		this.name = name;
-		this.faction = faction;
-		this.base = BaseCreator.createBase(faction.getBaseName(), this);
-		controlledResources.addAll(Arrays.asList(base.getPermanentResources()));
 	}
 	
 	public void buyUnit(String unitName, Planet orderPlanet) {
@@ -134,6 +131,16 @@ public class Player {
 		return faction;
 	}
 	
+	public void setFaction(Faction faction) {
+		if (this.faction == null) {
+			this.faction = faction;
+			this.base = BaseCreator.createBase(faction.getBaseName(), this);
+			controlledResources.addAll(Arrays.asList(base.getPermanentResources()));
+		} else {
+			throw new IllegalStateException("You cannot change the faction of a player after it has been set. (Original faction: " + this.faction + " ; Tried to change to: " + faction + ")");
+		}
+	}
+	
 	public Base getBase() {
 		return base;
 	}
@@ -154,6 +161,9 @@ public class Player {
 		return result;
 	}
 
-
+	@Override
+	public String toString() {
+		return "Player " + name;
+	}
 
 }

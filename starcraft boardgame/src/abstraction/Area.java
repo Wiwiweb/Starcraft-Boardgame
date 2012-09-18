@@ -39,7 +39,11 @@ public class Area {
 	}
 
 	public void setPlanet(Planet planet) {
-		this.planet = planet;
+		if (this.planet == null) {
+			this.planet = planet;
+		} else {
+			throw new IllegalStateException("You cannot change the planet of an area after it has been set. (Original planet: " + this.planet + " ; Tried to change to: " + planet + ")");
+		}
 	}
 
 	public int getAreaNumber() {

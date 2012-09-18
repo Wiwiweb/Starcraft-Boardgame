@@ -4,7 +4,7 @@ import abstraction.Price;
 
 public class UnitPattern {
 	
-	public enum WalkType {
+	public static enum WalkType {
 		GROUND, AIR
 	}
 	
@@ -63,7 +63,7 @@ public class UnitPattern {
 	
 	@Override
 	public String toString() {
-		return name + "(U)";		
+		return name + "(P)";		
 	}
 
 }

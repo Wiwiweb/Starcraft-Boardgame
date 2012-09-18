@@ -67,7 +67,7 @@ public class XmlParser {
 					areas[j] = new Area(resource, unitLimit);
 				}
 
-				Galaxy.addPlanet(name, new Planet(name, entrances, areas));
+				Planet.addPlanet(name, new Planet(name, entrances, areas));
 			}
 		} catch (NullPointerException e) {
 			System.err.println("XML syntax error in planets.xml");

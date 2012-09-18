@@ -1,10 +1,13 @@
 package abstraction;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Planet {
 
-	public enum Cardinal {
+	private static HashMap<String, Planet> planetList = new HashMap<String, Planet>();
+	
+	public static enum Cardinal {
 		NORTH, EAST, SOUTH, WEST;
 
 		public Cardinal opposite() {
@@ -167,4 +170,19 @@ public class Planet {
 	public String toString() {
 		return "Planet " + name;
 	}
+	
+	
+	public static Planet getPlanet(String name) {
+		Planet planet = planetList.get(name);
+    	if (planet != null) {
+        	return planet;
+    	} else {
+    		throw new IllegalArgumentException("No planet associated with the name " + name + ".");
+    	}
+	}
+	
+	public static void addPlanet(String name, Planet p) {
+		planetList.put(name, p);
+	}
+
 }

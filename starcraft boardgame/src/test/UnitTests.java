@@ -1,6 +1,12 @@
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -11,9 +17,10 @@ import abstraction.Base;
 import abstraction.Building;
 import abstraction.Faction;
 import abstraction.Galaxy;
+import abstraction.Game;
 import abstraction.Planet;
-import abstraction.Player;
 import abstraction.Planet.Cardinal;
+import abstraction.Player;
 import abstraction.creators.BuildingCreator;
 import abstraction.creators.UnitCreator;
 
@@ -22,6 +29,24 @@ public class UnitTests {
 	@BeforeClass
 	public static void initializeXml() {
 		XmlParser.getAll();
+	}
+	
+	@Test
+	public void testOrderedPlayers() {
+		Game game = new Game();
+		Player a = new Player("A");
+		Player b = new Player("B");
+		Player c = new Player("C");
+		Player d = new Player("D");
+		
+		List<Player> playerList = new ArrayList<Player>(Arrays.asList(a,b,c,d));
+		game.setPlayerList(playerList);
+		game.setFirstPlayer(c);
+
+		List<Player> orderedPlayerList = game.getPlayerListByOrder();
+		
+		assertEquals(Arrays.asList(a,b,c,d), playerList);
+		assertEquals(Arrays.asList(c,d,a,b), orderedPlayerList);
 	}
 	
 //	@Test
@@ -34,7 +59,8 @@ public class UnitTests {
 	
 	@Test
 	public void testBuildUnit() {
-		Player wiwi = new Player("Wiwi", Faction.getFaction("Overmind"));
+		Player wiwi = new Player("Wiwi");
+		wiwi.setFaction(Faction.getFaction("Overmind"));
 		
 		assertEquals("Zergling", wiwi.getBase().getBuilding(0).getUnitForLevel(1));
 		
@@ -50,9 +76,11 @@ public class UnitTests {
 	
 	@Test
 	public void testFactions() {		
-		Player wiwi = new Player("Wiwi", Faction.getFaction("Overmind"));
-		Player lolo = new Player("Lolo", Faction.getFaction("Queen of Blades"));
-
+		Player wiwi = new Player("Wiwi");
+		wiwi.setFaction(Faction.getFaction("Overmind"));
+		Player lolo = new Player("Lolo");
+		lolo.setFaction(Faction.getFaction("Queen of Blades"));
+	
 		assertEquals("Wiwi", wiwi.getName());
 		assertEquals("Overmind", wiwi.getFaction().getName());
 		assertEquals("Hydralisk", lolo.getFaction().getStartingUnitTypes(1));
@@ -61,7 +89,8 @@ public class UnitTests {
 
 	@Test
 	public void testBases() {
-		Player wiwi = new Player("Wiwi", Faction.getFaction("Overmind"));
+		Player wiwi = new Player("Wiwi");
+		wiwi.setFaction(Faction.getFaction("Overmind"));
 		Base zergBase = wiwi.getBase();
 		
 		assertEquals(2, zergBase.getBasePrice().getMinerals());
@@ -90,10 +119,10 @@ public class UnitTests {
 
 	@Test
 	public void testUnits() {
-		Player wiwi = new Player("Wiwi", Faction.getFaction("Overmind"));
-		Player lolo = new Player("Lolo", Faction.getFaction("Overmind"));
+		Player wiwi = new Player("Wiwi");
+		Player lolo = new Player("Lolo");
 
-		Planet pridewater = Galaxy.getPlanet("Pridewater");
+		Planet pridewater = Planet.getPlanet("Pridewater");
 		Area area0 = pridewater.getArea(0);
 		Area area1 = pridewater.getArea(1);
 
@@ -112,10 +141,10 @@ public class UnitTests {
 	@Test
 	public void testPlanets() {
 		Galaxy galaxy = new Galaxy();
-		Planet pridewater = Galaxy.getPlanet("Pridewater");
-		Planet chauSara = Galaxy.getPlanet("Chau Sara");
-		Planet tarsonis = Galaxy.getPlanet("Tarsonis");
-		Planet braken = Galaxy.getPlanet("Braken");
+		Planet pridewater = Planet.getPlanet("Pridewater");
+		Planet chauSara = Planet.getPlanet("Chau Sara");
+		Planet tarsonis = Planet.getPlanet("Tarsonis");
+		Planet braken = Planet.getPlanet("Braken");
 
 		galaxy.add(pridewater);
 		tarsonis.rotateClockwise();
