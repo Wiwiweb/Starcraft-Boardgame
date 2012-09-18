@@ -1,6 +1,6 @@
 package tools;
 
-import abstraction.Planet.Cardinal;
+import abstraction.patterns.PlanetPattern.Cardinal;
 
 public class PlanetPosition {
 

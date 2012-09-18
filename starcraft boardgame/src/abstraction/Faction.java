@@ -1,18 +1,17 @@
 package abstraction;
 
-
 public class Faction {
-	
+
 	private final String name;
-	
+
 	private final String baseName;
-	
+
 	private final int startingWorkers;
 	private final int startingTransports;
-	
+
 	private final String[] startingUnitTypes;
 	private final int[] startingUnitNumbers;
-	
+
 	public Faction(String name, String baseName, int startingWorkers, int startingTransports, String[] startingUnitTypes, int[] startingUnitNumbers) {
 		this.name = name;
 		this.baseName = baseName;

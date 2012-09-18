@@ -2,7 +2,7 @@ package abstraction;
 
 public class Resource {
 	
-	public enum ResourceType {
+	public static enum ResourceType {
 		MINERALS, GAS, CONTROL;
 	}
 	

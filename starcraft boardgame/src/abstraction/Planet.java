@@ -1,40 +1,22 @@
 package abstraction;
 
 import java.util.Arrays;
-import java.util.HashMap;
+
+import abstraction.patterns.PlanetPattern;
+import abstraction.patterns.PlanetPattern.Cardinal;
 
 public class Planet {
 
-	private static HashMap<String, Planet> planetList = new HashMap<String, Planet>();
-	
-	public static enum Cardinal {
-		NORTH, EAST, SOUTH, WEST;
+	private PlanetPattern pattern;
 
-		public Cardinal opposite() {
-			switch (this) {
-			case NORTH:
-				return SOUTH;
-			case EAST:
-				return WEST;
-			case SOUTH:
-				return NORTH;
-			case WEST:
-				return EAST;
-			default:
-				throw new IllegalStateException("This should never happen: " + this + " has no opposite.");
-			}
-		}
-	}
-
-	private final String name;
 	private boolean[] entrances = new boolean[4];
 	private Route[] routes = { null, null, null, null };
 	private final Area[] areas;
 
-	public Planet(String name, Cardinal[] entrances, Area[] areas) {
-		this.name = name;
+	public Planet(PlanetPattern pattern, Area[] areas) {
+		this.pattern = pattern;
 		this.areas = areas;
-		for (Cardinal e : entrances) {
+		for (Cardinal e : pattern.getStartingEntrances()) {
 			this.entrances[e.ordinal()] = true;
 		}
 		int i = 1;
@@ -47,7 +29,7 @@ public class Planet {
 	}
 
 	public String getName() {
-		return name;
+		return pattern.getName();
 	}
 
 	public boolean hasEntrance(Cardinal c) {
@@ -93,7 +75,7 @@ public class Planet {
 			throw new IllegalArgumentException("This zone does not exist.");
 		}
 	}
-	
+
 	public Area[] getAreas() {
 		return areas;
 	}
@@ -150,7 +132,7 @@ public class Planet {
 		} else {
 			string += " ";
 		}
-		string += name.charAt(0);
+		string += getName().charAt(0);
 		if (hasEntrance(Cardinal.EAST)) {
 			string += "-";
 		} else {
@@ -168,21 +150,7 @@ public class Planet {
 
 	@Override
 	public String toString() {
-		return "Planet " + name;
-	}
-	
-	
-	public static Planet getPlanet(String name) {
-		Planet planet = planetList.get(name);
-    	if (planet != null) {
-        	return planet;
-    	} else {
-    		throw new IllegalArgumentException("No planet associated with the name " + name + ".");
-    	}
-	}
-	
-	public static void addPlanet(String name, Planet p) {
-		planetList.put(name, p);
+		return "Planet " + getName();
 	}
 
 }

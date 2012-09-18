@@ -18,11 +18,12 @@ import abstraction.Building;
 import abstraction.Galaxy;
 import abstraction.Game;
 import abstraction.Planet;
-import abstraction.Planet.Cardinal;
 import abstraction.Player;
 import abstraction.creators.BuildingCreator;
 import abstraction.creators.FactionCreator;
+import abstraction.creators.PlanetCreator;
 import abstraction.creators.UnitCreator;
+import abstraction.patterns.PlanetPattern.Cardinal;
 
 public class UnitTests {
 
@@ -122,7 +123,7 @@ public class UnitTests {
 		Player wiwi = new Player("Wiwi");
 		Player lolo = new Player("Lolo");
 
-		Planet pridewater = Planet.getPlanet("Pridewater");
+		Planet pridewater = PlanetCreator.createPlanet("Pridewater");
 		Area area0 = pridewater.getArea(0);
 		Area area1 = pridewater.getArea(1);
 
@@ -141,10 +142,10 @@ public class UnitTests {
 	@Test
 	public void testPlanets() {
 		Galaxy galaxy = new Galaxy();
-		Planet pridewater = Planet.getPlanet("Pridewater");
-		Planet chauSara = Planet.getPlanet("Chau Sara");
-		Planet tarsonis = Planet.getPlanet("Tarsonis");
-		Planet braken = Planet.getPlanet("Braken");
+		Planet pridewater = PlanetCreator.createPlanet("Pridewater");
+		Planet chauSara = PlanetCreator.createPlanet("Chau Sara");
+		Planet tarsonis = PlanetCreator.createPlanet("Tarsonis");
+		Planet braken = PlanetCreator.createPlanet("Braken");
 
 		galaxy.add(pridewater);
 		tarsonis.rotateClockwise();

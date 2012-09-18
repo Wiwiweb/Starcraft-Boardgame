@@ -54,10 +54,16 @@ public class Area {
 		this.areaNumber = areaNumber;
 	}
 
+	public boolean isControlledBy(Player player) {
+		return !isEmpty() && listUnits.get(0).getOwner() == player;
+	}
+
+	public boolean isEmpty() {
+		return listUnits.isEmpty();
+	}
 	
-	@Override
-	public String toString() {
-		return planet.getName() + "'s #" + areaNumber + " area";
+	public boolean isFull() {
+		return listUnits.size() >= unitLimit;
 	}
 
 	public String listUnits() {
@@ -71,17 +77,10 @@ public class Area {
 
 		return result;
 	}
-
-	public boolean isControlledBy(Player player) {
-		return !isEmpty() && listUnits.get(0).getOwner() == player;
-	}
-
-	public boolean isEmpty() {
-		return listUnits.isEmpty();
-	}
 	
-	public boolean isFull() {
-		return listUnits.size() >= unitLimit;
+	@Override
+	public String toString() {
+		return planet.getName() + "'s #" + areaNumber + " area";
 	}
 
 }

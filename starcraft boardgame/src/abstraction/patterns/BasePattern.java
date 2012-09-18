@@ -1,41 +1,43 @@
 package abstraction.patterns;
 
 import abstraction.Price;
-import abstraction.Resource;
+import abstraction.Resource.ResourceType;
 
 public class BasePattern {
-	
+
 	private final String name;
-	
+
 	private final String[] buildingNames;
-	
+
 	private final int modulesMaxNum;
 	private final String[] availableModules;
-	
+
 	private final int workersMaxNum;
 	private final Price workerPrice;
-	
+
 	private final int transportsMaxNum;
 	private final Price transportPrice;
 
 	private final int basesMaxNum;
 	private final Price basePrice;
-	
-	private final Resource[] permanentResources;
-	
-	public BasePattern(String name, String[] buildingNames, int modulesMaxNum, String[] availableModules, Resource[] permanentResources,
-						int workersMaxNum, Price workerPrice, int transportsMaxNum, Price transportPrice, int basesMaxNum, Price basePrice) {
+
+	private final ResourceType[] permanentResourcesType;
+	private final int[] permanentResourcesNum;
+
+	public BasePattern(String name, String[] buildingNames, int modulesMaxNum, String[] availableModules, ResourceType[] permanentResourcesType,
+			int[] permanentResourcesNum, int workersMaxNum, Price workerPrice, int transportsMaxNum, Price transportPrice, int basesMaxNum, Price basePrice) {
 		this.name = name;
-		
+
 		if (buildingNames.length == 3) {
 			this.buildingNames = buildingNames;
 		} else {
 			throw new IllegalArgumentException("A base must have exactly 3 buildings.");
 		}
-		
+
 		this.modulesMaxNum = modulesMaxNum;
 		this.availableModules = availableModules;
-		this.permanentResources = permanentResources;
+		this.permanentResourcesType = permanentResourcesType;
+		this.permanentResourcesNum = permanentResourcesNum;
 		this.workersMaxNum = workersMaxNum;
 		this.workerPrice = workerPrice;
 		this.transportsMaxNum = transportsMaxNum;
@@ -59,15 +61,34 @@ public class BasePattern {
 	public String[] getAvailableModules() {
 		return availableModules;
 	}
-	
-	public Resource[] getPermanentResources() {
-		return permanentResources;
+
+	public String[] getBuildingNames() {
+		return buildingNames;
+	}
+
+	public int getWorkersMaxNum() {
+		return workersMaxNum;
+	}
+
+	public int getTransportsMaxNum() {
+		return transportsMaxNum;
+	}
+
+	public int getBasesMaxNum() {
+		return basesMaxNum;
+	}
+
+	public ResourceType[] getPermanentResourcesType() {
+		return permanentResourcesType;
+	}
+
+	public int[] getPermanentResourcesNum() {
+		return permanentResourcesNum;
 	}
 
 	public int getWorkerMaxNum() {
 		return workersMaxNum;
 	}
-
 
 	public Price getWorkerPrice() {
 		return workerPrice;

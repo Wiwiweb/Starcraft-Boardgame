@@ -9,24 +9,24 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import abstraction.Area;
 import abstraction.Faction;
-import abstraction.Planet;
-import abstraction.Planet.Cardinal;
 import abstraction.Price;
-import abstraction.Resource;
 import abstraction.Resource.ResourceType;
 import abstraction.creators.BaseCreator;
 import abstraction.creators.BuildingCreator;
 import abstraction.creators.FactionCreator;
+import abstraction.creators.PlanetCreator;
 import abstraction.creators.UnitCreator;
+import abstraction.patterns.AreaPattern;
 import abstraction.patterns.BasePattern;
 import abstraction.patterns.BuildingPattern;
+import abstraction.patterns.PlanetPattern;
+import abstraction.patterns.PlanetPattern.Cardinal;
 import abstraction.patterns.UnitPattern;
 import abstraction.patterns.UnitPattern.WalkType;
 
 public class XmlParser {
-	
+
 	public static void getAll() {
 		getUnits();
 		getBuildings();
@@ -37,7 +37,7 @@ public class XmlParser {
 
 	public static void getPlanets() {
 		Document doc = getXmlFile("./res/data/planets.xml");
-		try {			
+		try {
 			NodeList allPlanets = doc.getElementsByTagName("planet");
 
 			for (int i = 0; i < allPlanets.getLength(); i++) {
@@ -48,26 +48,28 @@ public class XmlParser {
 
 				// Entrances
 				NodeList allEntrances = planet.getElementsByTagName("entrance");
-				Cardinal[] entrances = new Cardinal[allEntrances.getLength()];
+				Cardinal[] startingEntrances = new Cardinal[allEntrances.getLength()];
 				for (int j = 0; j < allEntrances.getLength(); j++) {
 					String entrance = allEntrances.item(j).getTextContent();
-					entrances[j] = Cardinal.valueOf(entrance);
+					startingEntrances[j] = Cardinal.valueOf(entrance);
 				}
 
 				// Areas
 				NodeList allAreas = planet.getElementsByTagName("area");
-				Area[] areas = new Area[allAreas.getLength()];
+				AreaPattern[] areas = new AreaPattern[allAreas.getLength()];
 				for (int j = 0; j < allAreas.getLength(); j++) {
 					Element area = (Element) allAreas.item(j);
-					
+
 					Element resourceElement = (Element) area.getElementsByTagName("resource").item(0);
-					Resource resource = parseResource(resourceElement, false);
+					ResourceType resourceType = ResourceType.valueOf(resourceElement.getAttribute("type"));
+					int resourceNum = Integer.parseInt(resourceElement.getTextContent());
 					int unitLimit = parseInt("unitLimit", area);
-					
-					areas[j] = new Area(resource, unitLimit);
+
+					areas[j] = new AreaPattern(unitLimit, resourceType, resourceNum);
 				}
 
-				Planet.addPlanet(name, new Planet(name, entrances, areas));
+				PlanetPattern pattern = new PlanetPattern(name, startingEntrances, areas);
+				PlanetCreator.addPlanetPattern(name, pattern);
 			}
 		} catch (NullPointerException e) {
 			System.err.println("XML syntax error in planets.xml");
@@ -101,7 +103,7 @@ public class XmlParser {
 				boolean airAttack = parseBoolean("airAttack", unit);
 
 				// Support value
-				int support =  parseInt("support", unit);
+				int support = parseInt("support", unit);
 
 				// Is assist
 				boolean isAssist = parseBoolean("isAssist", unit);
@@ -132,19 +134,19 @@ public class XmlParser {
 
 				// Level prices
 				Price[] levelPrices = new Price[maxLevel];
-				Element priceList = (Element) building.getElementsByTagName("prices").item(0); 
+				Element priceList = (Element) building.getElementsByTagName("prices").item(0);
 				for (int j = 0; j < maxLevel; j++) {
-					levelPrices[j] = parsePrice("level"+(j+1), priceList);
+					levelPrices[j] = parsePrice("level" + (j + 1), priceList);
 				}
 
 				// Level units
 				String[] levelUnits = new String[maxLevel];
-				Element unitList = (Element) building.getElementsByTagName("units").item(0); 
+				Element unitList = (Element) building.getElementsByTagName("units").item(0);
 				for (int j = 0; j < maxLevel; j++) {
-					levelUnits[j] = getTagValue("level"+(j+1), unitList);
+					levelUnits[j] = getTagValue("level" + (j + 1), unitList);
 				}
 
-				BuildingPattern pattern =  new BuildingPattern(name, maxLevel, levelPrices, levelUnits);
+				BuildingPattern pattern = new BuildingPattern(name, maxLevel, levelPrices, levelUnits);
 				BuildingCreator.addBuildingPattern(name, pattern);
 			}
 		} catch (NullPointerException e) {
@@ -156,7 +158,7 @@ public class XmlParser {
 	public static void getBases() {
 		Document doc = getXmlFile("./res/data/bases.xml");
 
-		try {			
+		try {
 			NodeList allBases = doc.getElementsByTagName("base");
 
 			for (int i = 0; i < allBases.getLength(); i++) {
@@ -167,29 +169,33 @@ public class XmlParser {
 
 				// Buildings
 				String[] buildingNames = new String[3];
-				Element buildingList = (Element) base.getElementsByTagName("buildings").item(0); 
+				Element buildingList = (Element) base.getElementsByTagName("buildings").item(0);
 				for (int j = 0; j < buildingNames.length; j++) {
-					buildingNames[j] = getTagValue("building"+(j+1), buildingList);
+					buildingNames[j] = getTagValue("building" + (j + 1), buildingList);
 				}
 
 				// Modules max number
 				int modulesMaxNum = parseInt("modulesMaxNum", base);
 
 				// Available modules
-				Element moduleList = (Element) base.getElementsByTagName("availableModules").item(0); 
+				Element moduleList = (Element) base.getElementsByTagName("availableModules").item(0);
 				NodeList allModules = moduleList.getElementsByTagName("module");
-				String[] availableModules = new String[allModules.getLength()];	
+				String[] availableModules = new String[allModules.getLength()];
 				for (int j = 0; j < allModules.getLength(); j++) {
 					availableModules[j] = allModules.item(j).getTextContent();
 				}
-				
+
 				// Permanent resources
 				Element resourceList = (Element) base.getElementsByTagName("permanentResources").item(0);
 				NodeList allResources = resourceList.getElementsByTagName("resource");
-				Resource[] permanentResources = new Resource[allResources.getLength()];
+				ResourceType[] permanentResourcesType = new ResourceType[allResources.getLength()];
+				int[] permanentResourcesNum = new int[allResources.getLength()];
 				for (int j = 0; j < allResources.getLength(); j++) {
-					Element resource = (Element) allResources.item(j);
-					permanentResources[j] = parseResource(resource, true);
+					Element resourceElement = (Element) allResources.item(j);
+					ResourceType type = ResourceType.valueOf(resourceElement.getAttribute("type"));
+					int num = Integer.parseInt(resourceElement.getTextContent());
+					permanentResourcesType[j] = type;
+					permanentResourcesNum[j] = num;
 				}
 
 				// Workers max number
@@ -210,11 +216,10 @@ public class XmlParser {
 				// Base price
 				Price basePrice = parsePrice("basePrice", base);
 
-
-				BasePattern pattern = new BasePattern(name, buildingNames, modulesMaxNum, availableModules, permanentResources,
+				BasePattern pattern = new BasePattern(name, buildingNames, modulesMaxNum, availableModules, permanentResourcesType, permanentResourcesNum,
 						workersMaxNum, workerPrice, transportsMaxNum, transportPrice, basesMaxNum, basePrice);
 				BaseCreator.addBasePattern(name, pattern);
-			}		
+			}
 		} catch (NullPointerException e) {
 			System.err.println("XML syntax error in bases.xml");
 			e.printStackTrace();
@@ -224,7 +229,7 @@ public class XmlParser {
 	public static void getFactions() {
 		Document doc = getXmlFile("./res/data/factions.xml");
 
-		try {			
+		try {
 			NodeList allFactions = doc.getElementsByTagName("faction");
 
 			for (int i = 0; i < allFactions.getLength(); i++) {
@@ -232,12 +237,11 @@ public class XmlParser {
 
 				// Name
 				String name = faction.getAttribute("name");
-				
+
 				// Base
 				String baseName = getTagValue("base", faction);
 
-
-				Element startingList = (Element) faction.getElementsByTagName("startingUnits").item(0); 
+				Element startingList = (Element) faction.getElementsByTagName("startingUnits").item(0);
 
 				// Starting workers
 				int startingWorkers = parseInt("workers", startingList);
@@ -257,13 +261,12 @@ public class XmlParser {
 
 				Faction pattern = new Faction(name, baseName, startingWorkers, startingTransports, startingUnitTypes, startingUnitNumbers);
 				FactionCreator.addFaction(name, pattern);
-			}		
+			}
 		} catch (NullPointerException e) {
 			System.err.println("XML syntax error in faction.xml");
 			e.printStackTrace();
 		}
 	}
-
 
 	private static Document getXmlFile(String filename) {
 		try {
@@ -293,14 +296,8 @@ public class XmlParser {
 
 	private static Price parsePrice(String name, Element e) {
 		Element price = (Element) e.getElementsByTagName(name).item(0);
-		int minerals =  parseInt("minerals", price);
-		int gas =  parseInt("gas", price);
+		int minerals = parseInt("minerals", price);
+		int gas = parseInt("gas", price);
 		return new Price(minerals, gas);
-	}
-	
-	private static Resource parseResource(Element resource, boolean isPermanent) {
-		ResourceType type =  ResourceType.valueOf(resource.getAttribute("type"));
-		int num =  Integer.parseInt(resource.getTextContent());
-		return new Resource(type, num, isPermanent);
 	}
 }

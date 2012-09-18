@@ -4,10 +4,11 @@ import abstraction.Price;
 
 public class BuildingPattern {
 
+	private final String name;
+
 	private final int maxLevel;
 	private final Price[] levelPrices;
 	
-	private final String name;
 	private final String[] levelUnits;
 	
 	public BuildingPattern(String name, int maxLevel, Price[] levelPrices, String[] levelUnits) {
