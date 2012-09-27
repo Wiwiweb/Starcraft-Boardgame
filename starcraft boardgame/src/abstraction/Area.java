@@ -10,6 +10,7 @@ public class Area {
 	private final Resource resource;
 
 	private List<Unit> listUnits = new ArrayList<Unit>();
+	private Player hasBaseOwnedBy = null;
 
 	// Just used for displaying the name of the Area
 	private Planet planet;
@@ -18,7 +19,7 @@ public class Area {
 	public Area(Resource resource, int unitLimit) {
 		this.resource = resource;
 		this.unitLimit = unitLimit;
-		
+
 		this.resource.setArea(this);
 	}
 
@@ -34,6 +35,17 @@ public class Area {
 		listUnits.remove(unit);
 	}
 
+	public Player getBaseOwner() {
+		return hasBaseOwnedBy;
+	}
+
+	public void buildBaseOwnedBy(Player player) {
+		if(hasBaseOwnedBy != null) {
+			throw new IllegalStateException("You cannot build a base on an existing one.");
+		}
+		hasBaseOwnedBy = player;
+	}
+
 	public Planet getPlanet() {
 		return planet;
 	}
@@ -42,7 +54,8 @@ public class Area {
 		if (this.planet == null) {
 			this.planet = planet;
 		} else {
-			throw new IllegalStateException("You cannot change the planet of an area after it has been set. (Original planet: " + this.planet + " ; Tried to change to: " + planet + ")");
+			throw new IllegalStateException("You cannot change the planet of an area after it has been set. (Original planet: " + this.planet
+					+ " ; Tried to change to: " + planet + ")");
 		}
 	}
 
@@ -55,13 +68,15 @@ public class Area {
 	}
 
 	public boolean isControlledBy(Player player) {
-		return !isEmpty() && listUnits.get(0).getOwner() == player;
+		return !isEmpty() && !(hasBaseOwnedBy != player) && listUnits.get(0).getOwner() == player;
 	}
+	
+
 
 	public boolean isEmpty() {
 		return listUnits.isEmpty();
 	}
-	
+
 	public boolean isFull() {
 		return listUnits.size() >= unitLimit;
 	}
@@ -77,7 +92,7 @@ public class Area {
 
 		return result;
 	}
-	
+
 	@Override
 	public String toString() {
 		return planet.getName() + "'s #" + areaNumber + " area";

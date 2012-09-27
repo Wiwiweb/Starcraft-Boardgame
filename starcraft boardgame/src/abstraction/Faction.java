@@ -44,5 +44,10 @@ public class Faction {
 	public int getStartingUnitNumbers(int i) {
 		return startingUnitNumbers[i];
 	}
+	
+	@Override
+	public String toString() {
+		return "Faction " + getName();
+	}
 
 }

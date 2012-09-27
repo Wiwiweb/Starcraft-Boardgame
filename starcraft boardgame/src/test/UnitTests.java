@@ -4,9 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,6 +29,18 @@ public class UnitTests {
 	public static void initializeXml() {
 		XmlParser.getAll();
 	}
+
+	@Test
+	public void setupGalaxy() {
+		Game game = new Game();
+		
+		Player a = new Player("A");
+		Player b = new Player("B");
+		game.addPlayer(a);
+		game.addPlayer(b);
+		
+		game.setupGame();
+	}
 	
 	@Test
 	public void testOrderedPlayers() {
@@ -39,15 +49,15 @@ public class UnitTests {
 		Player b = new Player("B");
 		Player c = new Player("C");
 		Player d = new Player("D");
+		game.addPlayer(a);
+		game.addPlayer(b);
+		game.addPlayer(c);
+		game.addPlayer(d);
 		
-		List<Player> playerList = new ArrayList<Player>(Arrays.asList(a,b,c,d));
-		game.setPlayerList(playerList);
 		game.setFirstPlayer(c);
 
-		List<Player> orderedPlayerList = game.getPlayerListByOrder();
-		
-		assertEquals(Arrays.asList(a,b,c,d), playerList);
-		assertEquals(Arrays.asList(c,d,a,b), orderedPlayerList);
+		assertEquals(Arrays.asList(a,b,c,d), game.getPlayerList());
+		assertEquals(Arrays.asList(c,d,a,b), game.getPlayerListByOrder());
 	}
 	
 //	@Test

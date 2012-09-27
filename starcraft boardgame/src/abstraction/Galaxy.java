@@ -1,6 +1,10 @@
 package abstraction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tools.BidirectionalMap;
+import tools.PlanetEntrance;
 import tools.PlanetPosition;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
@@ -11,7 +15,7 @@ public class Galaxy {
 	private PlanetPosition bottomRight = new PlanetPosition(0, 0);
 
 	public void add(Planet p) {
-		if (planetPositions.isEmpty() == true) {
+		if (isEmpty() == true) {
 			planetPositions.put(p, new PlanetPosition(0, 0));
 		} else {
 			throw new IllegalStateException("There is already an initial planet.");
@@ -56,13 +60,34 @@ public class Galaxy {
 
 		}
 	}
+	
+	public void add(Planet add, PlanetEntrance entrance) {
+		add(add, entrance.getPlanet(), entrance.getEntrance());
+	}
 
 	public Planet getPlanetAt(PlanetPosition pos) {
 		return planetPositions.getKey(pos);
 	}
 
+	public boolean isEmpty() {
+		return planetPositions.isEmpty();
+	}
+
+	public List<PlanetEntrance> getAvailableSpots() {
+		final List<PlanetEntrance> result = new ArrayList<PlanetEntrance>();
+		for (Planet p : planetPositions.keySet()) {
+			final List<Cardinal> entrances = p.getLinkableEntrances();
+			for (Cardinal c : entrances) {
+				result.add(new PlanetEntrance(p, c));
+			}
+		}
+		return result;
+	}
+
 	@Override
 	public String toString() {
+		
+		//TODO add spaces and shit
 		String result = "";
 		for (int i = topLeft.getY(); i <= bottomRight.getY(); i++) {
 			for (int j = topLeft.getX(); j <= bottomRight.getX(); j++) {

@@ -1,46 +1,52 @@
 package tools;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class BidirectionalMap<KeyType, ValueType >{
-    private Map<KeyType, ValueType> keyToValueMap = new ConcurrentHashMap<KeyType, ValueType>();
-    private Map<ValueType, KeyType> valueToKeyMap = new ConcurrentHashMap<ValueType, KeyType>();
+public class BidirectionalMap<KeyType, ValueType> {
 
-    synchronized public void put(KeyType key, ValueType value){
-        keyToValueMap.put(key, value);
-        valueToKeyMap.put(value, key);
-    }
+	private Map<KeyType, ValueType> keyToValueMap = new ConcurrentHashMap<KeyType, ValueType>();
+	private Map<ValueType, KeyType> valueToKeyMap = new ConcurrentHashMap<ValueType, KeyType>();
 
-    synchronized public ValueType removeByKey(KeyType key){
-        ValueType removedValue = keyToValueMap.remove(key);
-        valueToKeyMap.remove(removedValue);
-        return removedValue;
-    }
+	synchronized public void put(KeyType key, ValueType value) {
+		keyToValueMap.put(key, value);
+		valueToKeyMap.put(value, key);
+	}
 
-    synchronized public KeyType removeByValue(ValueType value){
-        KeyType removedKey = valueToKeyMap.remove(value);
-        keyToValueMap.remove(removedKey);
-        return removedKey;
-    }
+	synchronized public ValueType removeByKey(KeyType key) {
+		ValueType removedValue = keyToValueMap.remove(key);
+		valueToKeyMap.remove(removedValue);
+		return removedValue;
+	}
 
-    public boolean containsKey(KeyType key){
-        return keyToValueMap.containsKey(key);
-    }
+	synchronized public KeyType removeByValue(ValueType value) {
+		KeyType removedKey = valueToKeyMap.remove(value);
+		keyToValueMap.remove(removedKey);
+		return removedKey;
+	}
 
-    public boolean containsValue(ValueType value){
-        return keyToValueMap.containsValue(value);
-    }
+	public boolean containsKey(KeyType key) {
+		return keyToValueMap.containsKey(key);
+	}
 
-    public KeyType getKey(ValueType value){
-        return valueToKeyMap.get(value);
-    }
+	public boolean containsValue(ValueType value) {
+		return keyToValueMap.containsValue(value);
+	}
 
-    public ValueType get(KeyType key){
-        return keyToValueMap.get(key);
-    }
+	public KeyType getKey(ValueType value) {
+		return valueToKeyMap.get(value);
+	}
+
+	public ValueType get(KeyType key) {
+		return keyToValueMap.get(key);
+	}
 
 	public boolean isEmpty() {
 		return keyToValueMap.isEmpty();
+	}
+
+	public Set<KeyType> keySet() {
+		return keyToValueMap.keySet();
 	}
 }

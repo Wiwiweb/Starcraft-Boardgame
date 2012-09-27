@@ -1,6 +1,8 @@
 package abstraction;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import abstraction.patterns.PlanetPattern;
 import abstraction.patterns.PlanetPattern.Cardinal;
@@ -11,9 +13,9 @@ public class Planet {
 
 	private boolean[] entrances = new boolean[4];
 	private Route[] routes = { null, null, null, null };
-	private final Area[] areas;
+	private final List<Area> areas;
 
-	public Planet(PlanetPattern pattern, Area[] areas) {
+	public Planet(PlanetPattern pattern, List<Area> areas) {
 		this.pattern = pattern;
 		this.areas = areas;
 		for (Cardinal e : pattern.getStartingEntrances()) {
@@ -44,6 +46,16 @@ public class Planet {
 		return hasEntrance(c) && !hasRoute(c);
 	}
 
+	public List<Cardinal> getLinkableEntrances() {
+		List<Cardinal> result = new ArrayList<Cardinal>();
+		for (Cardinal c : Cardinal.values()) {
+			if (isLinkable(c)) {
+				result.add(c);
+			}
+		}
+		return result;
+	}
+
 	public Route getRoute(Cardinal cardinal) {
 		return routes[cardinal.ordinal()];
 	}
@@ -69,14 +81,14 @@ public class Planet {
 	}
 
 	public Area getArea(int i) {
-		if (i < areas.length) {
-			return areas[i];
+		if (i < areas.size()) {
+			return areas.get(i);
 		} else {
 			throw new IllegalArgumentException("This zone does not exist.");
 		}
 	}
 
-	public Area[] getAreas() {
+	public List<Area> getAreas() {
 		return areas;
 	}
 

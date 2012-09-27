@@ -1,7 +1,9 @@
 package abstraction.creators;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import abstraction.Faction;
 
@@ -9,7 +11,7 @@ public class FactionCreator {
 
 	// A faction is its own pattern.
 	// It has no individual values, and thus can be shared by multiple players.
-	private static Map<String, Faction> factionList = new ConcurrentHashMap<String, Faction>();
+	private static Map<String, Faction> factionList = new LinkedHashMap<String, Faction>();
 
 	public static Faction getFaction(String name) {
 		Faction faction = factionList.get(name);
@@ -22,5 +24,10 @@ public class FactionCreator {
 
 	public static void addFaction(String name, Faction faction) {
 		factionList.put(name, faction);
+	}
+
+	public static List<Faction> getFactionList() {
+		final List<Faction> result = new ArrayList<Faction>(factionList.values());
+		return result;
 	}
 }

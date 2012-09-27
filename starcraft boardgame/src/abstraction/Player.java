@@ -13,11 +13,17 @@ public class Player {
 
 	private String name;
 	
+	/**
+	 * Used during the galaxy setup. Shows what planet the player can place.
+	 */
+	private List<Planet> planetTokens = new ArrayList<Planet>();
+	
 	private Faction faction;
 	private Base base;
 	
 	private List<Unit> units = new ArrayList<Unit>();
 	private List<Resource> controlledResources = new ArrayList<Resource>();
+	private int baseNumber = 0;
 	
 	public Player(String name) {
 		this.name = name;
@@ -42,8 +48,7 @@ public class Player {
 			}
 			
 			for (int i = 1; i <= mineralWorkersNeeded; i++) {
-				Game.ihm.warnSendWorker(i, ResourceType.MINERALS);
-				Resource chosenResource = Game.ihm.selectResourceFromList(mineralResources);
+				Resource chosenResource = Game.ihm.selectResourceToSendWorker(this, mineralResources, i, ResourceType.MINERALS);
 				sendWorkerToMine(chosenResource);
 			}
 		}
@@ -55,8 +60,7 @@ public class Player {
 			}
 			
 			for (int i = 1; i <= mineralWorkersNeeded; i++) {
-				Game.ihm.warnSendWorker(i, ResourceType.GAS);
-				Resource chosenResource = Game.ihm.selectResourceFromList(gasResources);
+				Resource chosenResource = Game.ihm.selectResourceToSendWorker(this, gasResources, i, ResourceType.GAS);
 				sendWorkerToMine(chosenResource);
 			}
 		}
@@ -66,7 +70,7 @@ public class Player {
 		if (buildableAreas.isEmpty()) {
 			throw new IllegalStateException("No space left to build a unit.");
 		}
-		Area selectedArea  = Game.ihm.selectAreaFromList(buildableAreas);
+		Area selectedArea  = Game.ihm.selectAreaToPlaceUnit(this, buildableAreas);
 		selectedArea.addUnit(unit);
 	}
 	
@@ -141,12 +145,48 @@ public class Player {
 		}
 	}
 	
+	public Faction selectFactionFromList(List<Faction> list) {
+		return Game.ihm.selectStartingFaction(this, list);
+	}
+	
 	public Base getBase() {
 		return base;
 	}
 
 	public void addUnit(Unit unit) {
 		units.add(unit);
+	}
+
+	public void placeBase(Area area) {
+		if(getBaseNumber() == getBase().getBaseMaxNum()) {
+			throw new IllegalStateException("You cannot build more bases.");
+		}
+		area.buildBaseOwnedBy(this);
+		addToBaseNumber();
+	}
+	
+	public int getBaseNumber() {
+		return baseNumber;
+	}
+	
+	public void addToBaseNumber() {
+		this.baseNumber++;
+	}
+	
+	public void removeToBaseNumber() {
+		this.baseNumber--;
+	}
+
+	public List<Planet> getPlanetTokens() {
+		return planetTokens;
+	}
+
+	public void addPlanetToken(Planet planetToken) {
+		this.planetTokens.add(planetToken);
+	}
+	
+	public void removePlanetToken(Planet planetToken) {
+		this.planetTokens.remove(planetToken);
 	}
 
 	public String listUnits() {
@@ -165,5 +205,6 @@ public class Player {
 	public String toString() {
 		return "Player " + name;
 	}
+
 
 }

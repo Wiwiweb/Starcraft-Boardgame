@@ -5,7 +5,11 @@ import java.util.List;
 import java.util.Scanner;
 
 import presentation.IHM;
+import tools.PlanetEntrance;
 import abstraction.Area;
+import abstraction.Faction;
+import abstraction.Planet;
+import abstraction.Player;
 import abstraction.Resource;
 import abstraction.Resource.ResourceType;
 
@@ -15,17 +19,17 @@ public class TextIHM implements IHM {
 
 	}
 
-	@Override
-	public Resource selectResourceFromList(List<Resource> list) {
+	private <T> T selectFromList(List<T> list) {
 		int choice = -1;
-		while(choice < 0 || choice > list.size()) {
-			
-			Iterator<Resource> it = list.iterator();
+		while (choice < 1 || choice > list.size()) {
+
+			Iterator<T> it = list.iterator();
 			int i = 1;
-			System.out.println("Choose a resource :");
+			// System.out.println(player.getName() + ", choose a " +
+			// list.get(0).getClass().getName() + " :");
 			while (it.hasNext()) {
-				Resource r = it.next();
-				System.out.println(i + " : " + r);
+				T t = it.next();
+				System.out.println(i + " : " + t);
 				i++;
 			}
 
@@ -34,39 +38,73 @@ public class TextIHM implements IHM {
 		}
 
 		return list.get(choice - 1);
+	}
+
+	@Override
+	public Faction selectStartingFaction(Player player, List<Faction> list) {
+		System.out.println(player.getName() + ", choose your faction :");
+		return selectFromList(list);
 	}
 	
 	@Override
-	public Area selectAreaFromList(List<Area> list) {
-		int choice = -1;
-		while(choice < 0 || choice > list.size()) {
-			
-			Iterator<Area> it = list.iterator();
-			int i = 1;
-			System.out.println("Choose an area :");
-			while (it.hasNext()) {
-				Area r = it.next();
-				System.out.println(i + " : " + r);
-				i++;
-			}
+	public Planet selectPlanetToPlace(Player player, List<Planet> list) {
+		System.out.println(player.getName() + ", choose which planet to place :");
+		return selectFromList(list);
+	}
+	
+	@Override
+	public PlanetEntrance selectSpotToPlacePlanet(Player player, List<PlanetEntrance> list, Planet planet) {
+		System.out.println(player.getName() + ", choose where to place " + planet.getName() + " :");
+		return selectFromList(list);
+	}
 
-			Scanner sc = new Scanner(System.in);
-			choice = sc.nextInt();
-		}
 
-		return list.get(choice - 1);
+	@Override
+	public Area selectAreaToPlaceBase(Player player, List<Area> list) {
+		System.out.println(player.getName() + ", choose where to place your base :");
+		return selectFromList(list);
 	}
 
 	@Override
-	public void warnSendWorker(int number, ResourceType resourceType) {
-		System.out.print("Select where to send a worker for ");
-		if(resourceType == ResourceType.MINERALS) {
+	public Resource selectResourceToSendWorker(Player player, List<Resource> list, int workerNumber, ResourceType resourceType) {
+		System.out.print(player.getName() + ", select where to send a worker for ");
+
+		if (resourceType == ResourceType.MINERALS) {
 			System.out.print("mineral");
-		} else if(resourceType == ResourceType.GAS) {
+		} else if (resourceType == ResourceType.GAS) {
 			System.out.print("gas");
 		} else {
 			throw new IllegalArgumentException("Resource asked is neither mineral nor gas.");
 		}
-		System.out.println(" #" + number + ":");
+		System.out.println(" #" + workerNumber + ":");
+
+		return selectFromList(list);
+	}
+	
+	@Override
+	public Area selectAreaToPlaceUnit(Player player, List<Area> list) {
+		System.out.println(player.getName() + ", choose where to place your unit :");
+		return selectFromList(list);
+	}
+
+	@Override
+	public boolean askToPlaceBase(Player player, Planet chosenPlanet) {
+		boolean result;
+		int choice = -1;
+		while (choice < 1 || choice > 2) {
+			System.out.println(player.getName() + ", do you want to place your base on " + chosenPlanet.getName());
+			System.out.println("1 : Yes");
+			System.out.println("2 : No");
+
+			Scanner sc = new Scanner(System.in);
+			choice = sc.nextInt();
+		}
+
+		if (choice == 1) {
+			result = true;
+		} else {
+			result = false;
+		}
+		return result;
 	}
 }
