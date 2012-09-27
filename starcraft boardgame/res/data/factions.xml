@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <factions>
-	
+
+	<faction name="Jim Raynor">
+		<base>Terran Base</base>
+		<startingUnits>
+			<workers>8</workers>
+			<transports>1</transports>
+			<unit type="Marine">2</unit>
+			<unit type="Firebat">1</unit>
+			<unit type="Vulture">1</unit>
+		</startingUnits>
+	</faction>
+
+	<faction name="Arcturus Mengsk">
+		<base>Terran Base</base>
+		<startingUnits>
+			<workers>8</workers>
+			<transports>1</transports>
+			<unit type="Marine">2</unit>
+			<unit type="Firebat">1</unit>
+			<unit type="Ghost">1</unit>
+		</startingUnits>
+	</faction>
+
 	<faction name="Overmind">
 		<base>Zerg Base</base>
 		<startingUnits>
@@ -10,7 +32,17 @@
 			<unit type="Hydralisk">1</unit>
 		</startingUnits>
 	</faction>
-	
+
+	<faction name="Overmind">
+		<base>Zerg Base</base>
+		<startingUnits>
+			<workers>8</workers>
+			<transports>1</transports>
+			<unit type="Zergling">4</unit>
+			<unit type="Hydralisk">1</unit>
+		</startingUnits>
+	</faction>
+
 	<faction name="Queen of Blades">
 		<base>Zerg Base</base>
 		<startingUnits>
@@ -20,5 +52,24 @@
 			<unit type="Hydralisk">2</unit>
 		</startingUnits>
 	</faction>
-	
+
+	<faction name="Tassadar">
+		<base>Protoss Base</base>
+		<startingUnits>
+			<workers>8</workers>
+			<transports>1</transports>
+			<unit type="Zealots">3</unit>
+		</startingUnits>
+	</faction>
+
+	<faction name="Aldaris">
+		<base>Protoss Base</base>
+		<startingUnits>
+			<workers>7</workers>
+			<transports>1</transports>
+			<unit type="Zealots">2</unit>
+			<unit type="Dragoon">1</unit>
+		</startingUnits>
+	</faction>
+
 </factions>
