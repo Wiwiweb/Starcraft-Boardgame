@@ -81,6 +81,8 @@ public class Game {
 			continueToNextPlayer = true;
 			while (continueToNextPlayer) {
 
+				Planet chosenPlanet;
+
 				// If the round is even
 				if (i % 2 == 0) {
 					// Player order is normal
@@ -93,35 +95,60 @@ public class Game {
 				}
 
 				// Choose planet
-				final Planet chosenPlanet;
 				if (nextPlayer.getPlanetTokens().size() == 1) {
 					chosenPlanet = nextPlayer.getPlanetTokens().get(0);
 				} else {
 					chosenPlanet = Game.ihm.selectPlanetToPlace(nextPlayer, nextPlayer.getPlanetTokens());
 				}
-				nextPlayer.removePlanetToken(chosenPlanet);
 
-				// TODO : deal with rotation
+				// Rotate planet
+				boolean stopLooping = false;
+				while (!stopLooping) {
+
+					int rotation = Game.ihm.choosePlanetRotation(nextPlayer, chosenPlanet);
+					switch (rotation) {
+					case 1:
+						chosenPlanet.rotateClockwise();
+						break;
+					case 2:
+						chosenPlanet.rotateCounterClockwise();
+						break;
+					case 3:
+						stopLooping = true;
+						break;
+					case 4:
+						// TODO cancel
+						break;
+					default:
+						throw new IllegalStateException("This should never happen.");
+					}
+
+				}
 
 				// Choose where to place the planet
 				if (galaxy.isEmpty()) {
 					galaxy.add(chosenPlanet);
 				} else {
-					List<PlanetEntrance> availableSpots = galaxy.getAvailableSpots();
-					
-					// Remove spots that cannot be linked
-					List<PlanetEntrance> unavailableSpots = new ArrayList<PlanetEntrance>();
-					for (PlanetEntrance entrance : availableSpots) {
+					List<PlanetEntrance> availableEntrances = galaxy.getAvailableSpots();
+
+					// Remove entrances that cannot be linked
+					List<PlanetEntrance> unavailableEntrances = new ArrayList<PlanetEntrance>();
+					for (PlanetEntrance entrance : availableEntrances) {
 						if (!chosenPlanet.isLinkable(entrance.getEntrance().opposite())) {
-							unavailableSpots.add(entrance);
+							unavailableEntrances.add(entrance);
 						}
 					}
-					for (PlanetEntrance entrance : unavailableSpots) {
-						availableSpots.remove(entrance);
+					for (PlanetEntrance entrance : unavailableEntrances) {
+						availableEntrances.remove(entrance);
 					}
 
-					PlanetEntrance chosenSpot = Game.ihm.selectSpotToPlacePlanet(nextPlayer, availableSpots, chosenPlanet);
+					PlanetEntrance chosenSpot = Game.ihm.selectSpotToPlacePlanet(nextPlayer, availableEntrances, chosenPlanet);
+					if (chosenSpot == null) {
+						// TODO cancel
+					}
+
 					galaxy.add(chosenPlanet, chosenSpot);
+					nextPlayer.removePlanetToken(chosenPlanet);
 				}
 
 				// Ask to place a base (except if it's the last round)

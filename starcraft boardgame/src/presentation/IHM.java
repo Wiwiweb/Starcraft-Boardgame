@@ -16,6 +16,8 @@ public interface IHM {
 
 	public Planet selectPlanetToPlace(Player player, List<Planet> list);
 
+	public int choosePlanetRotation(Player player, Planet planet);
+
 	public PlanetEntrance selectSpotToPlacePlanet(Player player, List<PlanetEntrance> list, Planet planet);
 	
 	public Area selectAreaToPlaceBase(Player player, List<Area> list);
@@ -25,5 +27,6 @@ public interface IHM {
 	public Area selectAreaToPlaceUnit(Player player, List<Area> list);
 	
 	public boolean askToPlaceBase(Player player, Planet chosenPlanet);
+
 
 }

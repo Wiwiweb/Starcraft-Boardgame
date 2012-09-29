@@ -87,12 +87,13 @@ public class Galaxy {
 	@Override
 	public String toString() {
 		
-		//TODO add spaces and shit
 		String result = "";
 		for (int i = topLeft.getY(); i <= bottomRight.getY(); i++) {
 			for (int j = topLeft.getX(); j <= bottomRight.getX(); j++) {
 				Planet p = getPlanetAt(new PlanetPosition(j, i));
-				if (p != null) {
+				if (p == null) {
+					result += " ";
+				} else {
 					result += p.getName().charAt(0);
 				}
 			}

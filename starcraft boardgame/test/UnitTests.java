@@ -157,12 +157,12 @@ public class UnitTests {
 		galaxy.add(pridewater);
 		tarsonis.rotateClockwise();
 		galaxy.add(tarsonis, pridewater, Cardinal.EAST);
-		chauSara.rotateClockwise();
-		galaxy.add(chauSara, pridewater, Cardinal.SOUTH);
+		chauSara.rotateCounterClockwise();
+		galaxy.add(chauSara, pridewater, Cardinal.NORTH);
 		galaxy.add(braken, tarsonis, Cardinal.SOUTH);
 
 		assertEquals(" | \n" + " P-\n" + " | \n", pridewater.showTextGraph());
-		assertEquals("PT\n" + "CB\n", galaxy.toString());
+		assertEquals("C \n" + "PT\n" + " B\n", galaxy.toString());
 		assertEquals("Chau Sara's #2 area", chauSara.getArea(1).toString());
 	}
 
