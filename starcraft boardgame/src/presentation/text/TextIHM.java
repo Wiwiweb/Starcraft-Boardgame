@@ -15,7 +15,8 @@ import abstraction.Resource.ResourceType;
 
 public class TextIHM implements IHM {
 
-	private <T> T selectFromList(List<T> list) {
+	@Override
+	public <T> T selectFromList(List<T> list) {
 		int choice = -1;
 		while (choice < 1 || choice > list.size()) {
 
@@ -34,7 +35,8 @@ public class TextIHM implements IHM {
 		return list.get(choice - 1);
 	}
 
-	private <T> T selectFromListWithCancel(List<T> list) {
+	@Override
+	public <T> T selectFromListWithCancel(List<T> list) {
 		T result;
 		int choice = -1;
 		while (choice < 1 || choice > list.size() + 1) {

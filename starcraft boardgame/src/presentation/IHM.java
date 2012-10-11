@@ -12,6 +12,10 @@ import abstraction.Resource.ResourceType;
 
 public interface IHM {
 
+	public <T> T selectFromList(List<T> list);
+
+	public <T> T selectFromListWithCancel(List<T> list);
+	
 	public Faction selectStartingFaction(Player player, List<Faction> list);
 
 	public Planet selectPlanetToPlace(Player player, List<Planet> list);

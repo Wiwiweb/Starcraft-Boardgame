@@ -7,14 +7,17 @@ import java.util.ListIterator;
 import presentation.IHM;
 import presentation.text.TextIHM;
 import tools.PlanetEntrance;
+import abstraction.AMenu.MenuType;
 import abstraction.creators.FactionCreator;
 import abstraction.creators.PlanetCreator;
+import control.text.CFactory;
 
 public class Game {
 
 	private final int NB_PLANETS_PER_PLAYER = 2;
 
 	public static IHM ihm = new TextIHM();
+	public static AFactory factory = new CFactory();
 
 	private final List<Player> playerList = new ArrayList<Player>();
 	private final Galaxy galaxy = new Galaxy();
@@ -32,7 +35,9 @@ public class Game {
 		// 2. Choose Factions
 		List<Faction> factionList = FactionCreator.getFactionList();
 		for (Player p : getPlayerListByOrder()) {
-			Faction faction = p.selectFactionFromList(factionList);
+			
+			AMenu<Faction> menu = Game.factory.newMenu(factionList, MenuType.SELECT_FACTION);
+			Faction faction = menu.selectChoice();
 			p.setFaction(faction);
 			factionList.remove(faction);
 		}
@@ -75,7 +80,7 @@ public class Game {
 		// 4. Second Round of Planet Placement
 		ListIterator<Player> it = orderedPlayerList.listIterator();
 		boolean continueToNextPlayer;
-		Player nextPlayer;
+		Player player;
 		for (int i = 0; i < NB_PLANETS_PER_PLAYER; i++) {
 
 			continueToNextPlayer = true;
@@ -86,26 +91,26 @@ public class Game {
 				// If the round is even
 				if (i % 2 == 0) {
 					// Player order is normal
-					nextPlayer = it.next();
+					player = it.next();
 					continueToNextPlayer = it.hasNext();
 				} else {
 					// Player order is reversed
-					nextPlayer = it.previous();
+					player = it.previous();
 					continueToNextPlayer = it.hasPrevious();
 				}
 
 				// Choose planet
-				if (nextPlayer.getPlanetTokens().size() == 1) {
-					chosenPlanet = nextPlayer.getPlanetTokens().get(0);
+				if (player.getPlanetTokens().size() == 1) {
+					chosenPlanet = player.getPlanetTokens().get(0);
 				} else {
-					chosenPlanet = Game.ihm.selectPlanetToPlace(nextPlayer, nextPlayer.getPlanetTokens());
+					chosenPlanet = Game.ihm.selectPlanetToPlace(player, player.getPlanetTokens());
 				}
 
 				// Rotate planet
 				boolean stopLooping = false;
 				while (!stopLooping) {
 
-					int rotation = Game.ihm.choosePlanetRotation(nextPlayer, chosenPlanet);
+					int rotation = Game.ihm.choosePlanetRotation(player, chosenPlanet);
 					switch (rotation) {
 					case 1:
 						chosenPlanet.rotateClockwise();
@@ -142,25 +147,25 @@ public class Game {
 						availableEntrances.remove(entrance);
 					}
 
-					PlanetEntrance chosenSpot = Game.ihm.selectSpotToPlacePlanet(nextPlayer, availableEntrances, chosenPlanet);
+					PlanetEntrance chosenSpot = Game.ihm.selectSpotToPlacePlanet(player, availableEntrances, chosenPlanet);
 					if (chosenSpot == null) {
 						// TODO cancel
 					}
 
 					galaxy.add(chosenPlanet, chosenSpot);
-					nextPlayer.removePlanetToken(chosenPlanet);
+					player.removePlanetToken(chosenPlanet);
 				}
 
 				// Ask to place a base (except if it's the last round)
 				boolean placeBase = false;
-				if (nextPlayer.getBaseNumber() == 0 && i != NB_PLANETS_PER_PLAYER - 1) {
-					placeBase = Game.ihm.askToPlaceBase(nextPlayer, chosenPlanet);
+				if (player.getBaseNumber() == 0 && i != NB_PLANETS_PER_PLAYER - 1) {
+					placeBase = Game.ihm.askToPlaceBase(player, chosenPlanet);
 				}
 
 				// Place base if it hasn't been placed yet, and we chose to place it or it's the last round
-				if (nextPlayer.getBaseNumber() == 0 && (placeBase || i == NB_PLANETS_PER_PLAYER - 1)) {
-					Area chosenArea = Game.ihm.selectAreaToPlaceBase(nextPlayer, chosenPlanet.getAreas());
-					nextPlayer.placeBase(chosenArea);
+				if (player.getBaseNumber() == 0 && (placeBase || i == NB_PLANETS_PER_PLAYER - 1)) {
+					Area chosenArea = Game.ihm.selectAreaToPlaceBase(player, chosenPlanet.getAreas());
+					player.placeBase(chosenArea);
 				}
 			}
 		}
@@ -168,6 +173,14 @@ public class Game {
 		System.out.println(galaxy.toString());
 
 		// 5. Place Z-Axis navigation Routes
+		it = orderedPlayerList.listIterator();
+
+		while(it.hasNext()) {
+			player = it.next();
+			List<PlanetEntrance> availableEntrances = galaxy.getAvailableSpots();
+			//TODO
+			
+		}
 		// 6. Distribute Resource Cards
 	}
 
