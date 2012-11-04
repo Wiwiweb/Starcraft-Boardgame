@@ -2,11 +2,14 @@ package abstraction;
 
 import java.util.List;
 
-import abstraction.AMenu.MenuType;
-
-
+import abstraction.menus.AMenu.MenuName;
+import abstraction.menus.AMenuChooseFromList;
+import abstraction.menus.AMenuStaticChoices;
 
 public abstract class AFactory {
-	
-	public abstract <T> AMenu<T> newMenu(List<T> choices, MenuType menuType);
+
+	public abstract AMenuStaticChoices newMenuStaticChoices(MenuName menuName, Player player);
+
+	public abstract <T> AMenuChooseFromList<T> newMenuChooseFromList(MenuName menuName, List<T> listChoices, Player player);
+
 }

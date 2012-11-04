@@ -5,4 +5,6 @@ public interface IPMenu<T> {
 
 	public T askChoice();
 
+	public T askChoiceWithCancel();
+
 }

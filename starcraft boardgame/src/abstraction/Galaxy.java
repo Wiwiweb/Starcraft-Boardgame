@@ -60,7 +60,7 @@ public class Galaxy {
 
 		}
 	}
-	
+
 	public void add(Planet add, PlanetEntrance entrance) {
 		add(add, entrance.getPlanet(), entrance.getEntrance());
 	}
@@ -86,7 +86,7 @@ public class Galaxy {
 
 	@Override
 	public String toString() {
-		
+
 		String result = "";
 		for (int i = topLeft.getY(); i <= bottomRight.getY(); i++) {
 			for (int j = topLeft.getX(); j <= bottomRight.getX(); j++) {
