@@ -22,7 +22,7 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 	private Boolean placeFirstBase;
 	private Area chosenBaseArea;
 
-	private MenuName[] menuNames = { MenuName.SELECT_PLANET_TO_PLACE, MenuName.ROTATE_PLANET, MenuName.SELECT_PLANET_SPOT,
+	private final MenuName[] menuNames = { MenuName.SELECT_PLANET_TO_PLACE, MenuName.ROTATE_PLANET, MenuName.SELECT_PLANET_SPOT,
 			MenuName.PLACE_FIRST_BASE, MenuName.SELECT_BASE_AREA };
 
 	public MultiMenuPlacePlanet(Galaxy galaxy, int roundNumber, Player player) {
@@ -32,7 +32,7 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 	}
 
 	@Override
-	public AMenu<?> getMenu(int i) {
+	protected AMenu<?> getMenu(int i) {
 		AMenu<?> menu;
 		switch (i) {
 
@@ -76,19 +76,21 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 	}
 
 	@Override
-	public void updateState() {
+	protected void updateState() {
 		int nextState;
 
 		switch (state) {
 
-		// Entry Point - 2 paths
+		// Entry Point - 1 path
 		case 0:
-			if (player.getPlanetTokens().size() == 1) {
-				chosenPlanet = player.getPlanetTokens().get(0);
-				nextState = 2;
-			} else {
-				nextState = 1;
-			}
+			// Maybe make it automatic if only 1 planet
+			// if (player.getPlanetTokens().size() == 1) {
+			// chosenPlanet = player.getPlanetTokens().get(0);
+			// nextState = 2;
+			// } else {
+			// nextState = 1;
+			// }
+			nextState = 1;
 			break;
 
 		// After Choose Planet - Only 1 path

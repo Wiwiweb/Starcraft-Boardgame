@@ -1,5 +1,6 @@
 package presentation.text;
 
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -15,6 +16,8 @@ import abstraction.Resource.ResourceType;
 
 public class TextIHM implements IHM {
 
+	public static Scanner scanner = new Scanner(System.in);
+	
 	@Override
 	public <T> T selectFromList(List<T> list) {
 		int choice = -1;
@@ -147,4 +150,5 @@ public class TextIHM implements IHM {
 		}
 		return result;
 	}
+
 }

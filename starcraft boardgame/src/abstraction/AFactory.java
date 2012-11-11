@@ -10,6 +10,7 @@ public abstract class AFactory {
 
 	public abstract AMenuStaticChoices newMenuStaticChoices(MenuName menuName, Player player);
 
-	public abstract <T> AMenuChooseFromList<T> newMenuChooseFromList(MenuName menuName, List<T> listChoices, Player player);
+	public abstract <T extends Comparable<? super T>> AMenuChooseFromList<T> newMenuChooseFromList(MenuName menuName,
+			List<T> listChoices, Player player);
 
 }

@@ -1,5 +1,7 @@
 package abstraction.patterns;
 
+import abstraction.Planet;
+
 public class PlanetPattern {
 
 	public static enum Cardinal {

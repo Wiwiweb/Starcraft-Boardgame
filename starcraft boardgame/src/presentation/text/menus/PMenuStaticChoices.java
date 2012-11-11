@@ -3,8 +3,8 @@ package presentation.text.menus;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
 
+import presentation.text.TextIHM;
 import abstraction.menus.AMenu.MenuName;
 import control.text.menus.CMenuStaticChoices;
 
@@ -54,8 +54,8 @@ public class PMenuStaticChoices implements IPMenu<Integer> {
 				i++;
 			}
 
-			Scanner sc = new Scanner(System.in);
-			choice = sc.nextInt();
+			choice = TextIHM.scanner.nextInt();
+			System.out.println();
 		}
 
 		return choice;
@@ -79,8 +79,8 @@ public class PMenuStaticChoices implements IPMenu<Integer> {
 
 			System.out.println(cancel + " : Cancel");
 
-			Scanner sc = new Scanner(System.in);
-			choice = sc.nextInt();
+			choice = TextIHM.scanner.nextInt();
+			System.out.println();
 		}
 
 		Integer result;

@@ -7,7 +7,7 @@ import java.util.List;
 import abstraction.patterns.PlanetPattern;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
-public class Planet {
+public class Planet implements Comparable<Planet> {
 
 	private PlanetPattern pattern;
 
@@ -119,7 +119,9 @@ public class Planet {
 	}
 
 	public void connect(Planet p, Cardinal thisCardinal, Cardinal pCardinal, boolean isZAxis) {
-		if (!(isLinkable(thisCardinal) && p.isLinkable(pCardinal))) {
+		if (this == p) {
+			throw new IllegalStateException("The planets are the same : " + p.getName());
+		} else if (!(isLinkable(thisCardinal) && p.isLinkable(pCardinal))) {
 			throw new IllegalStateException("The entrances are not available.");
 		} else if (!isZAxis && !(thisCardinal.opposite() == pCardinal)) {
 			throw new IllegalStateException("The entrances are not opposite.");
@@ -163,6 +165,11 @@ public class Planet {
 	@Override
 	public String toString() {
 		return "Planet " + getName();
+	}
+
+	@Override
+	public int compareTo(Planet o) {
+		return this.pattern.getName().compareTo(o.pattern.getName());
 	}
 
 }

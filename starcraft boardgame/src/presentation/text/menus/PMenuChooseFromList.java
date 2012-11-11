@@ -1,17 +1,19 @@
 package presentation.text.menus;
 
 import java.util.Iterator;
-import java.util.Scanner;
 
+import presentation.text.TextIHM;
 import abstraction.menus.AMenu.MenuName;
 import control.text.menus.CMenuChooseFromList;
 
-public class PMenuChooseFromList<T> implements IPMenu<T> {
+public class PMenuChooseFromList<T extends Comparable<? super T>> implements IPMenu<T> {
 
 	private final String SELECT_FACTION_PROMPT = "select your starting faction:";
 	private final String SELECT_PLANET_PROMPT = "select which planet to place:";
 	private final String SELECT_PLANET_SPOT_PROMPT = "select where to place this planet:";
 	private final String SELECT_BASE_AREA_PROMPT = "select where to place this base:";
+	private final String SELECT_ZAXIS_ENTRANCE_PROMPT = "select where to place the first side of the Z-Axis:";
+	private final String SELECT_ZAXIS_EXIT = "select where to place the second side of the Z-Axis:";
 
 	private final CMenuChooseFromList<T> control;
 	private final String promptMessage;
@@ -33,6 +35,12 @@ public class PMenuChooseFromList<T> implements IPMenu<T> {
 		case SELECT_BASE_AREA:
 			promptMessage = SELECT_BASE_AREA_PROMPT;
 			break;
+		case SELECT_ZAXIS_ENTRANCE:
+			promptMessage = SELECT_ZAXIS_ENTRANCE_PROMPT;
+			break;
+		case SELECT_ZAXIS_EXIT:
+			promptMessage = SELECT_ZAXIS_EXIT;
+			break;
 		default:
 			throw new IllegalArgumentException("Unknown menu type.");
 		}
@@ -53,8 +61,8 @@ public class PMenuChooseFromList<T> implements IPMenu<T> {
 				i++;
 			}
 
-			Scanner sc = new Scanner(System.in);
-			choice = sc.nextInt();
+			choice = TextIHM.scanner.nextInt();
+			System.out.println();
 		}
 
 		return control.getChoices().get(choice - 1);
@@ -78,8 +86,8 @@ public class PMenuChooseFromList<T> implements IPMenu<T> {
 
 			System.out.println(cancel + " : Cancel");
 
-			Scanner sc = new Scanner(System.in);
-			choice = sc.nextInt();
+			choice = TextIHM.scanner.nextInt();
+			System.out.println();
 		}
 
 		T result;

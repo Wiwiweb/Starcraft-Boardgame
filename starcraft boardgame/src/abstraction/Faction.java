@@ -1,6 +1,6 @@
 package abstraction;
 
-public class Faction {
+public class Faction implements Comparable<Faction>{
 
 	private final String name;
 
@@ -48,6 +48,11 @@ public class Faction {
 	@Override
 	public String toString() {
 		return "Faction " + getName();
+	}
+
+	@Override
+	public int compareTo(Faction o) {
+		return this.name.compareTo(o.name);
 	}
 
 }

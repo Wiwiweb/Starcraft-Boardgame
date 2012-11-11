@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Area {
+public class Area implements Comparable<Area>{
 
 	private final int unitLimit;
 	private final Resource resource;
@@ -48,6 +48,10 @@ public class Area {
 
 	public Planet getPlanet() {
 		return planet;
+	}
+	
+	public Resource getResource() {
+		return resource;
 	}
 
 	public void setPlanet(Planet planet) {
@@ -96,6 +100,15 @@ public class Area {
 	@Override
 	public String toString() {
 		return planet.getName() + "'s #" + areaNumber + " area";
+	}
+
+	@Override
+	public int compareTo(Area o) {
+		int result = this.planet.compareTo(o.planet);
+		if (result == 0) {
+			result = Integer.compare(this.areaNumber, o.areaNumber);
+		}
+		return 0;
 	}
 
 }

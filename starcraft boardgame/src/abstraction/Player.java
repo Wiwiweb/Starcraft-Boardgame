@@ -187,6 +187,13 @@ public class Player {
 	public void removePlanetToken(Planet planetToken) {
 		this.planetTokens.remove(planetToken);
 	}
+	
+	public void addControlledResource(Resource resource) {
+		if(resource.getResourceType() == ResourceType.CONTROL) {
+			throw new IllegalArgumentException("Control point areas can't be controlled by a player (not a spendable resource).");
+		}
+		controlledResources.add(resource);
+	}
 
 	public String listUnits() {
 		String result = getName() + "'s army:\n";

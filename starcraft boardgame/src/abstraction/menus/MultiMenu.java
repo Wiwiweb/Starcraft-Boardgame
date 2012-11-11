@@ -1,12 +1,10 @@
 package abstraction.menus;
 
 import abstraction.Player;
-import abstraction.menus.AMenu.MenuName;
 
 public abstract class MultiMenu {
 
 	protected final Player player;
-	protected MenuName[] menuNames;
 
 	/**
 	 * 0 is the beginning state</br> 1+ is "after menu 1+" -1 is the end state
@@ -24,13 +22,13 @@ public abstract class MultiMenu {
 	 * 
 	 * @return
 	 */
-	abstract public AMenu<?> getMenu(int i);
+	abstract protected AMenu<?> getMenu(int i);
 
 	/**
 	 * Updates the state based on current state and selection of menus. Does internal operations after a selection of a
 	 * menu (such as modifying a previous selection or providing a default selection to a skipped menu).
 	 */
-	abstract public void updateState();
+	abstract protected void updateState();
 
 	/**
 	 * Main loop.

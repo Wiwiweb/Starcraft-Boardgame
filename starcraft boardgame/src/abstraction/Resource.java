@@ -1,6 +1,6 @@
 package abstraction;
 
-public class Resource {
+public class Resource implements Comparable<Resource>{
 	
 	public static enum ResourceType {
 		MINERALS, GAS, CONTROL;
@@ -87,6 +87,11 @@ public class Resource {
 		}
 		result += resourceNum + " " + resourceType;
 		return result;
+	}
+
+	@Override
+	public int compareTo(Resource o) {
+		return this.area.compareTo(o.area);
 	}
 
 

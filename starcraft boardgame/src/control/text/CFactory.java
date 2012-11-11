@@ -18,7 +18,7 @@ public class CFactory extends AFactory {
 	}
 
 	@Override
-	public <T> AMenuChooseFromList<T> newMenuChooseFromList(MenuName menuName, List<T> listChoices, Player player) {
+	public <T extends Comparable<? super T>> AMenuChooseFromList<T> newMenuChooseFromList(MenuName menuName, List<T> listChoices, Player player) {
 		return new CMenuChooseFromList<T>(menuName, listChoices, player);
 	}
 
