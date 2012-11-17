@@ -11,6 +11,7 @@ import tools.PlanetEntrance;
 import abstraction.Resource.ResourceType;
 import abstraction.creators.FactionCreator;
 import abstraction.creators.PlanetCreator;
+import abstraction.creators.UnitCreator;
 import abstraction.menus.AMenu.MenuName;
 import abstraction.menus.AMenuChooseFromList;
 import abstraction.menus.MultiMenu;
@@ -88,10 +89,13 @@ public class Game {
 
 		// 5. Place Z-Axis navigation Routes
 		placeZAxis(orderedPlayerList);
-		
+
 		// 6. Distribute Resource Cards - DONE
+
+		// 7. Place Starting Forces
+		placeStartingForces(orderedPlayerList);
 	}
-	
+
 	private void placePlanets(final List<Player> orderedPlayerList) {
 		ListIterator<Player> it = orderedPlayerList.listIterator();
 		boolean continueToNextPlayer;
@@ -125,7 +129,7 @@ public class Game {
 
 				if (placePlanetMenu.isPlaceFirstBase()) {
 					player.placeBase(placePlanetMenu.getChosenBaseArea());
-					
+
 					for (Area a : chosenPlanet.getAreas()) {
 						if (a.getResource().getResourceType() != ResourceType.CONTROL) {
 							player.addControlledResource(a.getResource());
@@ -135,7 +139,7 @@ public class Game {
 			}
 		}
 	}
-	
+
 	private void placeZAxis(final List<Player> orderedPlayerList) {
 		ListIterator<Player> it = orderedPlayerList.listIterator();
 		boolean hasLegalSpot = true;
@@ -147,7 +151,7 @@ public class Game {
 				hasLegalSpot = false;
 				break;
 			} else {
-				
+
 				Iterator<PlanetEntrance> spotIt = availableEntrances.iterator();
 
 				checkLegal:
@@ -177,7 +181,26 @@ public class Game {
 		}
 	}
 
-	
+	private void placeStartingForces(final List<Player> orderedPlayerList) {
+		ListIterator<Player> it = orderedPlayerList.listIterator();
+		while (it.hasNext()) {
+			Player player = it.next();
+
+			String[] startingUnitTypes = player.getFaction().getStartingUnitTypes();
+			int[] startingUnitNumbers = player.getFaction().getStartingUnitNumbers();
+			List<Unit> startingUnits = new ArrayList<Unit>();
+
+			for (int i = 0; i < startingUnitTypes.length; i++) {
+				for (int j = 0; j < startingUnitNumbers[i]; j++) {
+					final Unit unit = UnitCreator.createUnit(startingUnitTypes[i], player);
+					startingUnits.add(unit);
+				}
+			}
+
+		}
+
+	}
+
 	public List<Player> getPlayerList() {
 		return playerList;
 	}
@@ -208,7 +231,7 @@ public class Game {
 	public void setFirstPlayer(Player firstPlayer) {
 		this.firstPlayer = firstPlayer;
 	}
-	
+
 	public Galaxy getGalaxy() {
 		return galaxy;
 	}

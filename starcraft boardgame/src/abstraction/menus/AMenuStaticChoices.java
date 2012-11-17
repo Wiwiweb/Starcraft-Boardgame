@@ -5,6 +5,10 @@ import abstraction.Player;
 
 public abstract class AMenuStaticChoices extends AMenu<Integer> {
 
+	public enum StaticChoice {
+		
+	}
+	
 	public AMenuStaticChoices(MenuName menuName, Player player) {
 		super(menuName, player);
 	}

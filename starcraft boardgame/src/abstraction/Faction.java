@@ -37,10 +37,18 @@ public class Faction implements Comparable<Faction>{
 		return startingTransports;
 	}
 
+	public String[] getStartingUnitTypes() {
+		return startingUnitTypes;
+	}
+	
 	public String getStartingUnitTypes(int i) {
 		return startingUnitTypes[i];
 	}
 
+	public int[] getStartingUnitNumbers() {
+		return startingUnitNumbers;
+	}
+	
 	public int getStartingUnitNumbers(int i) {
 		return startingUnitNumbers[i];
 	}
