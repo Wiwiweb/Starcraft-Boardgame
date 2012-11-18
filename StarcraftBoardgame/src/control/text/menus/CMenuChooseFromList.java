@@ -10,7 +10,7 @@ import abstraction.menus.AMenuChooseFromList;
 
 public class CMenuChooseFromList<T extends Comparable<? super T>> extends AMenuChooseFromList<T> {
 
-	private IPMenu<T> presentation;
+	private final IPMenu<T> presentation;
 
 	public CMenuChooseFromList(ChooseFromListMenuName menuName, List<T> choices, Player player) {
 		

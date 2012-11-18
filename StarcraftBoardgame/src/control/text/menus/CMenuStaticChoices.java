@@ -8,19 +8,16 @@ import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName.StaticChoice;
 
 public class CMenuStaticChoices extends AMenuStaticChoices {
 
-	private IPMenu<StaticChoice> presentation;
+	private final IPMenu<StaticChoice> presentation;
 
 	public CMenuStaticChoices(StaticChoicesMenuName menuName, Player player) {
 		super(menuName, player);
-
-		switch (menuName) {
-		case ROTATE_PLANET:
-		case PLACE_FIRST_BASE:
-			presentation = new PMenuStaticChoices(this);
-			break;
-		default:
-			throw new IllegalArgumentException("Unknown menu type.");
-		}
+		presentation = new PMenuStaticChoices(this);
+	}
+	
+	public CMenuStaticChoices(StaticChoicesMenuName menuName, StaticChoice[] disabledChoices, Player player) {
+		super(menuName, disabledChoices, player);
+		presentation = new PMenuStaticChoices(this);
 	}
 
 	@Override

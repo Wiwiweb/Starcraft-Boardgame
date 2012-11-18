@@ -8,6 +8,7 @@ import abstraction.menus.AMenuChooseFromList;
 import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
 import abstraction.menus.AMenuStaticChoices;
 import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName;
+import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName.StaticChoice;
 import control.text.menus.CMenuChooseFromList;
 import control.text.menus.CMenuStaticChoices;
 
@@ -17,11 +18,17 @@ public class CFactory extends AFactory {
 	public AMenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName, Player player) {
 		return new CMenuStaticChoices(menuName, player);
 	}
+	
+	@Override
+	public AMenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName, StaticChoice[] disabledChoices, Player player) {
+		return new CMenuStaticChoices(menuName, disabledChoices, player);
+	}
 
 	@Override
 	public <T extends Comparable<? super T>> AMenuChooseFromList<T> newMenuChooseFromList(ChooseFromListMenuName menuName, List<T> listChoices, Player player) {
 		return new CMenuChooseFromList<T>(menuName, listChoices, player);
 	}
+
 
 	// @Override
 	// public AMenuStaticChoices newMenuStaticChoices(MenuName menuName, Player player) {

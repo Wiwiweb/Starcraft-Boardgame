@@ -23,6 +23,7 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 				{
 					put(StaticChoicesMenuName.ROTATE_PLANET, "rotate this planet?");
 					put(StaticChoicesMenuName.PLACE_FIRST_BASE, "choose this planet for your first base?");
+					put(StaticChoicesMenuName.PLACE_REMOVE_UNIT, "what to do next?");
 				}
 			}
 					);
@@ -37,6 +38,9 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 					put(StaticChoice.ROTATE_PLANET_PLACE, "Place planet");
 					put(StaticChoice.PLACE_FIRST_BASE_YES, "Yes");
 					put(StaticChoice.PLACE_FIRST_BASE_NO, "No");
+					put(StaticChoice.PLACE_REMOVE_UNIT_PLACE_UNIT, "Place unit");
+					put(StaticChoice.PLACE_REMOVE_UNIT_REMOVE_UNIT, "Remove unit");
+					put(StaticChoice.PLACE_REMOVE_UNIT_PLACE_TRANSPORT, "Place transport");
 				}
 			}
 					);
@@ -55,11 +59,11 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 		String playerName = control.getPlayer().getName();
 		System.out.println(playerName + ", " + promptMessage);
 		int choice = -1;
-		
+
 		List<StaticChoice> choices = new ArrayList<>();
 		choices.addAll(Arrays.asList(control.getMenuName().getChoices()));
-		//TODO remove disabled choices
-		
+		choices.removeAll(Arrays.asList(control.getDisabledChoices()));
+
 		while (choice < 1 || choice > choices.size()) {
 
 			Iterator<StaticChoice> it = choices.iterator();
@@ -72,13 +76,13 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 			}
 
 			choice = TextIHM.scanner.nextInt();
-			if(Game.IS_TEST) {
+			if (Game.IS_TEST) {
 				System.out.println(choice);
 			}
 			System.out.println();
 		}
 
-		return getStaticChoiceFromInt(choice);
+		return choices.get(choice-1);
 	}
 
 	@Override
@@ -86,11 +90,11 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 		String playerName = control.getPlayer().getName();
 		System.out.println(playerName + ", " + promptMessage);
 		int choice = -1;
-		
+
 		List<StaticChoice> choices = new ArrayList<>();
 		choices.addAll(Arrays.asList(control.getMenuName().getChoices()));
-		//TODO remove disabled choices
-		
+		choices.removeAll(Arrays.asList(control.getDisabledChoices()));
+
 		int cancel = choices.size() + 1;
 
 		while (choice < 1 || choice > cancel) {
@@ -107,7 +111,7 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 			System.out.println(cancel + " : Cancel");
 
 			choice = TextIHM.scanner.nextInt();
-			if(Game.IS_TEST) {
+			if (Game.IS_TEST) {
 				System.out.println(choice);
 			}
 			System.out.println();
@@ -116,14 +120,7 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 		if (choice == cancel) {
 			return null;
 		} else {
-			return getStaticChoiceFromInt(choice);
+			return choices.get(choice-1);
 		}
 	}
-
-	private StaticChoice getStaticChoiceFromInt(int choice) {
-		StaticChoice[] choices = control.getMenuName().getChoices();
-		return choices[choice - 1];
-		// TODO allow disabling choices
-	}
-
 }
