@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<planets>
+
+	<planet name="Pridewater">
+		<entrance>NORTH</entrance>
+		<entrance>EAST</entrance>
+		<entrance>SOUTH</entrance>
+		<area>
+			<resource type="MINERALS">3</resource>
+			<unitLimit>4</unitLimit>
+		</area>
+		<area>
+			<resource type="GAS">2</resource>
+			<unitLimit>4</unitLimit>
+		</area>
+		<area>
+			<resource type="MINERALS">1</resource>
+			<unitLimit>3</unitLimit>
+		</area>
+	</planet>
+	
+	<planet name="Chau Sara">
+		<entrance>NORTH</entrance>
+		<entrance>WEST</entrance>
+		<area>
+			<resource type="CONTROL">1</resource>
+			<unitLimit>3</unitLimit>
+		</area>
+		<area>
+			<resource type="GAS">1</resource>		
+			<unitLimit>4</unitLimit>
+		</area>
+		<area>
+			<resource type="MINERALS">2</resource>
+			<unitLimit>3</unitLimit>
+		</area>
+	</planet>
+	
+	<planet name="Braken">
+		<entrance>NORTH</entrance>
+		<entrance>WEST</entrance>
+		<area>
+			<resource type="CONTROL">1</resource>
+			<unitLimit>4</unitLimit>
+		</area>
+		<area>
+			<resource type="GAS">2</resource>
+			<unitLimit>3</unitLimit>
+		</area>
+		<area>
+			<resource type="MINERALS">1</resource>
+			<unitLimit>2</unitLimit>
+		</area>
+	</planet>
+	
+	<planet name="Tarsonis">
+		<entrance>NORTH</entrance>
+		<entrance>EAST</entrance>
+		<entrance>SOUTH</entrance>
+		<area>
+			<resource type="CONTROL">1</resource>
+			<unitLimit>3</unitLimit>
+		</area>
+		<area>
+			<resource type="GAS">2</resource>
+			<unitLimit>4</unitLimit>
+		</area>
+		<area>
+			<resource type="MINERALS">2</resource>
+			<unitLimit>3</unitLimit>
+		</area>
+	</planet>
+	
+	<planet name="Abaddon">
+		<entrance>EAST</entrance>
+		<entrance>WEST</entrance>
+		<area>
+			<resource type="CONTROL">1</resource>
+			<unitLimit>4</unitLimit>
+		</area>
+		<area>
+			<resource type="MINERALS">3</resource>
+			<unitLimit>3</unitLimit>
+		</area>
+	</planet>
+	
+</planets>
