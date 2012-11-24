@@ -10,6 +10,9 @@ import abstraction.Player;
 import abstraction.Resource;
 import abstraction.Resource.ResourceType;
 
+/**
+ * @author William Gautier
+ */
 public interface IHM {
 
 	public <T> T selectFromList(List<T> list);

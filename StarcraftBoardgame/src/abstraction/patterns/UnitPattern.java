@@ -2,23 +2,27 @@ package abstraction.patterns;
 
 import abstraction.Price;
 
+/**
+ * @author William Gautier
+ */
 public class UnitPattern {
-	
+
 	public static enum WalkType {
 		GROUND, AIR
 	}
-	
+
 	private final Price price;
 	private final int maxNum;
-	
+
 	private final String name;
 	private final WalkType walkType;
 	private final boolean groundAttack;
 	private final boolean airAttack;
 	private final int support;
-	private final boolean assist;	
-	
-	public UnitPattern(String name, Price price, int maxNum, WalkType walkType, boolean groundAttack, boolean airAttack, int support, boolean assist) {
+	private final boolean assist;
+
+	public UnitPattern(String name, Price price, int maxNum, WalkType walkType, boolean groundAttack, boolean airAttack,
+			int support, boolean assist) {
 		this.name = name;
 		this.maxNum = maxNum;
 		this.price = price;
@@ -28,7 +32,7 @@ public class UnitPattern {
 		this.support = support;
 		this.assist = assist;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -60,10 +64,10 @@ public class UnitPattern {
 	public boolean isAssist() {
 		return assist;
 	}
-	
+
 	@Override
 	public String toString() {
-		return name + "(P)";		
+		return name + "(P)";
 	}
 
 }

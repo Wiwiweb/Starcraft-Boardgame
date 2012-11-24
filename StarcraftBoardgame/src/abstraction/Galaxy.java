@@ -8,6 +8,9 @@ import tools.PlanetEntrance;
 import tools.PlanetPosition;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
+/**
+ * @author William Gautier
+ */
 public class Galaxy {
 
 	private BidirectionalMap<Planet, PlanetPosition> planetPositions = new BidirectionalMap<Planet, PlanetPosition>();

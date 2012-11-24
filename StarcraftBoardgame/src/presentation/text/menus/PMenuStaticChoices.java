@@ -10,10 +10,13 @@ import java.util.Map;
 
 import presentation.text.TextIHM;
 import abstraction.Game;
+import abstraction.menus.AMenuStaticChoices.StaticChoice;
 import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName;
-import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName.StaticChoice;
 import control.text.menus.CMenuStaticChoices;
 
+/**
+ * @author William Gautier
+ */
 public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 
 	@SuppressWarnings("serial")
@@ -82,7 +85,7 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 			System.out.println();
 		}
 
-		return choices.get(choice-1);
+		return choices.get(choice - 1);
 	}
 
 	@Override
@@ -120,7 +123,7 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 		if (choice == cancel) {
 			return null;
 		} else {
-			return choices.get(choice-1);
+			return choices.get(choice - 1);
 		}
 	}
 }

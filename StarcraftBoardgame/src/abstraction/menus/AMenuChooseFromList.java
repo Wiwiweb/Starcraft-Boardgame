@@ -4,10 +4,15 @@ import java.util.List;
 
 import abstraction.Player;
 
+/**
+ * @author William Gautier
+ */
 public abstract class AMenuChooseFromList<T> extends AMenu<T> {
 
 	public static enum ChooseFromListMenuName {
-		CHOOSE_FACTION, CHOOSE_PLANET_TO_PLACE, CHOOSE_PLANET_SPOT, CHOOSE_BASE_AREA, CHOOSE_ZAXIS_ENTRANCE, CHOOSE_ZAXIS_EXIT
+		CHOOSE_FACTION, CHOOSE_PLANET_TO_PLACE, CHOOSE_PLANET_SPOT, CHOOSE_BASE_AREA,
+		CHOOSE_ZAXIS_ENTRANCE, CHOOSE_ZAXIS_EXIT,
+		CHOOSE_UNIT_TO_PLACE, CHOOSE_UNIT_PLACEMENT, CHOOSE_UNIT_TO_REMOVE, CHOOSE_TRANSPORT_PLACEMENT, CHOOSE_TRANSPORT_TO_REMOVE
 	}
 
 	private final ChooseFromListMenuName menuName;

@@ -25,6 +25,9 @@ import abstraction.patterns.PlanetPattern.Cardinal;
 import abstraction.patterns.UnitPattern;
 import abstraction.patterns.UnitPattern.WalkType;
 
+/**
+ * @author William Gautier
+ */
 public class XmlParser {
 
 	public static void getAll() {
@@ -216,7 +219,8 @@ public class XmlParser {
 				// Base price
 				Price basePrice = parsePrice("basePrice", base);
 
-				BasePattern pattern = new BasePattern(name, buildingNames, modulesMaxNum, availableModules, permanentResourcesType, permanentResourcesNum,
+				BasePattern pattern = new BasePattern(name, buildingNames, modulesMaxNum, availableModules,
+						permanentResourcesType, permanentResourcesNum,
 						workersMaxNum, workerPrice, transportsMaxNum, transportPrice, basesMaxNum, basePrice);
 				BaseCreator.addBasePattern(name, pattern);
 			}
@@ -259,7 +263,8 @@ public class XmlParser {
 					startingUnitNumbers[j] = Integer.parseInt(startingUnit.getTextContent());
 				}
 
-				Faction pattern = new Faction(name, baseName, startingWorkers, startingTransports, startingUnitTypes, startingUnitNumbers);
+				Faction pattern = new Faction(name, baseName, startingWorkers, startingTransports, startingUnitTypes,
+						startingUnitNumbers);
 				FactionCreator.addFaction(name, pattern);
 			}
 		} catch (NullPointerException e) {

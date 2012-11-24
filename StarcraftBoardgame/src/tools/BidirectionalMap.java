@@ -4,6 +4,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import sun.awt.image.ImageWatched.Link;
+
+/**
+ * @author GETah
+ * {@link http://stackoverflow.com/a/7834138}
+ */
 public class BidirectionalMap<KeyType, ValueType> {
 
 	private Map<KeyType, ValueType> keyToValueMap = new ConcurrentHashMap<KeyType, ValueType>();

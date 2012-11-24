@@ -4,7 +4,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import tools.XmlParser;
-
 import abstraction.Area;
 import abstraction.Building;
 import abstraction.Galaxy;
@@ -16,6 +15,9 @@ import abstraction.creators.PlanetCreator;
 import abstraction.creators.UnitCreator;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
+/**
+ * @author William Gautier
+ */
 public class CreatorTests {
 
 	@BeforeClass

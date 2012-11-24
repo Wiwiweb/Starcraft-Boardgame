@@ -1,5 +1,8 @@
 package abstraction.patterns;
 
+/**
+ * @author William Gautier
+ */
 public class PlanetPattern {
 
 	public static enum Cardinal {

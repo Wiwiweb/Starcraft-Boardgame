@@ -9,6 +9,9 @@ import abstraction.Resource.ResourceType;
 import abstraction.creators.BaseCreator;
 import abstraction.creators.UnitCreator;
 
+/**
+ * @author William Gautier
+ */
 public class Player {
 
 	private String name;
@@ -20,6 +23,7 @@ public class Player {
 
 	private Faction faction;
 	private Base base;
+	private Planet startingPlanet;
 
 	private List<Unit> units = new ArrayList<Unit>();
 	private List<Resource> controlledResources = new ArrayList<Resource>();
@@ -30,6 +34,7 @@ public class Player {
 	}
 
 	public void buyUnit(String unitName, Planet orderPlanet) {
+		// TODO remake
 		if (!getBase().isAvailableUnit(unitName)) {
 			throw new IllegalArgumentException("This unit is not available.");
 		}
@@ -66,22 +71,12 @@ public class Player {
 		}
 
 		Unit unit = createUnit(unitName);
-		List<Area> buildableAreas = getBuildableAreas(orderPlanet);
+		List<Area> buildableAreas = orderPlanet.getBuildableAreas(this);
 		if (buildableAreas.isEmpty()) {
 			throw new IllegalStateException("No space left to build a unit.");
 		}
 		Area selectedArea = Game.ihm.selectAreaToPlaceUnit(this, buildableAreas);
 		selectedArea.addUnit(unit);
-	}
-
-	private List<Area> getBuildableAreas(Planet orderPlanet) {
-		List<Area> result = new ArrayList<Area>();
-		for (Area area : orderPlanet.getAreas()) {
-			if (area.isEmpty() || (area.isControlledBy(this) && !area.isFull())) {
-				result.add(area);
-			}
-		}
-		return result;
 	}
 
 	private List<Resource> getAvailableMiningArea(ResourceType type) {
@@ -152,6 +147,14 @@ public class Player {
 		return base;
 	}
 
+	public Planet getStartingPlanet() {
+		return startingPlanet;
+	}
+
+	public void setStartingPlanet(Planet startingPlanet) {
+		this.startingPlanet = startingPlanet;
+	}
+
 	public void addUnit(Unit unit) {
 		units.add(unit);
 	}
@@ -187,12 +190,16 @@ public class Player {
 	public void removePlanetToken(Planet planetToken) {
 		this.planetTokens.remove(planetToken);
 	}
-	
+
 	public void addControlledResource(Resource resource) {
-		if(resource.getResourceType() == ResourceType.CONTROL) {
+		if (resource.getResourceType() == ResourceType.CONTROL) {
 			throw new IllegalArgumentException("Control point areas can't be controlled by a player (not a spendable resource).");
 		}
 		controlledResources.add(resource);
+	}
+
+	public boolean hasTransport(Route route) {
+		return route.getTransports().contains(this);
 	}
 
 	public String listUnits() {

@@ -8,12 +8,15 @@ import presentation.text.menus.PMenuChooseFromList;
 import abstraction.Player;
 import abstraction.menus.AMenuChooseFromList;
 
+/**
+ * @author William Gautier
+ */
 public class CMenuChooseFromList<T extends Comparable<? super T>> extends AMenuChooseFromList<T> {
 
 	private final IPMenu<T> presentation;
 
 	public CMenuChooseFromList(ChooseFromListMenuName menuName, List<T> choices, Player player) {
-		
+
 		super(menuName, choices, player);
 		Collections.sort(choices);
 

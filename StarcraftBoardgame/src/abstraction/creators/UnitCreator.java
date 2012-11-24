@@ -8,27 +8,30 @@ import abstraction.Price;
 import abstraction.Unit;
 import abstraction.patterns.UnitPattern;
 
+/**
+ * @author William Gautier
+ */
 public class UnitCreator {
-	
-    private static Map<String, UnitPattern> unitPatterns = new ConcurrentHashMap<String, UnitPattern>();
-        
-    public static Unit createUnit(String name, Player owner) {
-    	UnitPattern pattern = unitPatterns.get(name);    	
+
+	private static Map<String, UnitPattern> unitPatterns = new ConcurrentHashMap<String, UnitPattern>();
+
+	public static Unit createUnit(String name, Player owner) {
+		UnitPattern pattern = unitPatterns.get(name);
 		if (pattern != null) {
-			Unit unit =  new Unit(pattern, owner);
+			Unit unit = new Unit(pattern, owner);
 			owner.addUnit(unit);
 			return unit;
-	    } else {
+		} else {
 			throw new IllegalArgumentException("No unit pattern associated with the name " + name + ".");
 		}
-    }
-    
-    public static Price getPrice(String unitName) {
-    	UnitPattern pattern = unitPatterns.get(unitName);    	
-    	return pattern.getPrice();
-    }
-    
-    public static void addUnitPattern(String name, UnitPattern pattern) {
-    	unitPatterns.put(name, pattern);
-    }
+	}
+
+	public static Price getPrice(String unitName) {
+		UnitPattern pattern = unitPatterns.get(unitName);
+		return pattern.getPrice();
+	}
+
+	public static void addUnitPattern(String name, UnitPattern pattern) {
+		unitPatterns.put(name, pattern);
+	}
 }

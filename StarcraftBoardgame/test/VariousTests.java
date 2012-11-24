@@ -14,10 +14,11 @@ import abstraction.Player;
 import abstraction.creators.FactionCreator;
 import abstraction.creators.UnitCreator;
 
-
-
+/**
+ * @author William Gautier
+ */
 public class VariousTests {
-	
+
 	@BeforeClass
 	public static void initializeXml() {
 		XmlParser.getAll();

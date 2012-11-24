@@ -2,6 +2,9 @@ package abstraction.menus;
 
 import abstraction.Player;
 
+/**
+ * @author William Gautier
+ */
 public abstract class MultiMenu {
 
 	protected final Player player;

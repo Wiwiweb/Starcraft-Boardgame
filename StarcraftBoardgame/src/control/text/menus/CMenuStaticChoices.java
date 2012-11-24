@@ -1,11 +1,15 @@
 package control.text.menus;
 
+import java.util.Collection;
+
 import presentation.text.menus.IPMenu;
 import presentation.text.menus.PMenuStaticChoices;
 import abstraction.Player;
 import abstraction.menus.AMenuStaticChoices;
-import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName.StaticChoice;
 
+/**
+ * @author William Gautier
+ */
 public class CMenuStaticChoices extends AMenuStaticChoices {
 
 	private final IPMenu<StaticChoice> presentation;
@@ -14,8 +18,8 @@ public class CMenuStaticChoices extends AMenuStaticChoices {
 		super(menuName, player);
 		presentation = new PMenuStaticChoices(this);
 	}
-	
-	public CMenuStaticChoices(StaticChoicesMenuName menuName, StaticChoice[] disabledChoices, Player player) {
+
+	public CMenuStaticChoices(StaticChoicesMenuName menuName, Collection<StaticChoice> disabledChoices, Player player) {
 		super(menuName, disabledChoices, player);
 		presentation = new PMenuStaticChoices(this);
 	}

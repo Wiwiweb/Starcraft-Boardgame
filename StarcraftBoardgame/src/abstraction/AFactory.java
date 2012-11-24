@@ -1,20 +1,26 @@
 package abstraction;
 
+import java.util.Collection;
 import java.util.List;
 
 import abstraction.menus.AMenuChooseFromList;
 import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
 import abstraction.menus.AMenuStaticChoices;
+import abstraction.menus.AMenuStaticChoices.StaticChoice;
 import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName;
-import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName.StaticChoice;
 
+/**
+ * @author William Gautier
+ */
 public abstract class AFactory {
 
 	public abstract AMenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName, Player player);
-	
-	public abstract AMenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName, StaticChoice[] disabledChoices, Player player);
 
-	public abstract <T extends Comparable<? super T>> AMenuChooseFromList<T> newMenuChooseFromList(ChooseFromListMenuName menuName,
+	public abstract AMenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName,
+			Collection<StaticChoice> disabledChoices, Player player);
+
+	public abstract <T extends Comparable<? super T>> AMenuChooseFromList<T> newMenuChooseFromList(
+			ChooseFromListMenuName menuName,
 			List<T> listChoices, Player player);
 
 }

@@ -11,6 +11,9 @@ import abstraction.Player;
 import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
+/**
+ * @author William Gautier
+ */
 public class MultiMenuPlaceZAxis extends MultiMenu {
 
 	private final List<PlanetEntrance> availableEntrances;

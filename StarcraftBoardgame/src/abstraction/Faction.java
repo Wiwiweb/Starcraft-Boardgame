@@ -1,6 +1,9 @@
 package abstraction;
 
-public class Faction implements Comparable<Faction>{
+/**
+ * @author William Gautier
+ */
+public class Faction implements Comparable<Faction> {
 
 	private final String name;
 
@@ -12,7 +15,8 @@ public class Faction implements Comparable<Faction>{
 	private final String[] startingUnitTypes;
 	private final int[] startingUnitNumbers;
 
-	public Faction(String name, String baseName, int startingWorkers, int startingTransports, String[] startingUnitTypes, int[] startingUnitNumbers) {
+	public Faction(String name, String baseName, int startingWorkers, int startingTransports, String[] startingUnitTypes,
+			int[] startingUnitNumbers) {
 		this.name = name;
 		this.baseName = baseName;
 		this.startingWorkers = startingWorkers;
@@ -41,10 +45,14 @@ public class Faction implements Comparable<Faction>{
 		return startingUnitTypes[i];
 	}
 
+	public String[] getStartingUnitTypes() {
+		return startingUnitTypes;
+	}
+
 	public int getStartingUnitNumbers(int i) {
 		return startingUnitNumbers[i];
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Faction " + getName();

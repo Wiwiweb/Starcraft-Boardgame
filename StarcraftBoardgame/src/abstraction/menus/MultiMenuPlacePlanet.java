@@ -10,14 +10,17 @@ import abstraction.Game;
 import abstraction.Planet;
 import abstraction.Player;
 import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
+import abstraction.menus.AMenuStaticChoices.StaticChoice;
 import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName;
-import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName.StaticChoice;
 
+/**
+ * @author William Gautier
+ */
 public class MultiMenuPlacePlanet extends MultiMenu {
 
 	private final Galaxy galaxy;
 	private final int roundNumber;
-	private StaticChoice rotatePlanetSelection;
+	private StaticChoice rotatePlanetChoice;
 
 	private Planet chosenPlanet;
 	private PlanetEntrance chosenSpot;
@@ -100,11 +103,11 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 
 		// After Rotate Planet - 4 paths
 		case 2:
-			if (rotatePlanetSelection == null) { // Cancel
+			if (rotatePlanetChoice == null) { // Cancel
 				nextState = 1;
 			} else {
 
-				switch (rotatePlanetSelection) {
+				switch (rotatePlanetChoice) {
 				case ROTATE_PLANET_CLOCKWISE:
 					chosenPlanet.rotateClockwise();
 					nextState = 2;
@@ -181,7 +184,7 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 				chosenPlanet = (Planet) menu.selectChoice();
 				break;
 			case 2:
-				rotatePlanetSelection = (StaticChoice) menu.selectChoiceWithCancel();
+				rotatePlanetChoice = (StaticChoice) menu.selectChoiceWithCancel();
 				break;
 			case 3:
 				chosenSpot = (PlanetEntrance) menu.selectChoiceWithCancel();

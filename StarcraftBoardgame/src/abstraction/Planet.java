@@ -7,6 +7,9 @@ import java.util.List;
 import abstraction.patterns.PlanetPattern;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
+/**
+ * @author William Gautier
+ */
 public class Planet implements Comparable<Planet> {
 
 	private PlanetPattern pattern;
@@ -90,6 +93,62 @@ public class Planet implements Comparable<Planet> {
 
 	public List<Area> getAreas() {
 		return areas;
+	}
+
+	public List<Area> getBuildableAreas(Player player) {
+		List<Area> result = new ArrayList<Area>();
+		for (Area area : getAreas()) {
+			if (area.isEmpty() || (area.isControlledBy(player) && !area.isFull())) {
+				result.add(area);
+			}
+		}
+		return result;
+	}
+
+	public List<Area> getBuildableAreasPlusUnits(Player player, List<Area> areasWithAVirtualUnit) {
+		List<Area> result = new ArrayList<Area>();
+		for (Area area : getAreas()) {
+			int nbUnitsVirtuallyAddedToThisZone = 0;
+			for (Area a : areasWithAVirtualUnit) {
+				if (a == area) {
+					nbUnitsVirtuallyAddedToThisZone++;
+				}
+			}
+			boolean isFull = (area.getUnitNumber() + nbUnitsVirtuallyAddedToThisZone) >= area.getUnitLimit();
+
+			if (area.isEmpty() || (area.isControlledBy(player) && !isFull)) {
+				result.add(area);
+			}
+		}
+		return result;
+	}
+
+	public List<Route> getRoutesWithTransports(Player player) {
+		List<Route> result = new ArrayList<Route>();
+		for (Cardinal c : Cardinal.values()) {
+			if (hasRoute(c)) {
+				Route route = getRoute(c);
+				if (player.hasTransport(route)) {
+					result.add(route);
+				}
+			}
+
+		}
+		return result;
+	}
+
+	public List<Route> getRoutesWithNoTransports(Player player) {
+		List<Route> result = new ArrayList<Route>();
+		for (Cardinal c : Cardinal.values()) {
+			if (hasRoute(c)) {
+				Route route = getRoute(c);
+				if (!player.hasTransport(route)) {
+					result.add(route);
+				}
+			}
+
+		}
+		return result;
 	}
 
 	public void rotateClockwise() {

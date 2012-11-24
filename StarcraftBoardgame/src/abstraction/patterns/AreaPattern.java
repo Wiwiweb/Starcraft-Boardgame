@@ -2,6 +2,9 @@ package abstraction.patterns;
 
 import abstraction.Resource.ResourceType;
 
+/**
+ * @author William Gautier
+ */
 public class AreaPattern {
 
 	// These are special :
@@ -13,25 +16,25 @@ public class AreaPattern {
 	private final int unitLimit;
 	private final ResourceType resourceType;
 	private final int resourceNum;
-	
+
 	public AreaPattern(int unitLimit, ResourceType resourceType, int resourceNum) {
 		this.unitLimit = unitLimit;
 		this.resourceType = resourceType;
 		this.resourceNum = resourceNum;
 	}
-	
+
 	public int getUnitLimit() {
 		return unitLimit;
 	}
-	
+
 	public ResourceType getResourceType() {
 		return resourceType;
 	}
-	
+
 	public int getResourceNum() {
 		return resourceNum;
 	}
-	
+
 	@Override
 	public String toString() {
 		return getResourceNum() + " " + getResourceType().toString() + " area (P)";

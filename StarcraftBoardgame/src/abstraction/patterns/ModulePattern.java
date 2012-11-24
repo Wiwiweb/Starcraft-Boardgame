@@ -2,13 +2,16 @@ package abstraction.patterns;
 
 import abstraction.Price;
 
+/**
+ * @author William Gautier
+ */
 public class ModulePattern {
-	
+
 	private final int maxNum;
 	private final Price price;
-		
+
 	private final String name;
-	
+
 	public ModulePattern(String name, int maxNum, Price price) {
 		this.name = name;
 		this.maxNum = maxNum;

@@ -13,10 +13,13 @@ import abstraction.Player;
 import abstraction.Resource;
 import abstraction.Resource.ResourceType;
 
+/**
+ * @author William Gautier
+ */
 public class TextIHM implements IHM {
 
 	public static Scanner scanner = new Scanner(System.in);
-	
+
 	@Override
 	public <T> T selectFromList(List<T> list) {
 		int choice = -1;

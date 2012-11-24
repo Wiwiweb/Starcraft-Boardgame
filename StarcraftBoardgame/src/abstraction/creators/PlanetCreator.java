@@ -11,6 +11,9 @@ import abstraction.Resource;
 import abstraction.patterns.AreaPattern;
 import abstraction.patterns.PlanetPattern;
 
+/**
+ * @author William Gautier
+ */
 public class PlanetCreator {
 
 	private static Map<String, PlanetPattern> planetPatterns = new ConcurrentHashMap<String, PlanetPattern>();

@@ -3,6 +3,9 @@ package abstraction;
 import abstraction.creators.BuildingCreator;
 import abstraction.patterns.BasePattern;
 
+/**
+ * @author William Gautier
+ */
 public class Base {
 
 	private final BasePattern pattern;
@@ -21,7 +24,8 @@ public class Base {
 		this.permanentResources = new Resource[pattern.getPermanentResourcesType().length];
 
 		for (int i = 0; i < pattern.getPermanentResourcesType().length; i++) {
-			this.permanentResources[i] = new Resource(pattern.getPermanentResourcesType()[i], pattern.getPermanentResourcesNum()[i], true);
+			this.permanentResources[i] = new Resource(pattern.getPermanentResourcesType()[i],
+					pattern.getPermanentResourcesNum()[i], true);
 		}
 
 		for (int i = 0; i < 3; i++) {

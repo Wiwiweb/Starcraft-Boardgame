@@ -4,37 +4,202 @@ import java.util.ArrayList;
 import java.util.List;
 
 import abstraction.Area;
+import abstraction.Game;
+import abstraction.Planet;
 import abstraction.Player;
 import abstraction.Route;
 import abstraction.Unit;
+import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
+import abstraction.menus.AMenuStaticChoices.StaticChoice;
+import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName;
 
-
+/**
+ * @author William Gautier
+ */
 public class MultiMenuPlaceStartingForces extends MultiMenu {
-	
-	private List<Unit> startingUnits;
-	private int startingTransports;
-	
+
+	private final Planet startingPlanet;
+	private List<Unit> remainingUnits;
+	private int remainingTransports;
+
+	private StaticChoice unitPlaceRemoveChoice;
+	private Unit chosenUnit;
+	private Area chosenArea;
+	private Route chosenRoute;
+
 	// placedUnit and placedUnitArea go together
 	private List<Unit> placedUnits = new ArrayList<Unit>();
 	private List<Area> placedUnitsAreas = new ArrayList<Area>();
-	private List<Route> transportsPlaced = new ArrayList<Route>();
-	
-	public MultiMenuPlaceStartingForces(Player player, List<Unit> startingUnits, int startingTransports) {
+	private List<Route> placedTransports = new ArrayList<Route>();
+
+	public MultiMenuPlaceStartingForces(Planet startingPlanet, List<Unit> startingUnits, int startingTransports, Player player) {
 		super(player);
-		this.startingUnits = startingUnits;
-		this.startingTransports = startingTransports;
+		this.startingPlanet = startingPlanet;
+		this.remainingUnits = startingUnits;
+		this.remainingTransports = startingTransports;
 	}
 
 	@Override
 	protected AMenu<?> getMenu(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		AMenu<?> menu;
+
+		switch (i) {
+
+		case 1:
+			List<StaticChoice> disabledChoices = new ArrayList<StaticChoice>();
+			if (remainingUnits.isEmpty()) {
+				disabledChoices.add(StaticChoice.PLACE_REMOVE_UNIT_PLACE_UNIT);
+			}
+			if (placedUnits.isEmpty()) {
+				disabledChoices.add(StaticChoice.PLACE_REMOVE_UNIT_REMOVE_UNIT);
+			}
+			if (remainingTransports == 0) {
+				disabledChoices.add(StaticChoice.PLACE_REMOVE_UNIT_PLACE_TRANSPORT);
+			}
+			if (placedTransports.isEmpty()) {
+				disabledChoices.add(StaticChoice.PLACE_REMOVE_UNIT_REMOVE_TRANSPORT);
+			}
+
+			menu = Game.factory.newMenuStaticChoices(StaticChoicesMenuName.PLACE_REMOVE_UNIT, disabledChoices, player);
+			break;
+
+		case 2:
+			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_TO_PLACE, remainingUnits, player);
+			break;
+
+		case 3:
+			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_PLACEMENT,
+					startingPlanet.getBuildableAreasPlusUnits(player, placedUnitsAreas), player);
+			break;
+
+		case 4:
+			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_TO_REMOVE, placedUnits, player);
+			break;
+
+		case 5:
+			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_TRANSPORT_PLACEMENT,
+					startingPlanet.getRoutesWithNoTransports(player), player);
+			break;
+
+		case 6:
+			menu = Game.factory
+					.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_TRANSPORT_PLACEMENT, placedTransports, player);
+			break;
+
+		default:
+			throw new IllegalArgumentException("No such menu in this multi menu.");
+		}
+
+		return menu;
 	}
 
 	@Override
 	protected void updateState() {
-		// TODO Auto-generated method stub
+		int nextState;
 
+		switch (state) {
+
+		// Entry Point - 1 path
+		case 0:
+			nextState = 1;
+			break;
+
+		// After Choose Unit/Transport Place/Remove - 4 paths
+		case 1:
+			switch (unitPlaceRemoveChoice) {
+			case PLACE_REMOVE_UNIT_PLACE_UNIT:
+				nextState = 2;
+				break;
+			case PLACE_REMOVE_UNIT_REMOVE_UNIT:
+				nextState = 4;
+				break;
+			case PLACE_REMOVE_UNIT_PLACE_TRANSPORT:
+				nextState = 5;
+				break;
+			case PLACE_REMOVE_UNIT_REMOVE_TRANSPORT:
+				nextState = 6;
+				break;
+			default:
+				throw new IllegalStateException("This menu should not return this value.");
+			}
+			break;
+
+		// After Choose Unit to Place - 2 paths
+		case 2:
+			if (chosenUnit == null) { // Cancel
+				nextState = 1;
+			} else {
+				nextState = 3;
+			}
+			break;
+
+		// After Choose Area to place unit - 3 paths
+		case 3:
+			if (chosenArea == null) { // Cancel
+				nextState = 1;
+			} else {
+				placedUnits.add(chosenUnit);
+				placedUnitsAreas.add(chosenArea);
+				if (!remainingUnits.remove(chosenUnit)) {
+					throw new IllegalStateException();
+				}
+				if (remainingUnits.isEmpty() && remainingTransports == 0) { // It's over
+					nextState = -1;
+				} else {
+					nextState = 1;
+				}
+			}
+			break;
+
+		// After Choose Unit to Remove - 1 path but 2 choices
+		case 4:
+			if (chosenUnit == null) { // Cancel
+				nextState = 1;
+			} else {
+				int index = placedUnits.indexOf(chosenUnit);
+				if (index == -1) {
+					throw new IllegalStateException();
+				}
+				placedUnits.remove(index);
+				placedUnitsAreas.remove(index);
+				remainingUnits.add(chosenUnit);
+				nextState = 1;
+			}
+			break;
+
+		// After Choose Route to place transport - 2 path but 3 choices
+		case 5:
+			if (chosenRoute == null) { // Cancel
+				nextState = 1;
+			} else {
+				placedTransports.add(chosenRoute);
+				remainingTransports--;
+				if (remainingUnits.isEmpty() && remainingTransports == 0) { // It's over
+					nextState = -1;
+				} else {
+					nextState = 1;
+				}
+			}
+			break;
+
+		// After Choose Route to remove transport - 1 path but 2 choices
+		case 6:
+			if (chosenRoute == null) { // Cancel
+				nextState = 1;
+			} else {
+				if (!placedTransports.remove(chosenRoute)) {
+					throw new IllegalStateException();
+				}
+				remainingTransports++;
+				nextState = 1;
+			}
+			break;
+			
+		default:
+			throw new IllegalStateException("This state shouldn't happen.");
+		}
+
+		state = nextState;
 	}
 
 	@Override
@@ -43,19 +208,16 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 
 	}
 
-	
 	public List<Unit> getPlacedUnits() {
 		return placedUnits;
 	}
 
-	
 	public List<Area> getPlacedUnitsAreas() {
 		return placedUnitsAreas;
 	}
 
-	
 	public List<Route> getTransportsPlaced() {
-		return transportsPlaced;
+		return placedTransports;
 	}
 
 }

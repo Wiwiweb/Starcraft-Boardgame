@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Area implements Comparable<Area>{
+/**
+ * @author William Gautier
+ */
+public class Area implements Comparable<Area> {
 
 	private final int unitLimit;
 	private final Resource resource;
@@ -40,7 +43,7 @@ public class Area implements Comparable<Area>{
 	}
 
 	public void buildBaseOwnedBy(Player player) {
-		if(hasBaseOwnedBy != null) {
+		if (hasBaseOwnedBy != null) {
 			throw new IllegalStateException("You cannot build a base on an existing one.");
 		}
 		hasBaseOwnedBy = player;
@@ -49,7 +52,7 @@ public class Area implements Comparable<Area>{
 	public Planet getPlanet() {
 		return planet;
 	}
-	
+
 	public Resource getResource() {
 		return resource;
 	}
@@ -58,7 +61,8 @@ public class Area implements Comparable<Area>{
 		if (this.planet == null) {
 			this.planet = planet;
 		} else {
-			throw new IllegalStateException("You cannot change the planet of an area after it has been set. (Original planet: " + this.planet
+			throw new IllegalStateException("You cannot change the planet of an area after it has been set. (Original planet: "
+					+ this.planet
 					+ " ; Tried to change to: " + planet + ")");
 		}
 	}
@@ -74,8 +78,10 @@ public class Area implements Comparable<Area>{
 	public boolean isControlledBy(Player player) {
 		return !isEmpty() && !(hasBaseOwnedBy != player) && listUnits.get(0).getOwner() == player;
 	}
-	
 
+	public int getUnitNumber() {
+		return listUnits.size();
+	}
 
 	public boolean isEmpty() {
 		return listUnits.isEmpty();
@@ -108,7 +114,7 @@ public class Area implements Comparable<Area>{
 		if (result == 0) {
 			result = Integer.compare(this.areaNumber, o.areaNumber);
 		}
-		return 0;
+		return result;
 	}
 
 }

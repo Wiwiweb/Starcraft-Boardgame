@@ -7,6 +7,9 @@ import abstraction.Game;
 import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
 import control.text.menus.CMenuChooseFromList;
 
+/**
+ * @author William Gautier
+ */
 public class PMenuChooseFromList<T extends Comparable<? super T>> implements IPMenu<T> {
 
 	private final String SELECT_FACTION_PROMPT = "select your starting faction:";
@@ -63,7 +66,7 @@ public class PMenuChooseFromList<T extends Comparable<? super T>> implements IPM
 			}
 
 			choice = TextIHM.scanner.nextInt();
-			if(Game.IS_TEST) {
+			if (Game.IS_TEST) {
 				System.out.println(choice);
 			}
 			System.out.println();
@@ -91,7 +94,7 @@ public class PMenuChooseFromList<T extends Comparable<? super T>> implements IPM
 			System.out.println(cancel + " : Cancel");
 
 			choice = TextIHM.scanner.nextInt();
-			if(Game.IS_TEST) {
+			if (Game.IS_TEST) {
 				System.out.println(choice);
 			}
 			System.out.println();

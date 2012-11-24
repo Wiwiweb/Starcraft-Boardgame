@@ -11,16 +11,21 @@ import tools.PlanetEntrance;
 import abstraction.Resource.ResourceType;
 import abstraction.creators.FactionCreator;
 import abstraction.creators.PlanetCreator;
+import abstraction.creators.UnitCreator;
 import abstraction.menus.AMenuChooseFromList;
 import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
 import abstraction.menus.MultiMenuPlacePlanet;
+import abstraction.menus.MultiMenuPlaceStartingForces;
 import abstraction.menus.MultiMenuPlaceZAxis;
 import control.text.CFactory;
 
+/**
+ * @author William Gautier
+ */
 public class Game {
 
 	public static boolean IS_TEST = false;
-	
+
 	public final static int NB_PLANETS_PER_PLAYER = 2;
 
 	public static IHM ihm = new TextIHM();
@@ -43,7 +48,8 @@ public class Game {
 		List<Faction> factionList = FactionCreator.getFactionList();
 		for (Player p : getPlayerListByOrder()) {
 
-			AMenuChooseFromList<Faction> menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_FACTION, factionList, p);
+			AMenuChooseFromList<Faction> menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_FACTION,
+					factionList, p);
 			Faction faction = menu.selectChoice();
 			p.setFaction(faction);
 			factionList.remove(faction);
@@ -89,10 +95,13 @@ public class Game {
 
 		// 5. Place Z-Axis navigation Routes
 		placeZAxis(orderedPlayerList);
-		
+
 		// 6. Distribute Resource Cards - DONE
+
+		// 7. Place Starting Forces
+		placeStartingForces(orderedPlayerList);
 	}
-	
+
 	private void placePlanets(final List<Player> orderedPlayerList) {
 		ListIterator<Player> it = orderedPlayerList.listIterator();
 		boolean continueToNextPlayer;
@@ -126,7 +135,8 @@ public class Game {
 
 				if (placePlanetMenu.isPlaceFirstBase()) {
 					player.placeBase(placePlanetMenu.getChosenBaseArea());
-					
+					player.setStartingPlanet(placePlanetMenu.getChosenBaseArea().getPlanet());
+
 					for (Area a : chosenPlanet.getAreas()) {
 						if (a.getResource().getResourceType() != ResourceType.CONTROL) {
 							player.addControlledResource(a.getResource());
@@ -136,7 +146,7 @@ public class Game {
 			}
 		}
 	}
-	
+
 	private void placeZAxis(final List<Player> orderedPlayerList) {
 		ListIterator<Player> it = orderedPlayerList.listIterator();
 		boolean hasLegalSpot = true;
@@ -148,7 +158,7 @@ public class Game {
 				hasLegalSpot = false;
 				break;
 			} else {
-				
+
 				Iterator<PlanetEntrance> spotIt = availableEntrances.iterator();
 
 				checkLegal:
@@ -178,7 +188,34 @@ public class Game {
 		}
 	}
 
-	
+	private void placeStartingForces(final List<Player> orderedPlayerList) {
+		ListIterator<Player> it = orderedPlayerList.listIterator();
+		while (it.hasNext()) {
+
+			Player player = it.next();
+			Planet startingPlanet = player.getStartingPlanet();
+			List<Unit> startingUnits = new ArrayList<Unit>();
+
+			for (int i = 0; i < player.getFaction().getStartingUnitTypes().length; i++) {
+
+				String unitType = player.getFaction().getStartingUnitTypes(i);
+				for (int j = 0; j < player.getFaction().getStartingUnitNumbers(i); j++) {
+					startingUnits.add(UnitCreator.createUnit(unitType, player));
+				}
+			}
+
+			MultiMenuPlaceStartingForces placeForcesMenu = new MultiMenuPlaceStartingForces(startingPlanet, startingUnits, player
+					.getFaction().getStartingTransports(), player);
+			placeForcesMenu.doSelection();
+
+			for (int i = 0; i < placeForcesMenu.getPlacedUnits().size(); i++) {
+				Unit unit = placeForcesMenu.getPlacedUnits().get(i);
+				Area area = placeForcesMenu.getPlacedUnitsAreas().get(i);
+				area.addUnit(unit);
+			}
+		}
+	}
+
 	public List<Player> getPlayerList() {
 		return playerList;
 	}
@@ -209,7 +246,7 @@ public class Game {
 	public void setFirstPlayer(Player firstPlayer) {
 		this.firstPlayer = firstPlayer;
 	}
-	
+
 	public Galaxy getGalaxy() {
 		return galaxy;
 	}

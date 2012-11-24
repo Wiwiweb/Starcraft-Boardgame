@@ -3,6 +3,9 @@ package abstraction.patterns;
 import abstraction.Price;
 import abstraction.Resource.ResourceType;
 
+/**
+ * @author William Gautier
+ */
 public class BasePattern {
 
 	private final String name;
@@ -24,8 +27,10 @@ public class BasePattern {
 	private final ResourceType[] permanentResourcesType;
 	private final int[] permanentResourcesNum;
 
-	public BasePattern(String name, String[] buildingNames, int modulesMaxNum, String[] availableModules, ResourceType[] permanentResourcesType,
-			int[] permanentResourcesNum, int workersMaxNum, Price workerPrice, int transportsMaxNum, Price transportPrice, int basesMaxNum, Price basePrice) {
+	public BasePattern(String name, String[] buildingNames, int modulesMaxNum, String[] availableModules,
+			ResourceType[] permanentResourcesType,
+			int[] permanentResourcesNum, int workersMaxNum, Price workerPrice, int transportsMaxNum, Price transportPrice,
+			int basesMaxNum, Price basePrice) {
 		this.name = name;
 
 		if (buildingNames.length == 3) {

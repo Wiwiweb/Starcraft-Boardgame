@@ -7,6 +7,9 @@ import java.util.Map;
 
 import abstraction.Faction;
 
+/**
+ * @author William Gautier
+ */
 public class FactionCreator {
 
 	// A faction is its own pattern.

@@ -3,21 +3,23 @@ package tools;
 import abstraction.Planet;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
-public class PlanetEntrance implements Comparable<PlanetEntrance>{
+/**
+ * @author William Gautier
+ */
+public class PlanetEntrance implements Comparable<PlanetEntrance> {
 
 	private final Planet planet;
 	private final Cardinal entrance;
-	
+
 	public PlanetEntrance(Planet planet, Cardinal entrance) {
 		this.planet = planet;
 		this.entrance = entrance;
 	}
-	
+
 	public Planet getPlanet() {
 		return planet;
 	}
 
-	
 	public Cardinal getEntrance() {
 		return entrance;
 	}

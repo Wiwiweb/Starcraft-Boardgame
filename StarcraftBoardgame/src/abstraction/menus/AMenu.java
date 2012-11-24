@@ -2,6 +2,9 @@ package abstraction.menus;
 
 import abstraction.Player;
 
+/**
+ * @author William Gautier
+ */
 public abstract class AMenu<T> {
 
 	private final Player player;
@@ -17,6 +20,5 @@ public abstract class AMenu<T> {
 	public abstract T selectChoice();
 
 	public abstract T selectChoiceWithCancel();
-
 
 }
