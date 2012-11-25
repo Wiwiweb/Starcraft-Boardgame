@@ -54,8 +54,15 @@ public class Route implements Comparable<Route> {
 	public List<Player> getTransports() {
 		return transports;
 	}
+	
+	public boolean hasTransport(Player player) {
+		return transports.contains(player);
+	}
 
 	public void addTransport(Player player) {
+		if(hasTransport(player)) {
+			throw new IllegalStateException(player.getName() + " already has a transport on this route");
+		}
 		transports.add(player);
 	}
 

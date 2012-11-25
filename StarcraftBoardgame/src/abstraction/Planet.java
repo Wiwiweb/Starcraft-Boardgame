@@ -114,9 +114,14 @@ public class Planet implements Comparable<Planet> {
 					nbUnitsVirtuallyAddedToThisZone++;
 				}
 			}
-			boolean isFull = (area.getUnitNumber() + nbUnitsVirtuallyAddedToThisZone) >= area.getUnitLimit();
 
-			if (area.isEmpty() || (area.isControlledBy(player) && !isFull)) {
+			if ((area.getUnitNumber() + nbUnitsVirtuallyAddedToThisZone) > area.getUnitLimit()) {
+				throw new IllegalStateException("Too many units are going to be added to this area");
+			}
+
+			boolean isFull = (area.getUnitNumber() + nbUnitsVirtuallyAddedToThisZone) == area.getUnitLimit();
+
+			if ((area.isEmpty() || area.isControlledBy(player)) && !isFull) {
 				result.add(area);
 			}
 		}

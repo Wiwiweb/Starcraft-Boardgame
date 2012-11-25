@@ -54,7 +54,12 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 	public PMenuStaticChoices(CMenuStaticChoices control) {
 		this.control = control;
 		StaticChoicesMenuName menuName = control.getMenuName();
-		promptMessage = PROMPT_MESSAGES.get(menuName);
+		String getPrompt = PROMPT_MESSAGES.get(menuName);
+		if (getPrompt == null) {
+			promptMessage = "[No message for " + menuName + "]";
+		} else {
+			promptMessage = getPrompt;
+		}
 	}
 
 	@Override
@@ -74,6 +79,9 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 			while (it.hasNext()) {
 				StaticChoice c = it.next();
 				String msg = CHOICE_MESSAGES.get(c);
+				if(msg == null) {
+					msg = "[No message for " + c + "]";
+				}
 				System.out.println(i + " : " + msg);
 				i++;
 			}

@@ -1,13 +1,12 @@
+package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import tools.XmlParser;
 import abstraction.Base;
 import abstraction.Game;
 import abstraction.Player;
@@ -17,13 +16,7 @@ import abstraction.creators.UnitCreator;
 /**
  * @author William Gautier
  */
-public class VariousTests {
-
-	@BeforeClass
-	public static void initializeXml() {
-		XmlParser.getAll();
-		Game.IS_TEST = true;
-	}
+public class VariousTests extends Tests {
 
 	@Test
 	public void testOrderedPlayers() {

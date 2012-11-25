@@ -1,13 +1,14 @@
+package menus;
+
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.Scanner;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import presentation.text.TextIHM;
-import tools.XmlParser;
+import tests.Tests;
 import abstraction.Game;
 import abstraction.Player;
 import abstraction.menus.AMenuStaticChoices;
@@ -17,13 +18,7 @@ import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName;
 /**
  * @author William Gautier
  */
-public class MenuTests {
-
-	@BeforeClass
-	public static void initializeXml() {
-		XmlParser.getAll();
-		Game.IS_TEST = true;
-	}
+public class MenuTests extends Tests {
 
 	@Test
 	public void testDisabledStaticMenu() {

@@ -204,14 +204,18 @@ public class Game {
 				}
 			}
 
-			MultiMenuPlaceStartingForces placeForcesMenu = new MultiMenuPlaceStartingForces(startingPlanet, startingUnits, player
-					.getFaction().getStartingTransports(), player);
+			MultiMenuPlaceStartingForces placeForcesMenu = new MultiMenuPlaceStartingForces(startingPlanet, startingUnits,
+					player.getFaction().getStartingTransports(), player);
 			placeForcesMenu.doSelection();
 
 			for (int i = 0; i < placeForcesMenu.getPlacedUnits().size(); i++) {
 				Unit unit = placeForcesMenu.getPlacedUnits().get(i);
 				Area area = placeForcesMenu.getPlacedUnitsAreas().get(i);
 				area.addUnit(unit);
+			}
+
+			for (Route r : placeForcesMenu.getTransportsPlaced()) {
+				r.addTransport(player);
 			}
 		}
 	}

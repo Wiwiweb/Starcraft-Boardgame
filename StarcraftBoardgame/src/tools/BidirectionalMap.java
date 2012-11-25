@@ -4,8 +4,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import sun.awt.image.ImageWatched.Link;
-
 /**
  * @author GETah
  * {@link http://stackoverflow.com/a/7834138}

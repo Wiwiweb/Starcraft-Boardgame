@@ -32,10 +32,12 @@ public class Area implements Comparable<Area> {
 
 	public void addUnit(Unit unit) {
 		listUnits.add(unit);
+		unit.setArea(this);
 	}
 
 	public void removeUnit(Unit unit) {
 		listUnits.remove(unit);
+		unit.setArea(null);
 	}
 
 	public Player getBaseOwner() {
@@ -81,6 +83,18 @@ public class Area implements Comparable<Area> {
 
 	public int getUnitNumber() {
 		return listUnits.size();
+	}
+
+	public List<Unit> getUnitList() {
+		return listUnits;
+	}
+
+	public List<String> getUnitNamesList() {
+		List<String> result = new ArrayList<String>();
+		for (Unit u : listUnits) {
+			result.add(u.getName());
+		}
+		return result;
 	}
 
 	public boolean isEmpty() {

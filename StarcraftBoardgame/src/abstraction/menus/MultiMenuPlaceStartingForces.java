@@ -136,7 +136,7 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 		// After Choose Area to place unit - 3 paths
 		case 3:
 			if (chosenArea == null) { // Cancel
-				nextState = 1;
+				nextState = 2;
 			} else {
 				placedUnits.add(chosenUnit);
 				placedUnitsAreas.add(chosenArea);
@@ -204,8 +204,34 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 
 	@Override
 	public void doSelection() {
-		// TODO Auto-generated method stub
+		updateState();
+		while (state != -1) {
+			AMenu<?> menu = getMenu(state);
 
+			switch (state) {
+			case 1:
+				unitPlaceRemoveChoice = (StaticChoice) menu.selectChoice();
+				break;
+			case 2:
+				chosenUnit = (Unit) menu.selectChoiceWithCancel();
+				break;
+			case 3:
+				chosenArea = (Area) menu.selectChoiceWithCancel();
+				break;
+			case 4:
+				chosenUnit = (Unit) menu.selectChoiceWithCancel();
+				break;
+			case 5:
+				chosenRoute = (Route) menu.selectChoiceWithCancel();
+				break;
+			case 6:
+				chosenRoute = (Route) menu.selectChoiceWithCancel();
+				break;
+			default:
+				throw new IllegalStateException("This state shouldn't happen.");
+			}
+			updateState();
+		}
 	}
 
 	public List<Unit> getPlacedUnits() {

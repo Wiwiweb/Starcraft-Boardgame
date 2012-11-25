@@ -124,6 +124,9 @@ public class Player {
 	}
 
 	public Faction getFaction() {
+		if(faction == null) {
+			throw new IllegalStateException("This player has no faction");
+		}
 		return faction;
 	}
 
@@ -144,6 +147,9 @@ public class Player {
 	}
 
 	public Base getBase() {
+		if(base == null) {
+			throw new IllegalStateException("This player has no base");
+		}
 		return base;
 	}
 

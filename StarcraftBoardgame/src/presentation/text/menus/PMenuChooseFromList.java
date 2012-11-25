@@ -1,6 +1,9 @@
 package presentation.text.menus;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import presentation.text.TextIHM;
 import abstraction.Game;
@@ -12,12 +15,20 @@ import control.text.menus.CMenuChooseFromList;
  */
 public class PMenuChooseFromList<T extends Comparable<? super T>> implements IPMenu<T> {
 
-	private final String SELECT_FACTION_PROMPT = "select your starting faction:";
-	private final String SELECT_PLANET_PROMPT = "select which planet to place:";
-	private final String SELECT_PLANET_SPOT_PROMPT = "select where to place this planet:";
-	private final String SELECT_BASE_AREA_PROMPT = "select where to place this base:";
-	private final String SELECT_ZAXIS_ENTRANCE_PROMPT = "select where to place the first side of the Z-Axis:";
-	private final String SELECT_ZAXIS_EXIT = "select where to place the second side of the Z-Axis:";
+	@SuppressWarnings("serial")
+	private static final Map<ChooseFromListMenuName, String> PROMPT_MESSAGES =
+			Collections.unmodifiableMap(new HashMap<ChooseFromListMenuName, String>() {
+
+				{
+					put(ChooseFromListMenuName.CHOOSE_FACTION, "select your starting faction:");
+					put(ChooseFromListMenuName.CHOOSE_PLANET_TO_PLACE, "select which planet to place:");
+					put(ChooseFromListMenuName.CHOOSE_PLANET_SPOT, "select where to place this planet:");
+					put(ChooseFromListMenuName.CHOOSE_BASE_AREA, "select where to place this base:");
+					put(ChooseFromListMenuName.CHOOSE_ZAXIS_ENTRANCE, "select where to place the first side of the Z-Axis:");
+					put(ChooseFromListMenuName.CHOOSE_ZAXIS_EXIT, "select where to place the second side of the Z-Axis:");
+				}
+			}
+					);
 
 	private final CMenuChooseFromList<T> control;
 	private final String promptMessage;
@@ -26,27 +37,11 @@ public class PMenuChooseFromList<T extends Comparable<? super T>> implements IPM
 		this.control = control;
 		ChooseFromListMenuName menuName = control.getMenuName();
 
-		switch (menuName) {
-		case CHOOSE_FACTION:
-			promptMessage = SELECT_FACTION_PROMPT;
-			break;
-		case CHOOSE_PLANET_TO_PLACE:
-			promptMessage = SELECT_PLANET_PROMPT;
-			break;
-		case CHOOSE_PLANET_SPOT:
-			promptMessage = SELECT_PLANET_SPOT_PROMPT;
-			break;
-		case CHOOSE_BASE_AREA:
-			promptMessage = SELECT_BASE_AREA_PROMPT;
-			break;
-		case CHOOSE_ZAXIS_ENTRANCE:
-			promptMessage = SELECT_ZAXIS_ENTRANCE_PROMPT;
-			break;
-		case CHOOSE_ZAXIS_EXIT:
-			promptMessage = SELECT_ZAXIS_EXIT;
-			break;
-		default:
-			throw new IllegalArgumentException("Unknown menu name.");
+		String getPrompt = PROMPT_MESSAGES.get(menuName);
+		if (getPrompt == null) {
+			promptMessage = "[No message for " + menuName + "]";
+		} else {
+			promptMessage = getPrompt;
 		}
 	}
 

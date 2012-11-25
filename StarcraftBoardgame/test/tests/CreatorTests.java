@@ -1,13 +1,12 @@
+package tests;
+
 import static org.junit.Assert.assertEquals;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import tools.XmlParser;
 import abstraction.Area;
 import abstraction.Building;
 import abstraction.Galaxy;
-import abstraction.Game;
 import abstraction.Planet;
 import abstraction.Player;
 import abstraction.creators.BuildingCreator;
@@ -18,14 +17,8 @@ import abstraction.patterns.PlanetPattern.Cardinal;
 /**
  * @author William Gautier
  */
-public class CreatorTests {
+public class CreatorTests extends Tests {
 
-	@BeforeClass
-	public static void initializeXml() {
-		XmlParser.getAll();
-		Game.IS_TEST = true;
-	}
-	
 	@Test
 	public void testCreateBuilding() {
 		Building pool = BuildingCreator.createBuilding("Spawning Pool");
