@@ -63,17 +63,17 @@ public class MultiMenuPlacePlanetTests extends Tests {
 		menu = new MultiMenuPlacePlanet(galaxy, 0, player);
 		menu.doSelection();
 
-		Planet chosenPlanet = menu.getChosenPlanet();
+		Planet chosenPlanet = menu.getChoices().getChosenPlanet();
 		if (galaxy.isEmpty()) {
 			galaxy.add(chosenPlanet);
 		} else {
-			galaxy.add(chosenPlanet, menu.getChosenSpot());
+			galaxy.add(chosenPlanet, menu.getChoices().getChosenSpot());
 		}
 		player.removePlanetToken(chosenPlanet);
 
-		if (menu.isPlaceFirstBase()) {
-			player.placeBase(menu.getChosenBaseArea());
-			player.setStartingPlanet(menu.getChosenBaseArea().getPlanet());
+		if (menu.getChoices().isPlaceFirstBase()) {
+			player.placeBase(menu.getChoices().getChosenBaseArea());
+			player.setStartingPlanet(menu.getChoices().getChosenBaseArea().getPlanet());
 
 			for (Area a : chosenPlanet.getAreas()) {
 				if (a.getResource().getResourceType() != ResourceType.CONTROL) {

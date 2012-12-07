@@ -9,6 +9,7 @@ import abstraction.Game;
 import abstraction.Planet;
 import abstraction.Player;
 import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
+import abstraction.menus.states.MultiMenuPlaceZAxisChoices;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
 /**
@@ -18,9 +19,8 @@ public class MultiMenuPlaceZAxis extends MultiMenu {
 
 	private final List<PlanetEntrance> availableEntrances;
 
-	private PlanetEntrance entrance;
-	private PlanetEntrance exit;
-
+	private final MultiMenuPlaceZAxisChoices choices = new MultiMenuPlaceZAxisChoices();
+	
 	public MultiMenuPlaceZAxis(Galaxy galaxy, Player player) {
 		super(player);
 		this.availableEntrances = galaxy.getAvailableSpots();
@@ -37,8 +37,8 @@ public class MultiMenuPlaceZAxis extends MultiMenu {
 
 		case 2:
 			List<PlanetEntrance> availableExits = new ArrayList<PlanetEntrance>(availableEntrances);
-			availableExits.remove(entrance);
-			Planet planet = entrance.getPlanet();
+			availableExits.remove(getChoices().getEntrance());
+			Planet planet = getChoices().getEntrance().getPlanet();
 			for (Cardinal c : planet.getLinkableEntrances()) {
 				availableExits.remove(new PlanetEntrance(planet, c));
 			}
@@ -71,7 +71,7 @@ public class MultiMenuPlaceZAxis extends MultiMenu {
 
 		// After Select Exit - 2 paths
 		case 2:
-			if (exit == null) {
+			if (getChoices().getExit() == null) {
 				nextState = 1;
 			} else {
 				nextState = -1;
@@ -92,10 +92,10 @@ public class MultiMenuPlaceZAxis extends MultiMenu {
 			AMenu<?> menu = getMenu(state);
 			switch (state) {
 			case 1:
-				entrance = (PlanetEntrance) menu.selectChoice();
+				getChoices().setEntrance((PlanetEntrance) menu.selectChoice());
 				break;
 			case 2:
-				exit = (PlanetEntrance) menu.selectChoiceWithCancel();
+				getChoices().setExit((PlanetEntrance) menu.selectChoiceWithCancel());
 				break;
 			default:
 				throw new IllegalStateException("This state shouldn't happen.");
@@ -104,12 +104,8 @@ public class MultiMenuPlaceZAxis extends MultiMenu {
 		}
 	}
 
-	public PlanetEntrance getEntrance() {
-		return entrance;
-	}
-
-	public PlanetEntrance getExit() {
-		return exit;
+	public MultiMenuPlaceZAxisChoices getChoices() {
+		return choices;
 	}
 
 }

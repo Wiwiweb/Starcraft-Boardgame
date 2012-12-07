@@ -225,4 +225,9 @@ public class Player {
 		return "Player " + name;
 	}
 
+	
+	public List<Unit> getUnits() {
+		return units;
+	}
+
 }

@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import abstraction.Area;
@@ -9,6 +11,7 @@ import abstraction.Building;
 import abstraction.Galaxy;
 import abstraction.Planet;
 import abstraction.Player;
+import abstraction.Unit;
 import abstraction.creators.BuildingCreator;
 import abstraction.creators.PlanetCreator;
 import abstraction.creators.UnitCreator;
@@ -50,9 +53,22 @@ public class CreatorTests extends Tests {
 		area1.addUnit(UnitCreator.createUnit("Hydralisk", lolo));
 		area1.addUnit(UnitCreator.createUnit("Hydralisk", lolo));
 
-		assertEquals("Wiwi's Zergling\n" + "Wiwi's Zergling\n" + "Wiwi's Hydralisk\n", area0.listUnits());
-		assertEquals("Lolo's Hydralisk\n" + "Lolo's Hydralisk\n", area1.listUnits());
-		assertEquals("Wiwi's army:\n" + "Zergling\n" + "Zergling\n" + "Hydralisk\n", wiwi.listUnits());
+		List<Unit> area0Units = area0.getUnitList();
+		assertEquals("Zergling", area0Units.get(0).getName());
+		assertEquals("Zergling", area0Units.get(1).getName());
+		assertEquals("Hydralisk", area0Units.get(2).getName());
+		assertEquals("Wiwi", area0Units.get(0).getOwner().getName());
+
+		List<Unit> area1Units = area1.getUnitList();
+		assertEquals("Hydralisk", area1Units.get(0).getName());
+		assertEquals("Hydralisk", area1Units.get(1).getName());
+		assertEquals("Lolo", area1Units.get(0).getOwner().getName());
+		
+		List<Unit> wiwiUnits = wiwi.getUnits();
+		assertEquals("Zergling", wiwiUnits.get(0).getName());
+		assertEquals("Zergling", wiwiUnits.get(1).getName());
+		assertEquals("Hydralisk", wiwiUnits.get(2).getName());
+		assertEquals("Pridewater's #1 area", wiwiUnits.get(0).getArea().toString());
 	}
 
 	@Test

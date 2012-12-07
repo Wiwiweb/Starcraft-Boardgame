@@ -56,8 +56,8 @@ public class MultiMenuPlaceZAxisTests extends Tests {
 		menu = new MultiMenuPlaceZAxis(galaxy, player);
 		menu.doSelection();
 
-		PlanetEntrance entrance = menu.getEntrance();
-		PlanetEntrance exit = menu.getExit();
+		PlanetEntrance entrance = menu.getChoices().getEntrance();
+		PlanetEntrance exit = menu.getChoices().getExit();
 		entrance.getPlanet().connect(exit.getPlanet(), entrance.getEntrance(), exit.getEntrance(), true);
 
 		assertSame(abaddon, pridewater.getRoute(Cardinal.EAST).getDestinationFrom(pridewater));

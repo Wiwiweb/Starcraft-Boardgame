@@ -25,6 +25,10 @@ import control.text.CFactory;
 public class Game {
 
 	public static boolean IS_TEST = false;
+	
+	public static enum Phase {
+		PLANNING, EXECUTION, REGROUPING
+	}
 
 	public final static int NB_PLANETS_PER_PLAYER = 2;
 
@@ -35,6 +39,8 @@ public class Game {
 	private final Galaxy galaxy = new Galaxy();
 
 	private Player firstPlayer = null;
+	private int roundNumber = 0;
+	private Phase currentPhase = null;
 
 	public void setupGame() {
 
@@ -69,6 +75,8 @@ public class Game {
 
 		// 9. Draw Combat Cards
 		// TODO
+		
+		startGame();
 
 	}
 
@@ -125,17 +133,17 @@ public class Game {
 				MultiMenuPlacePlanet placePlanetMenu = new MultiMenuPlacePlanet(galaxy, i, player);
 				placePlanetMenu.doSelection();
 
-				Planet chosenPlanet = placePlanetMenu.getChosenPlanet();
+				Planet chosenPlanet = placePlanetMenu.getChoices().getChosenPlanet();
 				if (galaxy.isEmpty()) {
 					galaxy.add(chosenPlanet);
 				} else {
-					galaxy.add(chosenPlanet, placePlanetMenu.getChosenSpot());
+					galaxy.add(chosenPlanet, placePlanetMenu.getChoices().getChosenSpot());
 				}
 				player.removePlanetToken(chosenPlanet);
 
-				if (placePlanetMenu.isPlaceFirstBase()) {
-					player.placeBase(placePlanetMenu.getChosenBaseArea());
-					player.setStartingPlanet(placePlanetMenu.getChosenBaseArea().getPlanet());
+				if (placePlanetMenu.getChoices().isPlaceFirstBase()) {
+					player.placeBase(placePlanetMenu.getChoices().getChosenBaseArea());
+					player.setStartingPlanet(placePlanetMenu.getChoices().getChosenBaseArea().getPlanet());
 
 					for (Area a : chosenPlanet.getAreas()) {
 						if (a.getResource().getResourceType() != ResourceType.CONTROL) {
@@ -180,8 +188,8 @@ public class Game {
 			if (hasLegalSpot) {
 				MultiMenuPlaceZAxis placeZAxisMenu = new MultiMenuPlaceZAxis(galaxy, player);
 				placeZAxisMenu.doSelection();
-				PlanetEntrance entrance = placeZAxisMenu.getEntrance();
-				PlanetEntrance exit = placeZAxisMenu.getExit();
+				PlanetEntrance entrance = placeZAxisMenu.getChoices().getEntrance();
+				PlanetEntrance exit = placeZAxisMenu.getChoices().getExit();
 				entrance.getPlanet().connect(exit.getPlanet(), entrance.getEntrance(), exit.getEntrance(), true);
 			}
 
@@ -208,16 +216,34 @@ public class Game {
 					player.getFaction().getStartingTransports(), player);
 			placeForcesMenu.doSelection();
 
-			for (int i = 0; i < placeForcesMenu.getPlacedUnits().size(); i++) {
-				Unit unit = placeForcesMenu.getPlacedUnits().get(i);
-				Area area = placeForcesMenu.getPlacedUnitsAreas().get(i);
+			for (int i = 0; i < placeForcesMenu.getChoices().getPlacedUnits().size(); i++) {
+				Unit unit = placeForcesMenu.getChoices().getPlacedUnits().get(i);
+				Area area = placeForcesMenu.getChoices().getPlacedUnitsAreas().get(i);
 				area.addUnit(unit);
 			}
 
-			for (Route r : placeForcesMenu.getTransportsPlaced()) {
+			for (Route r : placeForcesMenu.getChoices().getPlacedTransports()) {
 				r.addTransport(player);
 			}
 		}
+	}
+	
+	private void startGame() {
+		roundNumber = 1;
+		boolean gameIsOver = false; 
+		
+		while(!gameIsOver) {
+			List<Player> orderedPlayerList = getPlayerListByOrder();
+			planningPhase(orderedPlayerList);
+			//TODO
+		}
+		
+	}
+	
+	private void planningPhase(final List<Player> orderedPlayerList) {
+		currentPhase = Phase.PLANNING;
+		
+		//TODO
 	}
 
 	public List<Player> getPlayerList() {

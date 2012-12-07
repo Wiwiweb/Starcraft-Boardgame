@@ -12,6 +12,7 @@ import abstraction.Player;
 import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
 import abstraction.menus.AMenuStaticChoices.StaticChoice;
 import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName;
+import abstraction.menus.states.MultiMenuPlacePlanetChoices;
 
 /**
  * @author William Gautier
@@ -22,11 +23,8 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 	private final int roundNumber;
 	private StaticChoice rotatePlanetChoice;
 
-	private Planet chosenPlanet;
-	private PlanetEntrance chosenSpot;
-	private Boolean placeFirstBase;
-	private Area chosenBaseArea;
-
+	private final MultiMenuPlacePlanetChoices choices = new MultiMenuPlacePlanetChoices();
+	
 	public MultiMenuPlacePlanet(Galaxy galaxy, int roundNumber, Player player) {
 		super(player);
 		this.galaxy = galaxy;
@@ -53,7 +51,7 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 			// Remove entrances that cannot be linked
 			List<PlanetEntrance> unavailableEntrances = new ArrayList<PlanetEntrance>();
 			for (PlanetEntrance entrance : availableEntrances) {
-				if (!chosenPlanet.isLinkable(entrance.getEntrance().opposite())) {
+				if (!getChoices().getChosenPlanet().isLinkable(entrance.getEntrance().opposite())) {
 					unavailableEntrances.add(entrance);
 				}
 			}
@@ -68,7 +66,7 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 			break;
 
 		case 5:
-			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_BASE_AREA, chosenPlanet.getAreas(), player);
+			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_BASE_AREA, getChoices().getChosenPlanet().getAreas(), player);
 			break;
 
 		default:
@@ -109,11 +107,11 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 
 				switch (rotatePlanetChoice) {
 				case ROTATE_PLANET_CLOCKWISE:
-					chosenPlanet.rotateClockwise();
+					getChoices().getChosenPlanet().rotateClockwise();
 					nextState = 2;
 					break;
 				case ROTATE_PLANET_COUNTERCLOCKWISE:
-					chosenPlanet.rotateCounterClockwise();
+					getChoices().getChosenPlanet().rotateCounterClockwise();
 					nextState = 2;
 					break;
 				case ROTATE_PLANET_PLACE:
@@ -131,16 +129,16 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 
 		// After Place Planet - 4 paths
 		case 3:
-			if (chosenSpot == null) { // Cancel
+			if (getChoices().getChosenSpot() == null) { // Cancel
 				nextState = 2;
 			} else if (player.getBaseNumber() == 0 && roundNumber != Game.NB_PLANETS_PER_PLAYER - 1) {
 				nextState = 4;
 			} else {
 				if (player.getBaseNumber() == 1) {
-					placeFirstBase = false;
+					getChoices().setPlaceFirstBase(false);
 					nextState = -1;
 				} else {
-					placeFirstBase = true;
+					getChoices().setPlaceFirstBase(true);
 					nextState = 5;
 				}
 			}
@@ -148,9 +146,9 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 
 		// After Place First Base - 3 paths
 		case 4:
-			if (placeFirstBase == null) { // Cancel
+			if (getChoices().isPlaceFirstBase() == null) { // Cancel
 				nextState = 3;
-			} else if (placeFirstBase == true) {
+			} else if (getChoices().isPlaceFirstBase() == true) {
 				nextState = 5;
 			} else {
 				nextState = -1;
@@ -159,7 +157,7 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 
 		// After Choose Base Area - 2 paths
 		case 5:
-			if (chosenBaseArea == null) { // Cancel
+			if (getChoices().getChosenBaseArea() == null) { // Cancel
 				nextState = 4;
 			} else {
 				nextState = -1;
@@ -181,26 +179,26 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 
 			switch (state) {
 			case 1:
-				chosenPlanet = (Planet) menu.selectChoice();
+				getChoices().setChosenPlanet((Planet) menu.selectChoice());
 				break;
 			case 2:
 				rotatePlanetChoice = (StaticChoice) menu.selectChoiceWithCancel();
 				break;
 			case 3:
-				chosenSpot = (PlanetEntrance) menu.selectChoiceWithCancel();
+				getChoices().setChosenSpot((PlanetEntrance) menu.selectChoiceWithCancel());
 				break;
 			case 4:
 				StaticChoice placeFirstBaseChoice = (StaticChoice) menu.selectChoiceWithCancel();
 				if (placeFirstBaseChoice == null) {
-					placeFirstBase = null;
+					getChoices().setPlaceFirstBase(null);
 				} else if (placeFirstBaseChoice == StaticChoice.PLACE_FIRST_BASE_YES) {
-					placeFirstBase = true;
+					getChoices().setPlaceFirstBase(true);
 				} else {
-					placeFirstBase = false;
+					getChoices().setPlaceFirstBase(false);
 				}
 				break;
 			case 5:
-				chosenBaseArea = (Area) menu.selectChoiceWithCancel();
+				getChoices().setChosenBaseArea((Area) menu.selectChoiceWithCancel());
 				break;
 			default:
 				throw new IllegalStateException("This state shouldn't happen.");
@@ -209,19 +207,8 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 		}
 	}
 
-	public Planet getChosenPlanet() {
-		return chosenPlanet;
+	public MultiMenuPlacePlanetChoices getChoices() {
+		return choices;
 	}
 
-	public PlanetEntrance getChosenSpot() {
-		return chosenSpot;
-	}
-
-	public boolean isPlaceFirstBase() {
-		return placeFirstBase;
-	}
-
-	public Area getChosenBaseArea() {
-		return chosenBaseArea;
-	}
 }

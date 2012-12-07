@@ -12,6 +12,7 @@ import abstraction.Unit;
 import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
 import abstraction.menus.AMenuStaticChoices.StaticChoice;
 import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName;
+import abstraction.menus.states.MultiMenuPlaceStartingForcesChoices;
 
 /**
  * @author William Gautier
@@ -27,10 +28,7 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 	private Area chosenArea;
 	private Route chosenRoute;
 
-	// placedUnit and placedUnitArea go together
-	private List<Unit> placedUnits = new ArrayList<Unit>();
-	private List<Area> placedUnitsAreas = new ArrayList<Area>();
-	private List<Route> placedTransports = new ArrayList<Route>();
+	private final MultiMenuPlaceStartingForcesChoices choices = new MultiMenuPlaceStartingForcesChoices();
 
 	public MultiMenuPlaceStartingForces(Planet startingPlanet, List<Unit> startingUnits, int startingTransports, Player player) {
 		super(player);
@@ -50,13 +48,13 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 			if (remainingUnits.isEmpty()) {
 				disabledChoices.add(StaticChoice.PLACE_REMOVE_UNIT_PLACE_UNIT);
 			}
-			if (placedUnits.isEmpty()) {
+			if (getChoices().getPlacedUnits().isEmpty()) {
 				disabledChoices.add(StaticChoice.PLACE_REMOVE_UNIT_REMOVE_UNIT);
 			}
 			if (remainingTransports == 0) {
 				disabledChoices.add(StaticChoice.PLACE_REMOVE_UNIT_PLACE_TRANSPORT);
 			}
-			if (placedTransports.isEmpty()) {
+			if (getChoices().getPlacedTransports().isEmpty()) {
 				disabledChoices.add(StaticChoice.PLACE_REMOVE_UNIT_REMOVE_TRANSPORT);
 			}
 
@@ -69,11 +67,12 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 
 		case 3:
 			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_PLACEMENT,
-					startingPlanet.getBuildableAreasPlusUnits(player, placedUnitsAreas), player);
+					startingPlanet.getBuildableAreasPlusUnits(player, getChoices().getPlacedUnitsAreas()), player);
 			break;
 
 		case 4:
-			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_TO_REMOVE, placedUnits, player);
+			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_TO_REMOVE,
+					getChoices().getPlacedUnits(), player);
 			break;
 
 		case 5:
@@ -83,7 +82,8 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 
 		case 6:
 			menu = Game.factory
-					.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_TRANSPORT_PLACEMENT, placedTransports, player);
+					.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_TRANSPORT_PLACEMENT, getChoices().getPlacedTransports(),
+							player);
 			break;
 
 		default:
@@ -138,8 +138,8 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 			if (chosenArea == null) { // Cancel
 				nextState = 2;
 			} else {
-				placedUnits.add(chosenUnit);
-				placedUnitsAreas.add(chosenArea);
+				getChoices().getPlacedUnits().add(chosenUnit);
+				getChoices().getPlacedUnitsAreas().add(chosenArea);
 				if (!remainingUnits.remove(chosenUnit)) {
 					throw new IllegalStateException();
 				}
@@ -156,12 +156,12 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 			if (chosenUnit == null) { // Cancel
 				nextState = 1;
 			} else {
-				int index = placedUnits.indexOf(chosenUnit);
+				int index = getChoices().getPlacedUnits().indexOf(chosenUnit);
 				if (index == -1) {
 					throw new IllegalStateException();
 				}
-				placedUnits.remove(index);
-				placedUnitsAreas.remove(index);
+				getChoices().getPlacedUnits().remove(index);
+				getChoices().getPlacedUnitsAreas().remove(index);
 				remainingUnits.add(chosenUnit);
 				nextState = 1;
 			}
@@ -172,7 +172,7 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 			if (chosenRoute == null) { // Cancel
 				nextState = 1;
 			} else {
-				placedTransports.add(chosenRoute);
+				getChoices().getPlacedTransports().add(chosenRoute);
 				remainingTransports--;
 				if (remainingUnits.isEmpty() && remainingTransports == 0) { // It's over
 					nextState = -1;
@@ -187,14 +187,14 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 			if (chosenRoute == null) { // Cancel
 				nextState = 1;
 			} else {
-				if (!placedTransports.remove(chosenRoute)) {
+				if (!getChoices().getPlacedTransports().remove(chosenRoute)) {
 					throw new IllegalStateException();
 				}
 				remainingTransports++;
 				nextState = 1;
 			}
 			break;
-			
+
 		default:
 			throw new IllegalStateException("This state shouldn't happen.");
 		}
@@ -234,16 +234,8 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 		}
 	}
 
-	public List<Unit> getPlacedUnits() {
-		return placedUnits;
-	}
-
-	public List<Area> getPlacedUnitsAreas() {
-		return placedUnitsAreas;
-	}
-
-	public List<Route> getTransportsPlaced() {
-		return placedTransports;
+	public MultiMenuPlaceStartingForcesChoices getChoices() {
+		return choices;
 	}
 
 }

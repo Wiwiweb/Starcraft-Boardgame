@@ -89,13 +89,13 @@ public class MultiMenuPlaceStartingForcesTests extends Tests {
 		menu = new MultiMenuPlaceStartingForces(pridewater, startingUnits, player.getFaction().getStartingTransports(), player);
 		menu.doSelection();
 
-		for (int i = 0; i < menu.getPlacedUnits().size(); i++) {
-			Unit unit = menu.getPlacedUnits().get(i);
-			Area area = menu.getPlacedUnitsAreas().get(i);
+		for (int i = 0; i < menu.getChoices().getPlacedUnits().size(); i++) {
+			Unit unit = menu.getChoices().getPlacedUnits().get(i);
+			Area area = menu.getChoices().getPlacedUnitsAreas().get(i);
 			area.addUnit(unit);
 		}
 
-		for (Route r : menu.getTransportsPlaced()) {
+		for (Route r : menu.getChoices().getPlacedTransports()) {
 			r.addTransport(player);
 		}
 		
