@@ -10,7 +10,8 @@ public abstract class MultiMenu {
 	protected final Player player;
 
 	/**
-	 * 0 is the beginning state</br> 1+ is "after menu 1+" -1 is the end state
+	 * 0 is the beginning state</br>
+	 * 1+ is "after menu 1+" -1 is the end state
 	 */
 	protected int state;
 

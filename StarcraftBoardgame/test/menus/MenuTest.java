@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import presentation.text.TextIHM;
@@ -18,11 +19,20 @@ import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName;
 /**
  * @author William Gautier
  */
-public class MenuTests extends Tests {
+public class MenuTest extends Tests {
 
+	private Player player;
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+		player = new Player("Player");
+	}
+	
 	@Test
 	public void testDisabledStaticMenu() {
-		Player player = new Player("Player");
 		StaticChoice[] disabledChoices = { StaticChoice.PLACE_REMOVE_UNIT_REMOVE_UNIT };
 		AMenuStaticChoices menu = Game.factory.newMenuStaticChoices(StaticChoicesMenuName.PLACE_REMOVE_UNIT,
 				Arrays.asList(disabledChoices), player);
@@ -35,7 +45,6 @@ public class MenuTests extends Tests {
 
 	@Test
 	public void testStaticMenu() {
-		Player player = new Player("Player");
 		AMenuStaticChoices menu = Game.factory.newMenuStaticChoices(StaticChoicesMenuName.PLACE_REMOVE_UNIT, player);
 		String data = "2 ";
 

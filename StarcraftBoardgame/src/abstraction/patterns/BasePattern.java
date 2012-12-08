@@ -33,11 +33,7 @@ public class BasePattern {
 			int basesMaxNum, Price basePrice) {
 		this.name = name;
 
-		if (buildingNames.length == 3) {
-			this.buildingNames = buildingNames;
-		} else {
-			throw new IllegalArgumentException("A base must have exactly 3 buildings.");
-		}
+		this.buildingNames = buildingNames;
 
 		this.modulesMaxNum = modulesMaxNum;
 		this.availableModules = availableModules;

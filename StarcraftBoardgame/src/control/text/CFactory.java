@@ -1,7 +1,7 @@
 package control.text;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import abstraction.AFactory;
 import abstraction.Player;
@@ -31,7 +31,7 @@ public class CFactory extends AFactory {
 
 	@Override
 	public <T extends Comparable<? super T>> AMenuChooseFromList<T> newMenuChooseFromList(ChooseFromListMenuName menuName,
-			List<T> listChoices, Player player) {
-		return new CMenuChooseFromList<T>(menuName, listChoices, player);
+			Collection<T> listChoices, Player player) {
+		return new CMenuChooseFromList<T>(menuName, new ArrayList<T>(listChoices), player);
 	}
 }

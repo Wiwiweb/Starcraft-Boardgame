@@ -12,6 +12,10 @@ public class Area implements Comparable<Area> {
 	private final int unitLimit;
 	private final Resource resource;
 
+	/**
+	 * The list of units on this area.</br>
+	 * This list will only contain units from ONE player
+	 */
 	private List<Unit> listUnits = new ArrayList<Unit>();
 	private Player hasBaseOwnedBy = null;
 
@@ -31,6 +35,12 @@ public class Area implements Comparable<Area> {
 	}
 
 	public void addUnit(Unit unit) {
+		if(isFull()) {
+			throw new IllegalStateException("This area is full.");
+		}
+		if(!isEmpty() && !isControlledBy(unit.getOwner())) {
+			throw new IllegalStateException("You cannot add a unit to an enemy zone.");
+		}
 		listUnits.add(unit);
 		unit.setArea(this);
 	}
@@ -78,7 +88,7 @@ public class Area implements Comparable<Area> {
 	}
 
 	public boolean isControlledBy(Player player) {
-		return !isEmpty() && !(hasBaseOwnedBy != player) && listUnits.get(0).getOwner() == player;
+		return !isEmpty() && ((hasBaseOwnedBy == player) || listUnits.get(0).getOwner() == player);
 	}
 
 	public int getUnitNumber() {
@@ -98,7 +108,7 @@ public class Area implements Comparable<Area> {
 	}
 
 	public boolean isEmpty() {
-		return listUnits.isEmpty();
+		return listUnits.isEmpty() && hasBaseOwnedBy == null;
 	}
 
 	public boolean isFull() {

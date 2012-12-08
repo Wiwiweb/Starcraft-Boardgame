@@ -2,11 +2,14 @@ package abstraction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import abstraction.Order.OrderType;
 import abstraction.Resource.ResourceType;
 import abstraction.creators.BaseCreator;
+import abstraction.creators.FactionCreator;
 import abstraction.creators.UnitCreator;
 
 /**
@@ -28,6 +31,11 @@ public class Player {
 	private List<Unit> units = new ArrayList<Unit>();
 	private List<Resource> controlledResources = new ArrayList<Resource>();
 	private int baseNumber = 0;
+
+	// Attributes for a single round
+	private int ordersLeftToPlace;
+	private int specialOrdersAvailable;
+	private HashMap<OrderType, Integer> orderTypePlaced = new HashMap<OrderType, Integer>();
 
 	public Player(String name) {
 		this.name = name;
@@ -124,7 +132,7 @@ public class Player {
 	}
 
 	public Faction getFaction() {
-		if(faction == null) {
+		if (faction == null) {
 			throw new IllegalStateException("This player has no faction");
 		}
 		return faction;
@@ -142,12 +150,16 @@ public class Player {
 		}
 	}
 
+	public void setFaction(String faction) {
+		setFaction(FactionCreator.getFaction(faction));
+	}
+
 	public Faction selectFactionFromList(List<Faction> list) {
 		return Game.ihm.selectStartingFaction(this, list);
 	}
 
 	public Base getBase() {
-		if(base == null) {
+		if (base == null) {
 			throw new IllegalStateException("This player has no base");
 		}
 		return base;
@@ -208,6 +220,52 @@ public class Player {
 		return route.getTransports().contains(this);
 	}
 
+	public int getOrdersLeftToPlace() {
+		return ordersLeftToPlace;
+	}
+
+	public void setOrdersLeftToPlace(int ordersLeftToPlace) {
+		this.ordersLeftToPlace = ordersLeftToPlace;
+	}
+
+	public void decrementOrdersLeftToPlace() {
+		this.ordersLeftToPlace--;
+	}
+
+	public int getSpecialOrdersAvailable() {
+		return specialOrdersAvailable;
+	}
+
+	public void decrementSpecialOrdersAvailable() {
+		this.specialOrdersAvailable--;
+	}
+
+	int getSpecialOrdersMaxAmount() {
+		int result = 0;
+		for (Module m : getBase().getModules()) {
+			if (m.getName() == "Research & Development") {
+				result++;
+			}
+		}
+		return result;
+	}
+	
+	public int getOrderTypePlaced(OrderType orderType) {
+		return orderTypePlaced.get(orderType);
+	}
+
+	public void setOrderTypePlaced(HashMap<OrderType, Integer> orderTypePlaced) {
+		this.orderTypePlaced = orderTypePlaced;
+	}
+	
+	public void resetOrdersAttributes() {
+		ordersLeftToPlace = Game.NB_ORDERS_PER_PLAYER;
+		specialOrdersAvailable = getSpecialOrdersMaxAmount();
+		for(OrderType o : OrderType.values()) {
+			orderTypePlaced.put(o, 0);
+		}
+	}
+
 	public String listUnits() {
 		String result = getName() + "'s army:\n";
 		Iterator<Unit> i = units.iterator();
@@ -225,7 +283,6 @@ public class Player {
 		return "Player " + name;
 	}
 
-	
 	public List<Unit> getUnits() {
 		return units;
 	}

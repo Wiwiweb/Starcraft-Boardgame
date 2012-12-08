@@ -1,4 +1,5 @@
 package tests;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -10,13 +11,12 @@ import org.junit.Test;
 import abstraction.Base;
 import abstraction.Game;
 import abstraction.Player;
-import abstraction.creators.FactionCreator;
 import abstraction.creators.UnitCreator;
 
 /**
  * @author William Gautier
  */
-public class VariousTests extends Tests {
+public class VariousTest extends Tests {
 
 	@Test
 	public void testOrderedPlayers() {
@@ -46,7 +46,7 @@ public class VariousTests extends Tests {
 	@Test
 	public void testIncreaseLevel() {
 		Player wiwi = new Player("Wiwi");
-		wiwi.setFaction(FactionCreator.getFaction("Overmind"));
+		wiwi.setFaction("Overmind");
 
 		assertEquals("Zergling", wiwi.getBase().getBuilding(0).getUnitForLevel(1));
 
@@ -63,9 +63,9 @@ public class VariousTests extends Tests {
 	@Test
 	public void testFaction() {
 		Player wiwi = new Player("Wiwi");
-		wiwi.setFaction(FactionCreator.getFaction("Overmind"));
+		wiwi.setFaction("Overmind");
 		Player lolo = new Player("Lolo");
-		lolo.setFaction(FactionCreator.getFaction("Queen of Blades"));
+		lolo.setFaction("Queen of Blades");
 
 		assertEquals("Wiwi", wiwi.getName());
 		assertEquals("Overmind", wiwi.getFaction().getName());
@@ -76,7 +76,7 @@ public class VariousTests extends Tests {
 	@Test
 	public void testBase() {
 		Player wiwi = new Player("Wiwi");
-		wiwi.setFaction(FactionCreator.getFaction("Overmind"));
+		wiwi.setFaction("Overmind");
 		Base zergBase = wiwi.getBase();
 
 		assertEquals(2, zergBase.getBasePrice().getMinerals());

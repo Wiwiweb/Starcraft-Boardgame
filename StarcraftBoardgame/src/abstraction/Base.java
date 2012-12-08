@@ -1,5 +1,8 @@
 package abstraction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import abstraction.creators.BuildingCreator;
 import abstraction.patterns.BasePattern;
 
@@ -11,7 +14,8 @@ public class Base {
 	private final BasePattern pattern;
 
 	private final Player owner;
-	private final Building[] buildings = new Building[3];
+	private final List<Building> buildings = new ArrayList<Building>();
+	private final List<Module> modules = new ArrayList<Module>();
 	private final Resource[] permanentResources;
 
 	private int workerPool;
@@ -28,12 +32,13 @@ public class Base {
 					pattern.getPermanentResourcesNum()[i], true);
 		}
 
-		for (int i = 0; i < 3; i++) {
-			buildings[i] = BuildingCreator.createBuilding(pattern.getBuildingName(i));
+		for (int i = 0; i < pattern.getBuildingNames().length; i++) {
+			Building building = BuildingCreator.createBuilding(pattern.getBuildingName(i));
+			buildings.add(building);
 		}
 
 		// First building starts built (level 1)
-		buildings[0].increaseLevel();
+		buildings.get(0).increaseLevel();
 	}
 
 	public boolean isAvailableUnit(String unitName) {
@@ -52,7 +57,18 @@ public class Base {
 	}
 
 	public Building getBuilding(int i) {
-		return buildings[i];
+		return buildings.get(i);
+	}
+
+	public List<Module> getModules() {
+		return modules;
+	}
+	
+	public void addModule(Module module) {
+		if(modules.size() == getModulesMaxNum()) {
+			throw new IllegalStateException("Cannot add any more modules.");
+		}
+		modules.add(module);
 	}
 
 	public Resource[] getPermanentResources() {

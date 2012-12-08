@@ -17,6 +17,7 @@ public class Planet implements Comparable<Planet> {
 	private boolean[] entrances = new boolean[4];
 	private Route[] routes = { null, null, null, null };
 	private final List<Area> areas;
+	private final List<Order> orderPile = new ArrayList<Order>();
 
 	public Planet(PlanetPattern pattern, List<Area> areas) {
 		this.pattern = pattern;
@@ -128,34 +129,56 @@ public class Planet implements Comparable<Planet> {
 		return result;
 	}
 
+	public List<Route> getRoutes() {
+		List<Route> result = new ArrayList<Route>();
+		for (Route r : routes) {
+			if (r != null) {
+				result.add(r);
+			}
+		}
+		return result;
+	}
+
 	public List<Route> getRoutesWithTransports(Player player) {
 		List<Route> result = new ArrayList<Route>();
-		for (Cardinal c : Cardinal.values()) {
-			if (hasRoute(c)) {
-				Route route = getRoute(c);
-				if (player.hasTransport(route)) {
-					result.add(route);
-				}
+		for (Route r : getRoutes()) {
+			if (player.hasTransport(r)) {
+				result.add(r);
 			}
-
 		}
 		return result;
 	}
 
 	public List<Route> getRoutesWithNoTransports(Player player) {
 		List<Route> result = new ArrayList<Route>();
-		for (Cardinal c : Cardinal.values()) {
-			if (hasRoute(c)) {
-				Route route = getRoute(c);
-				if (!player.hasTransport(route)) {
-					result.add(route);
-				}
+		for (Route r : getRoutes()) {
+			if (!player.hasTransport(r)) {
+				result.add(r);
 			}
-
 		}
 		return result;
 	}
 
+	public List<Order> getOrderPile() {
+		return orderPile;
+	}
+
+	public Order getTopOrder() {
+		return orderPile.get(orderPile.size() - 1);
+	}
+
+	public void addOrderToTop(Order o) {
+		orderPile.add(o);
+	}
+
+	public void removeTopOrder() {
+		orderPile.remove(orderPile.size() - 1);
+	}
+
+	/**
+	 * Permanently rotates the planet clockwise by switching entrances.</br>
+	 * Cannot be done after routes are set. (If you want to rotate the whole galaxy, check Galaxy)
+	 */
 	public void rotateClockwise() {
 		if (!Arrays.equals(routes, new Route[] { null, null, null, null })) {
 			throw new IllegalStateException("Routes have already been set.");
@@ -169,6 +192,10 @@ public class Planet implements Comparable<Planet> {
 		}
 	}
 
+	/**
+	 * Permanently rotates the planet counterclockwise by switching entrances.</br>
+	 * Cannot be done after routes are set. (If you want to rotate the whole galaxy, check Galaxy)
+	 */
 	public void rotateCounterClockwise() {
 		if (!Arrays.equals(routes, new Route[] { null, null, null, null })) {
 			throw new IllegalStateException("Routes have already been set.");
@@ -182,6 +209,14 @@ public class Planet implements Comparable<Planet> {
 		}
 	}
 
+	/**
+	 * Connect this planet to another planet by creating a new Route and adding the route to both planet's lists.
+	 * 
+	 * @param p - The planet to connect to.
+	 * @param thisCardinal - The direction we'll connect from.
+	 * @param pCardinal - The direction of planet p we'll connect to.
+	 * @param isZAxis - If the Route should be created as a ZAxis.
+	 */
 	public void connect(Planet p, Cardinal thisCardinal, Cardinal pCardinal, boolean isZAxis) {
 		if (this == p) {
 			throw new IllegalStateException("The planets are the same : " + p.getName());
@@ -194,6 +229,23 @@ public class Planet implements Comparable<Planet> {
 			addRoute(route, thisCardinal);
 			p.addRoute(route, pCardinal);
 		}
+	}
+
+	/**
+	 * Returns true if the player has at least one friendly unit or base on any area of the planet.
+	 * 
+	 * @param player - The player that needs a friendly unit or base.
+	 * @return A List of all the Planets.
+	 */
+	public boolean hasFriendlyUnitOrBase(Player player) {
+		boolean result = false;
+		for (Area a : areas) {
+			if (a.isControlledBy(player)) {
+				result = true;
+				break;
+			}
+		}
+		return result;
 	}
 
 	public String showTextGraph() {

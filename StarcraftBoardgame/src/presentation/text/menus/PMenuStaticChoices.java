@@ -44,6 +44,7 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 					put(StaticChoice.PLACE_REMOVE_UNIT_PLACE_UNIT, "Place unit");
 					put(StaticChoice.PLACE_REMOVE_UNIT_REMOVE_UNIT, "Remove unit");
 					put(StaticChoice.PLACE_REMOVE_UNIT_PLACE_TRANSPORT, "Place transport");
+					put(StaticChoice.PLACE_REMOVE_UNIT_REMOVE_TRANSPORT, "Remove transport");
 				}
 			}
 					);

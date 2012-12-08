@@ -46,7 +46,7 @@ public class PlanetPosition {
 	public boolean moreBottomThan(PlanetPosition p) {
 		return this.getY() > p.getY();
 	}
-
+	
 	public PlanetPosition plusCardinal(Cardinal c) {
 		int plusX = 0, plusY = 0;
 		switch (c) {

@@ -24,7 +24,7 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 	private StaticChoice rotatePlanetChoice;
 
 	private final MultiMenuPlacePlanetChoices choices = new MultiMenuPlacePlanetChoices();
-	
+
 	public MultiMenuPlacePlanet(Galaxy galaxy, int roundNumber, Player player) {
 		super(player);
 		this.galaxy = galaxy;
@@ -34,6 +34,7 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 	@Override
 	protected AMenu<?> getMenu(int i) {
 		AMenu<?> menu;
+
 		switch (i) {
 
 		case 1:
@@ -46,7 +47,7 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 			break;
 
 		case 3:
-			List<PlanetEntrance> availableEntrances = galaxy.getAvailableSpots();
+			List<PlanetEntrance> availableEntrances = new ArrayList<PlanetEntrance>(galaxy.getAvailableSpots());
 
 			// Remove entrances that cannot be linked
 			List<PlanetEntrance> unavailableEntrances = new ArrayList<PlanetEntrance>();
@@ -66,7 +67,8 @@ public class MultiMenuPlacePlanet extends MultiMenu {
 			break;
 
 		case 5:
-			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_BASE_AREA, getChoices().getChosenPlanet().getAreas(), player);
+			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_BASE_AREA, getChoices().getChosenPlanet()
+					.getAreas(), player);
 			break;
 
 		default:

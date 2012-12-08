@@ -2,9 +2,9 @@ package abstraction.menus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import tools.PlanetEntrance;
-import abstraction.Galaxy;
 import abstraction.Game;
 import abstraction.Planet;
 import abstraction.Player;
@@ -17,18 +17,19 @@ import abstraction.patterns.PlanetPattern.Cardinal;
  */
 public class MultiMenuPlaceZAxis extends MultiMenu {
 
-	private final List<PlanetEntrance> availableEntrances;
+	private final Set<PlanetEntrance> availableEntrances;
 
 	private final MultiMenuPlaceZAxisChoices choices = new MultiMenuPlaceZAxisChoices();
 	
-	public MultiMenuPlaceZAxis(Galaxy galaxy, Player player) {
+	public MultiMenuPlaceZAxis(Set<PlanetEntrance> availableEntrances, Player player) {
 		super(player);
-		this.availableEntrances = galaxy.getAvailableSpots();
+		this.availableEntrances = availableEntrances;
 	}
 
 	@Override
 	protected AMenu<?> getMenu(int i) {
 		AMenu<?> menu;
+		
 		switch (i) {
 
 		case 1:

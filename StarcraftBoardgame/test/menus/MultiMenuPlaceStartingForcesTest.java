@@ -20,7 +20,6 @@ import abstraction.Planet;
 import abstraction.Player;
 import abstraction.Route;
 import abstraction.Unit;
-import abstraction.creators.FactionCreator;
 import abstraction.creators.PlanetCreator;
 import abstraction.creators.UnitCreator;
 import abstraction.menus.MultiMenuPlaceStartingForces;
@@ -29,7 +28,7 @@ import abstraction.patterns.PlanetPattern.Cardinal;
 /**
  * @author William Gautier
  */
-public class MultiMenuPlaceStartingForcesTests extends Tests {
+public class MultiMenuPlaceStartingForcesTest extends Tests {
 
 	private Game game;
 	private Galaxy galaxy;
@@ -48,7 +47,7 @@ public class MultiMenuPlaceStartingForcesTests extends Tests {
 	 */
 	@Test
 	public void testDoSelection() {
-		player.setFaction(FactionCreator.getFaction("Overmind"));
+		player.setFaction("Overmind");
 
 		Planet abaddon = PlanetCreator.createPlanet("Abaddon");
 		Planet tarsonis = PlanetCreator.createPlanet("Tarsonis");

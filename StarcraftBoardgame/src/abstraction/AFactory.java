@@ -1,7 +1,6 @@
 package abstraction;
 
 import java.util.Collection;
-import java.util.List;
 
 import abstraction.menus.AMenuChooseFromList;
 import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
@@ -20,7 +19,6 @@ public abstract class AFactory {
 			Collection<StaticChoice> disabledChoices, Player player);
 
 	public abstract <T extends Comparable<? super T>> AMenuChooseFromList<T> newMenuChooseFromList(
-			ChooseFromListMenuName menuName,
-			List<T> listChoices, Player player);
+			ChooseFromListMenuName menuName, Collection<T> listChoices, Player player);
 
 }

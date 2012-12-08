@@ -25,7 +25,7 @@ import abstraction.patterns.PlanetPattern.Cardinal;
 /**
  * @author William Gautier
  */
-public class MultiMenuPlaceZAxisTests extends Tests {
+public class MultiMenuPlaceZAxisTest extends Tests {
 
 	private Game game;
 	private Galaxy galaxy;
@@ -53,7 +53,7 @@ public class MultiMenuPlaceZAxisTests extends Tests {
 		// Abaddon west, cancel, pridewater east, cancel, pridewater east, abaddon west
 		String data = "1 4 2 3 2 1 ";
 		TextIHM.scanner = new Scanner(data);
-		menu = new MultiMenuPlaceZAxis(galaxy, player);
+		menu = new MultiMenuPlaceZAxis(galaxy.getAvailableSpots(), player);
 		menu.doSelection();
 
 		PlanetEntrance entrance = menu.getChoices().getEntrance();

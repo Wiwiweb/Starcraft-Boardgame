@@ -20,7 +20,6 @@ import abstraction.Game;
 import abstraction.Planet;
 import abstraction.Player;
 import abstraction.Resource.ResourceType;
-import abstraction.creators.FactionCreator;
 import abstraction.creators.PlanetCreator;
 import abstraction.menus.MultiMenuPlacePlanet;
 import abstraction.patterns.PlanetPattern.Cardinal;
@@ -28,7 +27,7 @@ import abstraction.patterns.PlanetPattern.Cardinal;
 /**
  * @author William Gautier
  */
-public class MultiMenuPlacePlanetTests extends Tests {
+public class MultiMenuPlacePlanetTest extends Tests {
 
 	private Game game;
 	private Galaxy galaxy;
@@ -47,7 +46,7 @@ public class MultiMenuPlacePlanetTests extends Tests {
 	 */
 	@Test
 	public void testDoSelection() {
-		player.setFaction(FactionCreator.getFaction("Overmind"));
+		player.setFaction("Overmind");
 
 		Planet abaddon = PlanetCreator.createPlanet("Abaddon");
 		Planet tarsonis = PlanetCreator.createPlanet("Tarsonis");
@@ -100,8 +99,8 @@ public class MultiMenuPlacePlanetTests extends Tests {
 		game.addPlayer(b);
 		game.setFirstPlayer(a);
 
-		a.setFaction(FactionCreator.getFaction("Overmind"));
-		b.setFaction(FactionCreator.getFaction("Overmind"));
+		a.setFaction("Overmind");
+		b.setFaction("Overmind");
 
 		Planet chauSara = PlanetCreator.createPlanet("Chau Sara");
 		Planet abaddon = PlanetCreator.createPlanet("Abaddon");

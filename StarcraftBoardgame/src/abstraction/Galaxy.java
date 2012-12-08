@@ -1,7 +1,8 @@
 package abstraction;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import tools.BidirectionalMap;
 import tools.PlanetEntrance;
@@ -17,6 +18,11 @@ public class Galaxy {
 	private PlanetPosition topLeft = new PlanetPosition(0, 0);
 	private PlanetPosition bottomRight = new PlanetPosition(0, 0);
 
+	/**
+	 * Adds the first Planet to the Galaxy.
+	 * 
+	 * @param p - The Planet to add.
+	 */
 	public void add(Planet p) {
 		if (isEmpty() == true) {
 			planetPositions.put(p, new PlanetPosition(0, 0));
@@ -25,6 +31,13 @@ public class Galaxy {
 		}
 	}
 
+	/**
+	 * Adds a planet to the Galaxy to an existing Planet.
+	 * 
+	 * @param add - The Planet to add.
+	 * @param link - The Planet to add to.
+	 * @param from - The direction we'll add the new Planet from.
+	 */
 	public void add(Planet add, Planet link, Cardinal from) {
 		if (!link.isLinkable(from) || !add.isLinkable(from.opposite())) {
 			throw new IllegalStateException("The planets are not linkable from this side.");
@@ -76,15 +89,50 @@ public class Galaxy {
 		return planetPositions.isEmpty();
 	}
 
-	public List<PlanetEntrance> getAvailableSpots() {
-		final List<PlanetEntrance> result = new ArrayList<PlanetEntrance>();
-		for (Planet p : planetPositions.keySet()) {
+	/**
+	 * Get all the PlanetEntrances where a new Route could be placed.
+	 * 
+	 * @return A Set of all the PlanetEntrances
+	 */
+	public Set<PlanetEntrance> getAvailableSpots() {
+		final Set<PlanetEntrance> result = new HashSet<PlanetEntrance>();
+		
+		for (Planet p : getPlanets()) {
 			final List<Cardinal> entrances = p.getLinkableEntrances();
+			final PlanetPosition position = planetPositions.get(p);
+			
 			for (Cardinal c : entrances) {
-				result.add(new PlanetEntrance(p, c));
+				if(planetPositions.getKey(position.plusCardinal(c)) == null) {
+					result.add(new PlanetEntrance(p, c));
+				}
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Get all the Planets where player could place an order. (ie. he has at least a friendly unit or base on them)
+	 * 
+	 * @param player - The player to check for available planets.
+	 * @return A Set of all the Planets.
+	 */
+	public Set<Planet> getAvailableOrderPlanets(Player player) {
+		Set<Planet> result = new HashSet<Planet>();
+
+		for (Planet p : getPlanets()) {
+			if (p.hasFriendlyUnitOrBase(player)) {
+				result.add(p);
+				for(Route r : p.getRoutes()) {
+					result.add(r.getDestinationFrom(p));
+				}
+			}
+		}
+
+		return result;
+	}
+
+	public Set<Planet> getPlanets() {
+		return planetPositions.keySet();
 	}
 
 	@Override

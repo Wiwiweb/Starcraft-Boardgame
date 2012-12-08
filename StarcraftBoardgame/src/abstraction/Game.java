@@ -1,19 +1,23 @@
 package abstraction;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 
 import presentation.IHM;
 import presentation.text.TextIHM;
 import tools.PlanetEntrance;
+import abstraction.Order.OrderType;
 import abstraction.Resource.ResourceType;
 import abstraction.creators.FactionCreator;
 import abstraction.creators.PlanetCreator;
 import abstraction.creators.UnitCreator;
 import abstraction.menus.AMenuChooseFromList;
 import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
+import abstraction.menus.MultiMenuPlaceOrder;
 import abstraction.menus.MultiMenuPlacePlanet;
 import abstraction.menus.MultiMenuPlaceStartingForces;
 import abstraction.menus.MultiMenuPlaceZAxis;
@@ -25,12 +29,15 @@ import control.text.CFactory;
 public class Game {
 
 	public static boolean IS_TEST = false;
-	
+
 	public static enum Phase {
 		PLANNING, EXECUTION, REGROUPING
 	}
 
 	public final static int NB_PLANETS_PER_PLAYER = 2;
+	public final static int NB_ORDERS_PER_PLAYER = 4;
+	public final static int NB_ORDERS_OF_EACH_TYPE = 2;
+	public final static int NB_SPECIAL_ORDERS_OF_EACH_TYPE = 1;
 
 	public static IHM ihm = new TextIHM();
 	public static AFactory factory = new CFactory();
@@ -75,7 +82,7 @@ public class Game {
 
 		// 9. Draw Combat Cards
 		// TODO
-		
+
 		startGame();
 
 	}
@@ -160,23 +167,20 @@ public class Game {
 		boolean hasLegalSpot = true;
 		while (it.hasNext() && hasLegalSpot) {
 			Player player = it.next();
-			List<PlanetEntrance> availableEntrances = galaxy.getAvailableSpots();
+			Set<PlanetEntrance> availableEntrances = galaxy.getAvailableSpots();
 
 			if (availableEntrances.size() < 2) {
-				hasLegalSpot = false;
 				break;
 			} else {
 
-				Iterator<PlanetEntrance> spotIt = availableEntrances.iterator();
-
+				hasLegalSpot = false;
 				checkLegal:
-				while (spotIt.hasNext()) {
-					PlanetEntrance entrance = spotIt.next();
-					List<PlanetEntrance> otherEntrances = availableEntrances;
-					otherEntrances.remove(entrance);
-					hasLegalSpot = false;
-					for (PlanetEntrance p : otherEntrances) {
-						if (entrance.getPlanet() != p.getPlanet()) {
+				for (PlanetEntrance p : availableEntrances) {
+					Set<PlanetEntrance> otherEntrances = new HashSet<PlanetEntrance>(availableEntrances);
+					otherEntrances.remove(p);
+
+					for (PlanetEntrance p2 : otherEntrances) {
+						if (p.getPlanet() != p2.getPlanet()) {
 							hasLegalSpot = true;
 							break checkLegal;
 						}
@@ -186,7 +190,7 @@ public class Game {
 			}
 
 			if (hasLegalSpot) {
-				MultiMenuPlaceZAxis placeZAxisMenu = new MultiMenuPlaceZAxis(galaxy, player);
+				MultiMenuPlaceZAxis placeZAxisMenu = new MultiMenuPlaceZAxis(galaxy.getAvailableSpots(), player);
 				placeZAxisMenu.doSelection();
 				PlanetEntrance entrance = placeZAxisMenu.getChoices().getEntrance();
 				PlanetEntrance exit = placeZAxisMenu.getChoices().getExit();
@@ -227,23 +231,79 @@ public class Game {
 			}
 		}
 	}
-	
+
 	private void startGame() {
 		roundNumber = 1;
-		boolean gameIsOver = false; 
-		
-		while(!gameIsOver) {
+		boolean gameIsOver = false;
+
+		while (!gameIsOver) {
 			List<Player> orderedPlayerList = getPlayerListByOrder();
 			planningPhase(orderedPlayerList);
-			//TODO
+			// TODO
 		}
-		
+
 	}
-	
+
 	private void planningPhase(final List<Player> orderedPlayerList) {
 		currentPhase = Phase.PLANNING;
-		
-		//TODO
+
+		for (Player p : orderedPlayerList) {
+			p.setOrdersLeftToPlace(NB_ORDERS_PER_PLAYER);
+		}
+
+		boolean ordersRemaining = true;
+
+		while (ordersRemaining) {
+
+			ordersRemaining = false;
+			ListIterator<Player> it = orderedPlayerList.listIterator();
+			while (it.hasNext()) {
+				Player player = it.next();
+
+				if (player.getOrdersLeftToPlace() > 0) {
+					ordersRemaining = true;
+
+					// Get available orders
+					Set<OrderType> availableOrders = new HashSet<OrderType>(Arrays.asList(OrderType.values()));
+					if (player.getOrderTypePlaced(OrderType.BUILD) >= Game.NB_ORDERS_OF_EACH_TYPE) {
+						availableOrders.remove(OrderType.BUILD);
+					}
+					if (player.getOrderTypePlaced(OrderType.MOBILIZE) >= Game.NB_ORDERS_OF_EACH_TYPE) {
+						availableOrders.remove(OrderType.MOBILIZE);
+					}
+					if (player.getOrderTypePlaced(OrderType.RESEARCH) >= Game.NB_ORDERS_OF_EACH_TYPE) {
+						availableOrders.remove(OrderType.RESEARCH);
+					}
+
+					if (player.getSpecialOrdersAvailable() <= 0) {
+						availableOrders.remove(OrderType.SPECIAL_BUILD);
+						availableOrders.remove(OrderType.SPECIAL_MOBILIZE);
+						availableOrders.remove(OrderType.SPECIAL_RESEARCH);
+					} else {
+						if (player.getOrderTypePlaced(OrderType.SPECIAL_BUILD) >= Game.NB_SPECIAL_ORDERS_OF_EACH_TYPE) {
+							availableOrders.remove(OrderType.SPECIAL_BUILD);
+						}
+						if (player.getOrderTypePlaced(OrderType.SPECIAL_MOBILIZE) >= Game.NB_SPECIAL_ORDERS_OF_EACH_TYPE) {
+							availableOrders.remove(OrderType.SPECIAL_MOBILIZE);
+						}
+						if (player.getOrderTypePlaced(OrderType.SPECIAL_RESEARCH) >= Game.NB_SPECIAL_ORDERS_OF_EACH_TYPE) {
+							availableOrders.remove(OrderType.SPECIAL_RESEARCH);
+						}
+					}
+
+					MultiMenuPlaceOrder placeOrderMenu = new MultiMenuPlaceOrder(galaxy.getAvailableOrderPlanets(player),
+							availableOrders, player);
+					placeOrderMenu.doSelection();
+
+					player.decrementOrdersLeftToPlace();
+					Planet planet = placeOrderMenu.getChoices().getPlanet();
+					OrderType orderType = placeOrderMenu.getChoices().getOrderType();
+					planet.addOrderToTop(new Order(orderType, player, planet));
+				}
+
+			}
+
+		}
 	}
 
 	public List<Player> getPlayerList() {
@@ -251,8 +311,7 @@ public class Game {
 	}
 
 	public List<Player> getPlayerListByOrder() {
-		@SuppressWarnings("unchecked")
-		List<Player> orderedPlayerList = (ArrayList<Player>) ((ArrayList<Player>) playerList).clone();
+		List<Player> orderedPlayerList = new ArrayList<Player>(playerList);
 
 		Player nextPlayer = null;
 		while (nextPlayer != firstPlayer) {

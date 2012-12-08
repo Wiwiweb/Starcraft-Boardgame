@@ -20,7 +20,7 @@ import abstraction.patterns.PlanetPattern.Cardinal;
 /**
  * @author William Gautier
  */
-public class CreatorTests extends Tests {
+public class CreatorTest extends Tests {
 
 	@Test
 	public void testCreateBuilding() {
