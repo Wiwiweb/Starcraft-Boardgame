@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,8 +18,8 @@ import abstraction.Game;
 import abstraction.Order.OrderType;
 import abstraction.Planet;
 import abstraction.Player;
-import abstraction.creators.PlanetCreator;
-import abstraction.menus.MultiMenuPlaceOrder;
+import abstraction.menus.multimenus.MultiMenuPlaceOrder;
+import abstraction.menus.multimenus.states.MultiMenuPlaceOrderChoices;
 
 /**
  * @author William Gautier
@@ -36,19 +37,19 @@ public class MultiMenuPlaceOrderTest extends Tests {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		game = new Game();
+		game = factory.newGame();
 		galaxy = game.getGalaxy();
-		player = new Player("Player");
+		player = factory.newPlayer("Player");
 	}
 
 	/**
-	 * Test method for {@link abstraction.menus.MultiMenuPlaceOrder#doSelection()}.
+	 * Test method for {@link abstraction.menus.multimenus.MultiMenuPlaceOrder#doSelection()}.
 	 */
 	@Test
 	public void testDoSelection() {
-		Planet abaddon = PlanetCreator.createPlanet("Abaddon");
-		Planet tarsonis = PlanetCreator.createPlanet("Tarsonis");
-		Planet pridewater = PlanetCreator.createPlanet("Pridewater");
+		Planet abaddon = factory.newPlanet("Abaddon");
+		Planet tarsonis = factory.newPlanet("Tarsonis");
+		Planet pridewater = factory.newPlanet("Pridewater");
 
 		generateBasicGalaxy(galaxy, abaddon, tarsonis, pridewater);
 
@@ -59,10 +60,10 @@ public class MultiMenuPlaceOrderTest extends Tests {
 		TextIHM.scanner = new Scanner(data);
 		menu = new MultiMenuPlaceOrder(galaxy.getAvailableOrderPlanets(player),
 				new HashSet<OrderType>(Arrays.asList(OrderType.values())), player);
-		menu.doSelection();
+		MultiMenuPlaceOrderChoices choices = menu.doSelection();
 
-		assertEquals(OrderType.MOBILIZE, menu.getChoices().getOrderType());
-		assertSame(pridewater, menu.getChoices().getPlanet());
+		assertEquals(OrderType.MOBILIZE, choices.getOrderType());
+		assertSame(pridewater, choices.getPlanet());
 	}
 
 }

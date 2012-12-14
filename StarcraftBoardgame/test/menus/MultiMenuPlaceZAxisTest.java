@@ -18,8 +18,8 @@ import abstraction.Galaxy;
 import abstraction.Game;
 import abstraction.Planet;
 import abstraction.Player;
-import abstraction.creators.PlanetCreator;
-import abstraction.menus.MultiMenuPlaceZAxis;
+import abstraction.menus.multimenus.MultiMenuPlaceZAxis;
+import abstraction.menus.multimenus.states.MultiMenuPlaceZAxisChoices;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
 /**
@@ -34,19 +34,19 @@ public class MultiMenuPlaceZAxisTest extends Tests {
 
 	@Before
 	public void setUp() throws Exception {
-		game = new Game();
+		game = factory.newGame();
 		galaxy = game.getGalaxy();
-		player = new Player("Player");
+		player = factory.newPlayer("Player");
 	}
 
 	/**
-	 * Test method for {@link abstraction.menus.MultiMenuPlaceZAxis#doSelection()}.
+	 * Test method for {@link abstraction.menus.multimenus.MultiMenuPlaceZAxis#doSelection()}.
 	 */
 	@Test
 	public void testDoSelection() {
-		Planet abaddon = PlanetCreator.createPlanet("Abaddon");
-		Planet tarsonis = PlanetCreator.createPlanet("Tarsonis");
-		Planet pridewater = PlanetCreator.createPlanet("Pridewater");
+		Planet abaddon = factory.newPlanet("Abaddon");
+		Planet tarsonis = factory.newPlanet("Tarsonis");
+		Planet pridewater = factory.newPlanet("Pridewater");
 
 		generateBasicGalaxy(galaxy, abaddon, tarsonis, pridewater);
 
@@ -54,11 +54,11 @@ public class MultiMenuPlaceZAxisTest extends Tests {
 		String data = "1 4 2 3 2 1 ";
 		TextIHM.scanner = new Scanner(data);
 		menu = new MultiMenuPlaceZAxis(galaxy.getAvailableSpots(), player);
-		menu.doSelection();
+		MultiMenuPlaceZAxisChoices choices = menu.doSelection();
 
-		PlanetEntrance entrance = menu.getChoices().getEntrance();
-		PlanetEntrance exit = menu.getChoices().getExit();
-		entrance.getPlanet().connect(exit.getPlanet(), entrance.getEntrance(), exit.getEntrance(), true);
+		PlanetEntrance entrance = choices.getEntrance();
+		PlanetEntrance exit = choices.getExit();
+		entrance.getPlanet().connect(exit.getPlanet(), entrance.getEntrance(), exit.getEntrance(), true, factory);
 
 		assertSame(abaddon, pridewater.getRoute(Cardinal.EAST).getDestinationFrom(pridewater));
 		assertSame(pridewater, abaddon.getRoute(Cardinal.WEST).getDestinationFrom(abaddon));
@@ -72,21 +72,21 @@ public class MultiMenuPlaceZAxisTest extends Tests {
 	// @Ignore
 	@Test
 	public void testPlaceZAxisNoMoreSpots() {
-		Player a = new Player("A");
-		Player b = new Player("B");
-		Player c = new Player("C");
+		Player a = factory.newPlayer("A");
+		Player b = factory.newPlayer("B");
+		Player c = factory.newPlayer("C");
 		game.addPlayer(a);
 		game.addPlayer(b);
 		game.addPlayer(c);
 		game.setFirstPlayer(a);
 
-		Planet abaddon = PlanetCreator.createPlanet("Abaddon");
-		Planet tarsonis = PlanetCreator.createPlanet("Tarsonis");
-		Planet pridewater = PlanetCreator.createPlanet("Pridewater");
+		Planet abaddon = factory.newPlanet("Abaddon");
+		Planet tarsonis = factory.newPlanet("Tarsonis");
+		Planet pridewater = factory.newPlanet("Pridewater");
 
 		galaxy.add(abaddon);
-		galaxy.add(tarsonis, abaddon, Cardinal.WEST);
-		galaxy.add(pridewater, tarsonis, Cardinal.NORTH);
+		galaxy.add(tarsonis, abaddon, Cardinal.WEST, factory);
+		galaxy.add(pridewater, tarsonis, Cardinal.NORTH, factory);
 
 		assertEquals("P \nTA\n", galaxy.toString());
 
@@ -121,21 +121,21 @@ public class MultiMenuPlaceZAxisTest extends Tests {
 	// @Ignore
 	@Test
 	public void testPlaceZAxisNoMoreLegalSpots() {
-		Player a = new Player("A");
-		Player b = new Player("B");
-		Player c = new Player("C");
+		Player a = factory.newPlayer("A");
+		Player b = factory.newPlayer("B");
+		Player c = factory.newPlayer("C");
 		game.addPlayer(a);
 		game.addPlayer(b);
 		game.addPlayer(c);
 		game.setFirstPlayer(a);
 
-		Planet abaddon = PlanetCreator.createPlanet("Abaddon");
-		Planet tarsonis = PlanetCreator.createPlanet("Tarsonis");
-		Planet pridewater = PlanetCreator.createPlanet("Pridewater");
+		Planet abaddon = factory.newPlanet("Abaddon");
+		Planet tarsonis = factory.newPlanet("Tarsonis");
+		Planet pridewater = factory.newPlanet("Pridewater");
 
 		galaxy.add(abaddon);
-		galaxy.add(tarsonis, abaddon, Cardinal.WEST);
-		galaxy.add(pridewater, tarsonis, Cardinal.NORTH);
+		galaxy.add(tarsonis, abaddon, Cardinal.WEST, factory);
+		galaxy.add(pridewater, tarsonis, Cardinal.NORTH, factory);
 
 		assertEquals("P \nTA\n", galaxy.toString());
 

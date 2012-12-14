@@ -1,6 +1,8 @@
-package abstraction.menus;
+package abstraction.menus.multimenus;
 
 import abstraction.Player;
+import abstraction.menus.Menu;
+import abstraction.menus.multimenus.states.MultiMenuChoices;
 
 /**
  * @author William Gautier
@@ -26,7 +28,7 @@ public abstract class MultiMenu {
 	 * 
 	 * @return
 	 */
-	abstract protected AMenu<?> getMenu(int i);
+	abstract protected Menu<?> getMenu(int i);
 
 	/**
 	 * Updates the state based on current state and selection of menus. Does internal operations after a selection of a
@@ -37,6 +39,6 @@ public abstract class MultiMenu {
 	/**
 	 * Main loop.
 	 */
-	abstract public void doSelection();
+	abstract public MultiMenuChoices doSelection();
 
 }

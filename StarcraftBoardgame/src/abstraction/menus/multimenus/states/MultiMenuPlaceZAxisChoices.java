@@ -1,11 +1,11 @@
-package abstraction.menus.states;
+package abstraction.menus.multimenus.states;
 
 import tools.PlanetEntrance;
 
 /**
  * @author William Gautier
  */
-public class MultiMenuPlaceZAxisChoices {
+public class MultiMenuPlaceZAxisChoices implements MultiMenuChoices {
 
 	private PlanetEntrance entrance;
 	private PlanetEntrance exit;

@@ -7,7 +7,7 @@ import abstraction.Player;
 /**
  * @author William Gautier
  */
-public abstract class AMenuChooseFromList<T> extends AMenu<T> {
+public abstract class MenuChooseFromList<T> extends Menu<T> {
 
 	public static enum ChooseFromListMenuName {
 		CHOOSE_FACTION, CHOOSE_PLANET_TO_PLACE, CHOOSE_PLANET_SPOT, CHOOSE_BASE_AREA,
@@ -19,7 +19,7 @@ public abstract class AMenuChooseFromList<T> extends AMenu<T> {
 	private final ChooseFromListMenuName menuName;
 	private final List<T> choices;
 
-	public AMenuChooseFromList(ChooseFromListMenuName menuName, List<T> choices, Player player) {
+	public MenuChooseFromList(ChooseFromListMenuName menuName, List<T> choices, Player player) {
 		super(player);
 		this.menuName = menuName;
 		this.choices = choices;

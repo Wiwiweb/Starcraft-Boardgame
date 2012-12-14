@@ -14,9 +14,9 @@ import abstraction.patterns.PlanetPattern.Cardinal;
  */
 public class Galaxy {
 
-	private BidirectionalMap<Planet, PlanetPosition> planetPositions = new BidirectionalMap<Planet, PlanetPosition>();
-	private PlanetPosition topLeft = new PlanetPosition(0, 0);
-	private PlanetPosition bottomRight = new PlanetPosition(0, 0);
+	private final BidirectionalMap<Planet, PlanetPosition> planetPositions = new BidirectionalMap<Planet, PlanetPosition>();
+	private final PlanetPosition topLeft = new PlanetPosition(0, 0);
+	private final PlanetPosition bottomRight = new PlanetPosition(0, 0);
 
 	/**
 	 * Adds the first Planet to the Galaxy.
@@ -38,7 +38,7 @@ public class Galaxy {
 	 * @param link - The Planet to add to.
 	 * @param from - The direction we'll add the new Planet from.
 	 */
-	public void add(Planet add, Planet link, Cardinal from) {
+	public void add(Planet add, Planet link, Cardinal from, Factory factory) {
 		if (!link.isLinkable(from) || !add.isLinkable(from.opposite())) {
 			throw new IllegalStateException("The planets are not linkable from this side.");
 		} else if (!planetPositions.containsKey(link)) {
@@ -64,21 +64,21 @@ public class Galaxy {
 
 			// Connect added planet
 			planetPositions.put(add, addPosition);
-			link.connect(add, from, from.opposite(), false);
+			link.connect(add, from, from.opposite(), false, factory);
 
 			// Connect close planets to the planet that was added
 			for (Cardinal c : Cardinal.values()) {
 				Planet closePlanet = planetPositions.getKey(addPosition.plusCardinal(c));
 				if (closePlanet != null && add.isLinkable(c) && closePlanet.isLinkable(c.opposite())) {
-					add.connect(closePlanet, c, c.opposite(), false);
+					add.connect(closePlanet, c, c.opposite(), false, factory);
 				}
 			}
 
 		}
 	}
 
-	public void add(Planet add, PlanetEntrance entrance) {
-		add(add, entrance.getPlanet(), entrance.getEntrance());
+	public void add(Planet add, PlanetEntrance entrance, Factory factory) {
+		add(add, entrance.getPlanet(), entrance.getEntrance(), factory);
 	}
 
 	public Planet getPlanetAt(PlanetPosition pos) {
@@ -96,13 +96,13 @@ public class Galaxy {
 	 */
 	public Set<PlanetEntrance> getAvailableSpots() {
 		final Set<PlanetEntrance> result = new HashSet<PlanetEntrance>();
-		
+
 		for (Planet p : getPlanets()) {
 			final List<Cardinal> entrances = p.getLinkableEntrances();
 			final PlanetPosition position = planetPositions.get(p);
-			
+
 			for (Cardinal c : entrances) {
-				if(planetPositions.getKey(position.plusCardinal(c)) == null) {
+				if (planetPositions.getKey(position.plusCardinal(c)) == null) {
 					result.add(new PlanetEntrance(p, c));
 				}
 			}
@@ -122,7 +122,7 @@ public class Galaxy {
 		for (Planet p : getPlanets()) {
 			if (p.hasFriendlyUnitOrBase(player)) {
 				result.add(p);
-				for(Route r : p.getRoutes()) {
+				for (Route r : p.getRoutes()) {
 					result.add(r.getDestinationFrom(p));
 				}
 			}

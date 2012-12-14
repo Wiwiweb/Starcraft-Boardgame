@@ -7,7 +7,7 @@ import java.util.Map;
 
 import presentation.text.TextIHM;
 import abstraction.Game;
-import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
+import abstraction.menus.MenuChooseFromList.ChooseFromListMenuName;
 import control.text.menus.CMenuChooseFromList;
 
 /**

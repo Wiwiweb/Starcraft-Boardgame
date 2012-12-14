@@ -16,8 +16,6 @@ import abstraction.Player;
 import abstraction.Resource;
 import abstraction.Resource.ResourceType;
 import abstraction.Unit;
-import abstraction.creators.PlanetCreator;
-import abstraction.creators.UnitCreator;
 
 /**
  * @author William Gautier
@@ -34,9 +32,9 @@ public class AreaTest extends Tests {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		abaddon = PlanetCreator.createPlanet("Abaddon");
-		player = new Player("Player");
-		player.setFaction("Overmind");
+		abaddon = factory.newPlanet("Abaddon");
+		player = factory.newPlayer("Player");
+		player.setFaction("Overmind", factory);
 		area = abaddon.getArea(0);
 	}
 
@@ -45,7 +43,7 @@ public class AreaTest extends Tests {
 	 */
 	@Test
 	public void testAddUnit1() {
-		Unit zergling = UnitCreator.createUnit("Zergling", player);
+		Unit zergling = factory.newUnit("Zergling", player);
 		area.addUnit(zergling);
 
 		assertEquals(1, area.getUnitNumber());
@@ -58,10 +56,10 @@ public class AreaTest extends Tests {
 	 */
 	@Test(expected = IllegalStateException.class)
 	public void testAddUnit2() {
-		Unit zergling1 = UnitCreator.createUnit("Zergling", player);
-		Unit zergling2 = UnitCreator.createUnit("Zergling", player);
-		Unit zergling3 = UnitCreator.createUnit("Zergling", player);
-		Unit zergling4 = UnitCreator.createUnit("Zergling", player);
+		Unit zergling1 = factory.newUnit("Zergling", player);
+		Unit zergling2 = factory.newUnit("Zergling", player);
+		Unit zergling3 = factory.newUnit("Zergling", player);
+		Unit zergling4 = factory.newUnit("Zergling", player);
 		area.addUnit(zergling1);
 		area.addUnit(zergling2);
 		area.addUnit(zergling3);
@@ -74,9 +72,9 @@ public class AreaTest extends Tests {
 	 */
 	@Test(expected = IllegalStateException.class)
 	public void testAddUnit3() {
-		Player player2 = new Player("Player 2");
-		Unit zergling1 = UnitCreator.createUnit("Zergling", player);
-		Unit zergling2 = UnitCreator.createUnit("Zergling", player2);
+		Player player2 = factory.newPlayer("Player 2");
+		Unit zergling1 = factory.newUnit("Zergling", player);
+		Unit zergling2 = factory.newUnit("Zergling", player2);
 		area.addUnit(zergling1);
 		area.addUnit(zergling2);
 	}
@@ -86,7 +84,7 @@ public class AreaTest extends Tests {
 	 */
 	@Test
 	public void testRemoveUnit() {
-		Unit zergling = UnitCreator.createUnit("Zergling", player);
+		Unit zergling = factory.newUnit("Zergling", player);
 		area.addUnit(zergling);
 		area.removeUnit(zergling);
 
@@ -139,7 +137,7 @@ public class AreaTest extends Tests {
 	 */
 	@Test
 	public void testIsControlledBy2() {
-		Unit zergling = UnitCreator.createUnit("Zergling", player);
+		Unit zergling = factory.newUnit("Zergling", player);
 		area.addUnit(zergling);
 
 		assertTrue(area.isControlledBy(player));
@@ -151,8 +149,8 @@ public class AreaTest extends Tests {
 	 */
 	@Test
 	public void testIsControlledBy3() {
-		Player player2 = new Player("Player 2");
-		Unit zergling = UnitCreator.createUnit("Zergling", player2);
+		Player player2 = factory.newPlayer("Player 2");
+		Unit zergling = factory.newUnit("Zergling", player2);
 		area.addUnit(zergling);
 
 		assertFalse(area.isControlledBy(player));
@@ -172,8 +170,8 @@ public class AreaTest extends Tests {
 	 */
 	@Test
 	public void testGetUnitNumber() {
-		Unit zergling1 = UnitCreator.createUnit("Zergling", player);
-		Unit zergling2 = UnitCreator.createUnit("Zergling", player);
+		Unit zergling1 = factory.newUnit("Zergling", player);
+		Unit zergling2 = factory.newUnit("Zergling", player);
 		area.addUnit(zergling1);
 		area.addUnit(zergling2);
 
@@ -185,8 +183,8 @@ public class AreaTest extends Tests {
 	 */
 	@Test
 	public void testGetUnitList() {
-		Unit zergling1 = UnitCreator.createUnit("Zergling", player);
-		Unit zergling2 = UnitCreator.createUnit("Zergling", player);
+		Unit zergling1 = factory.newUnit("Zergling", player);
+		Unit zergling2 = factory.newUnit("Zergling", player);
 		area.addUnit(zergling1);
 		area.addUnit(zergling2);
 
@@ -210,7 +208,7 @@ public class AreaTest extends Tests {
 	 */
 	@Test
 	public void testIsEmpty2() {
-		Unit zergling = UnitCreator.createUnit("Zergling", player);
+		Unit zergling = factory.newUnit("Zergling", player);
 		area.addUnit(zergling);
 
 		assertFalse(area.isEmpty());
@@ -221,9 +219,9 @@ public class AreaTest extends Tests {
 	 */
 	@Test
 	public void testIsFull() {
-		Unit zergling1 = UnitCreator.createUnit("Zergling", player);
-		Unit zergling2 = UnitCreator.createUnit("Zergling", player);
-		Unit zergling3 = UnitCreator.createUnit("Zergling", player);
+		Unit zergling1 = factory.newUnit("Zergling", player);
+		Unit zergling2 = factory.newUnit("Zergling", player);
+		Unit zergling3 = factory.newUnit("Zergling", player);
 		area.addUnit(zergling1);
 		area.addUnit(zergling2);
 		area.addUnit(zergling3);

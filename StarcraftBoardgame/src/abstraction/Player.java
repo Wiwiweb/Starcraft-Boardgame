@@ -8,8 +8,6 @@ import java.util.List;
 
 import abstraction.Order.OrderType;
 import abstraction.Resource.ResourceType;
-import abstraction.creators.BaseCreator;
-import abstraction.creators.FactionCreator;
 import abstraction.creators.UnitCreator;
 
 /**
@@ -22,14 +20,14 @@ public class Player {
 	/**
 	 * Used during the galaxy setup. Shows what planet the player can place.
 	 */
-	private List<Planet> planetTokens = new ArrayList<Planet>();
+	private final List<Planet> planetTokens = new ArrayList<Planet>();
 
 	private Faction faction;
 	private Base base;
 	private Planet startingPlanet;
 
-	private List<Unit> units = new ArrayList<Unit>();
-	private List<Resource> controlledResources = new ArrayList<Resource>();
+	private final List<Unit> units = new ArrayList<Unit>();
+	private final List<Resource> controlledResources = new ArrayList<Resource>();
 	private int baseNumber = 0;
 
 	// Attributes for a single round
@@ -41,7 +39,7 @@ public class Player {
 		this.name = name;
 	}
 
-	public void buyUnit(String unitName, Planet orderPlanet) {
+	public void buyUnit(String unitName, Planet orderPlanet, Factory factory) {
 		// TODO remake
 		if (!getBase().isAvailableUnit(unitName)) {
 			throw new IllegalArgumentException("This unit is not available.");
@@ -78,7 +76,7 @@ public class Player {
 			}
 		}
 
-		Unit unit = createUnit(unitName);
+		Unit unit = createUnit(unitName, factory);
 		List<Area> buildableAreas = orderPlanet.getBuildableAreas(this);
 		if (buildableAreas.isEmpty()) {
 			throw new IllegalStateException("No space left to build a unit.");
@@ -116,11 +114,11 @@ public class Player {
 		return resourcesAvailable >= workersNeeded;
 	}
 
-	private Unit createUnit(String unitName) {
+	private Unit createUnit(String unitName, Factory factory) {
 		if (!getBase().isAvailableUnit(unitName)) {
 			throw new IllegalArgumentException("This unit is not available.");
 		}
-		return UnitCreator.createUnit(unitName, this);
+		return factory.newUnit(unitName, this);
 	}
 
 	public String getName() {
@@ -138,10 +136,10 @@ public class Player {
 		return faction;
 	}
 
-	public void setFaction(Faction faction) {
+	public void setFaction(Faction faction, Factory factory) {
 		if (this.faction == null) {
 			this.faction = faction;
-			this.base = BaseCreator.createBase(faction.getBaseName(), this);
+			this.base = factory.newBase(faction.getBaseName(), this);
 			controlledResources.addAll(Arrays.asList(base.getPermanentResources()));
 		} else {
 			throw new IllegalStateException(
@@ -150,8 +148,8 @@ public class Player {
 		}
 	}
 
-	public void setFaction(String faction) {
-		setFaction(FactionCreator.getFaction(faction));
+	public void setFaction(String faction, Factory factory) {
+		setFaction(factory.getFaction(faction), factory);
 	}
 
 	public Faction selectFactionFromList(List<Faction> list) {
@@ -249,7 +247,7 @@ public class Player {
 		}
 		return result;
 	}
-	
+
 	public int getOrderTypePlaced(OrderType orderType) {
 		return orderTypePlaced.get(orderType);
 	}
@@ -257,11 +255,11 @@ public class Player {
 	public void setOrderTypePlaced(HashMap<OrderType, Integer> orderTypePlaced) {
 		this.orderTypePlaced = orderTypePlaced;
 	}
-	
+
 	public void resetOrdersAttributes() {
 		ordersLeftToPlace = Game.NB_ORDERS_PER_PLAYER;
 		specialOrdersAvailable = getSpecialOrdersMaxAmount();
-		for(OrderType o : OrderType.values()) {
+		for (OrderType o : OrderType.values()) {
 			orderTypePlaced.put(o, 0);
 		}
 	}

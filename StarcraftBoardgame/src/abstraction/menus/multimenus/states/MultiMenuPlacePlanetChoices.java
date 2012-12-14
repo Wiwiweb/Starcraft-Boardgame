@@ -1,4 +1,4 @@
-package abstraction.menus.states;
+package abstraction.menus.multimenus.states;
 
 import tools.PlanetEntrance;
 import abstraction.Area;
@@ -7,7 +7,7 @@ import abstraction.Planet;
 /**
  * @author William Gautier
  */
-public class MultiMenuPlacePlanetChoices {
+public class MultiMenuPlacePlanetChoices implements MultiMenuChoices {
 
 	private Planet chosenPlanet;
 	private PlanetEntrance chosenSpot;

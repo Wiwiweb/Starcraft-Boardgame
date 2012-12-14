@@ -5,12 +5,12 @@ import java.util.Collection;
 import presentation.text.menus.IPMenu;
 import presentation.text.menus.PMenuStaticChoices;
 import abstraction.Player;
-import abstraction.menus.AMenuStaticChoices;
+import abstraction.menus.MenuStaticChoices;
 
 /**
  * @author William Gautier
  */
-public class CMenuStaticChoices extends AMenuStaticChoices {
+public class CMenuStaticChoices extends MenuStaticChoices {
 
 	private final IPMenu<StaticChoice> presentation;
 

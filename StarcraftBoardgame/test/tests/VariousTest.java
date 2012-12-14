@@ -20,11 +20,11 @@ public class VariousTest extends Tests {
 
 	@Test
 	public void testOrderedPlayers() {
-		Game game = new Game();
-		Player a = new Player("A");
-		Player b = new Player("B");
-		Player c = new Player("C");
-		Player d = new Player("D");
+		Game game = factory.newGame();
+		Player a = factory.newPlayer("A");
+		Player b = factory.newPlayer("B");
+		Player c = factory.newPlayer("C");
+		Player d = factory.newPlayer("D");
 		game.addPlayer(a);
 		game.addPlayer(b);
 		game.addPlayer(c);
@@ -38,15 +38,15 @@ public class VariousTest extends Tests {
 
 	// @Test
 	// public void testBuyUnit() {
-	// Player wiwi = new Player("Wiwi", Faction.getFaction("Overmind"));
+	// Player wiwi = factory.newPlayer("Wiwi", Faction.getFaction("Overmind"));
 	// Planet tarsonis = Galaxy.getPlanet("Tarsonis");
 	// wiwi.buyUnit("Zergling", tarsonis);
 	// }
 
 	@Test
 	public void testIncreaseLevel() {
-		Player wiwi = new Player("Wiwi");
-		wiwi.setFaction("Overmind");
+		Player wiwi = factory.newPlayer("Wiwi");
+		wiwi.setFaction("Overmind", factory);
 
 		assertEquals("Zergling", wiwi.getBase().getBuilding(0).getUnitForLevel(1));
 
@@ -62,10 +62,10 @@ public class VariousTest extends Tests {
 
 	@Test
 	public void testFaction() {
-		Player wiwi = new Player("Wiwi");
-		wiwi.setFaction("Overmind");
-		Player lolo = new Player("Lolo");
-		lolo.setFaction("Queen of Blades");
+		Player wiwi = factory.newPlayer("Wiwi");
+		wiwi.setFaction("Overmind", factory);
+		Player lolo = factory.newPlayer("Lolo");
+		lolo.setFaction("Queen of Blades", factory);
 
 		assertEquals("Wiwi", wiwi.getName());
 		assertEquals("Overmind", wiwi.getFaction().getName());
@@ -75,8 +75,8 @@ public class VariousTest extends Tests {
 
 	@Test
 	public void testBase() {
-		Player wiwi = new Player("Wiwi");
-		wiwi.setFaction("Overmind");
+		Player wiwi = factory.newPlayer("Wiwi");
+		wiwi.setFaction("Overmind", factory);
 		Base zergBase = wiwi.getBase();
 
 		assertEquals(2, zergBase.getBasePrice().getMinerals());

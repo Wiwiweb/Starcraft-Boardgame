@@ -3,7 +3,6 @@ package abstraction;
 import java.util.ArrayList;
 import java.util.List;
 
-import abstraction.creators.BuildingCreator;
 import abstraction.patterns.BasePattern;
 
 /**
@@ -21,19 +20,19 @@ public class Base {
 	private int workerPool;
 	private int workerUnavailable = 0;
 
-	public Base(BasePattern pattern, Player owner, int startingWorkers) {
+	public Base(BasePattern pattern, Player owner, int startingWorkers, Factory factory) {
 		this.pattern = pattern;
 		this.owner = owner;
 		this.setWorkerPool(startingWorkers);
 		this.permanentResources = new Resource[pattern.getPermanentResourcesType().length];
 
 		for (int i = 0; i < pattern.getPermanentResourcesType().length; i++) {
-			this.permanentResources[i] = new Resource(pattern.getPermanentResourcesType()[i],
+			this.permanentResources[i] = factory.newResource(pattern.getPermanentResourcesType()[i],
 					pattern.getPermanentResourcesNum()[i], true);
 		}
 
 		for (int i = 0; i < pattern.getBuildingNames().length; i++) {
-			Building building = BuildingCreator.createBuilding(pattern.getBuildingName(i));
+			Building building = factory.newBuilding(pattern.getBuildingName(i));
 			buildings.add(building);
 		}
 
@@ -63,9 +62,9 @@ public class Base {
 	public List<Module> getModules() {
 		return modules;
 	}
-	
+
 	public void addModule(Module module) {
-		if(modules.size() == getModulesMaxNum()) {
+		if (modules.size() == getModulesMaxNum()) {
 			throw new IllegalStateException("Cannot add any more modules.");
 		}
 		modules.add(module);

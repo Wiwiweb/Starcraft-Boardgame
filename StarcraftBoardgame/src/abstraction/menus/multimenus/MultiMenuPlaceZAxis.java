@@ -1,4 +1,4 @@
-package abstraction.menus;
+package abstraction.menus.multimenus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,9 @@ import tools.PlanetEntrance;
 import abstraction.Game;
 import abstraction.Planet;
 import abstraction.Player;
-import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
-import abstraction.menus.states.MultiMenuPlaceZAxisChoices;
+import abstraction.menus.Menu;
+import abstraction.menus.MenuChooseFromList.ChooseFromListMenuName;
+import abstraction.menus.multimenus.states.MultiMenuPlaceZAxisChoices;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
 /**
@@ -20,16 +21,16 @@ public class MultiMenuPlaceZAxis extends MultiMenu {
 	private final Set<PlanetEntrance> availableEntrances;
 
 	private final MultiMenuPlaceZAxisChoices choices = new MultiMenuPlaceZAxisChoices();
-	
+
 	public MultiMenuPlaceZAxis(Set<PlanetEntrance> availableEntrances, Player player) {
 		super(player);
 		this.availableEntrances = availableEntrances;
 	}
 
 	@Override
-	protected AMenu<?> getMenu(int i) {
-		AMenu<?> menu;
-		
+	protected Menu<?> getMenu(int i) {
+		Menu<?> menu;
+
 		switch (i) {
 
 		case 1:
@@ -38,8 +39,8 @@ public class MultiMenuPlaceZAxis extends MultiMenu {
 
 		case 2:
 			List<PlanetEntrance> availableExits = new ArrayList<PlanetEntrance>(availableEntrances);
-			availableExits.remove(getChoices().getEntrance());
-			Planet planet = getChoices().getEntrance().getPlanet();
+			availableExits.remove(choices.getEntrance());
+			Planet planet = choices.getEntrance().getPlanet();
 			for (Cardinal c : planet.getLinkableEntrances()) {
 				availableExits.remove(new PlanetEntrance(planet, c));
 			}
@@ -72,7 +73,7 @@ public class MultiMenuPlaceZAxis extends MultiMenu {
 
 		// After Select Exit - 2 paths
 		case 2:
-			if (getChoices().getExit() == null) {
+			if (choices.getExit() == null) {
 				nextState = 1;
 			} else {
 				nextState = -1;
@@ -87,25 +88,23 @@ public class MultiMenuPlaceZAxis extends MultiMenu {
 	}
 
 	@Override
-	public void doSelection() {
+	public MultiMenuPlaceZAxisChoices doSelection() {
 		updateState();
 		while (state != -1) {
-			AMenu<?> menu = getMenu(state);
+			Menu<?> menu = getMenu(state);
 			switch (state) {
 			case 1:
-				getChoices().setEntrance((PlanetEntrance) menu.selectChoice());
+				choices.setEntrance((PlanetEntrance) menu.selectChoice());
 				break;
 			case 2:
-				getChoices().setExit((PlanetEntrance) menu.selectChoiceWithCancel());
+				choices.setExit((PlanetEntrance) menu.selectChoiceWithCancel());
 				break;
 			default:
 				throw new IllegalStateException("This state shouldn't happen.");
 			}
 			updateState();
 		}
-	}
 
-	public MultiMenuPlaceZAxisChoices getChoices() {
 		return choices;
 	}
 

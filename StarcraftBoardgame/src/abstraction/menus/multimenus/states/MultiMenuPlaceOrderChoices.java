@@ -1,4 +1,4 @@
-package abstraction.menus.states;
+package abstraction.menus.multimenus.states;
 
 import abstraction.Order.OrderType;
 import abstraction.Planet;
@@ -7,7 +7,7 @@ import abstraction.Planet;
 /**
  * @author William Gautier
  */
-public class MultiMenuPlaceOrderChoices {
+public class MultiMenuPlaceOrderChoices implements MultiMenuChoices {
 	
 	private OrderType orderType;
 	private Planet planet;

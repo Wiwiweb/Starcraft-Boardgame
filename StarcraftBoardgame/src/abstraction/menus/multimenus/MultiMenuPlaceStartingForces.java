@@ -1,4 +1,4 @@
-package abstraction.menus;
+package abstraction.menus.multimenus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,12 @@ import abstraction.Planet;
 import abstraction.Player;
 import abstraction.Route;
 import abstraction.Unit;
-import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
-import abstraction.menus.AMenuStaticChoices.StaticChoice;
-import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName;
-import abstraction.menus.states.MultiMenuPlaceStartingForcesChoices;
+import abstraction.menus.Menu;
+import abstraction.menus.MenuStaticChoices;
+import abstraction.menus.MenuChooseFromList.ChooseFromListMenuName;
+import abstraction.menus.MenuStaticChoices.StaticChoice;
+import abstraction.menus.MenuStaticChoices.StaticChoicesMenuName;
+import abstraction.menus.multimenus.states.MultiMenuPlaceStartingForcesChoices;
 
 /**
  * @author William Gautier
@@ -38,8 +40,8 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 	}
 
 	@Override
-	protected AMenu<?> getMenu(int i) {
-		AMenu<?> menu;
+	protected Menu<?> getMenu(int i) {
+		Menu<?> menu;
 
 		switch (i) {
 
@@ -48,13 +50,13 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 			if (remainingUnits.isEmpty()) {
 				disabledChoices.add(StaticChoice.PLACE_REMOVE_UNIT_PLACE_UNIT);
 			}
-			if (getChoices().getPlacedUnits().isEmpty()) {
+			if (choices.getPlacedUnits().isEmpty()) {
 				disabledChoices.add(StaticChoice.PLACE_REMOVE_UNIT_REMOVE_UNIT);
 			}
 			if (remainingTransports == 0) {
 				disabledChoices.add(StaticChoice.PLACE_REMOVE_UNIT_PLACE_TRANSPORT);
 			}
-			if (getChoices().getPlacedTransports().isEmpty()) {
+			if (choices.getPlacedTransports().isEmpty()) {
 				disabledChoices.add(StaticChoice.PLACE_REMOVE_UNIT_REMOVE_TRANSPORT);
 			}
 
@@ -67,12 +69,12 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 
 		case 3:
 			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_PLACEMENT,
-					startingPlanet.getBuildableAreasPlusUnits(player, getChoices().getPlacedUnitsAreas()), player);
+					startingPlanet.getBuildableAreasPlusUnits(player, choices.getPlacedUnitsAreas()), player);
 			break;
 
 		case 4:
 			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_TO_REMOVE,
-					getChoices().getPlacedUnits(), player);
+					choices.getPlacedUnits(), player);
 			break;
 
 		case 5:
@@ -82,7 +84,7 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 
 		case 6:
 			menu = Game.factory
-					.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_TRANSPORT_PLACEMENT, getChoices().getPlacedTransports(),
+					.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_TRANSPORT_PLACEMENT, choices.getPlacedTransports(),
 							player);
 			break;
 
@@ -138,8 +140,8 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 			if (chosenArea == null) { // Cancel
 				nextState = 2;
 			} else {
-				getChoices().getPlacedUnits().add(chosenUnit);
-				getChoices().getPlacedUnitsAreas().add(chosenArea);
+				choices.getPlacedUnits().add(chosenUnit);
+				choices.getPlacedUnitsAreas().add(chosenArea);
 				if (!remainingUnits.remove(chosenUnit)) {
 					throw new IllegalStateException();
 				}
@@ -156,12 +158,12 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 			if (chosenUnit == null) { // Cancel
 				nextState = 1;
 			} else {
-				int index = getChoices().getPlacedUnits().indexOf(chosenUnit);
+				int index = choices.getPlacedUnits().indexOf(chosenUnit);
 				if (index == -1) {
 					throw new IllegalStateException();
 				}
-				getChoices().getPlacedUnits().remove(index);
-				getChoices().getPlacedUnitsAreas().remove(index);
+				choices.getPlacedUnits().remove(index);
+				choices.getPlacedUnitsAreas().remove(index);
 				remainingUnits.add(chosenUnit);
 				nextState = 1;
 			}
@@ -172,7 +174,7 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 			if (chosenRoute == null) { // Cancel
 				nextState = 1;
 			} else {
-				getChoices().getPlacedTransports().add(chosenRoute);
+				choices.getPlacedTransports().add(chosenRoute);
 				remainingTransports--;
 				if (remainingUnits.isEmpty() && remainingTransports == 0) { // It's over
 					nextState = -1;
@@ -187,7 +189,7 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 			if (chosenRoute == null) { // Cancel
 				nextState = 1;
 			} else {
-				if (!getChoices().getPlacedTransports().remove(chosenRoute)) {
+				if (!choices.getPlacedTransports().remove(chosenRoute)) {
 					throw new IllegalStateException();
 				}
 				remainingTransports++;
@@ -203,10 +205,10 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 	}
 
 	@Override
-	public void doSelection() {
+	public MultiMenuPlaceStartingForcesChoices doSelection() {
 		updateState();
 		while (state != -1) {
-			AMenu<?> menu = getMenu(state);
+			Menu<?> menu = getMenu(state);
 
 			switch (state) {
 			case 1:
@@ -232,9 +234,7 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 			}
 			updateState();
 		}
-	}
 
-	public MultiMenuPlaceStartingForcesChoices getChoices() {
 		return choices;
 	}
 

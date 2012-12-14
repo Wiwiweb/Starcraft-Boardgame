@@ -10,8 +10,8 @@ import java.util.Map;
 
 import presentation.text.TextIHM;
 import abstraction.Game;
-import abstraction.menus.AMenuStaticChoices.StaticChoice;
-import abstraction.menus.AMenuStaticChoices.StaticChoicesMenuName;
+import abstraction.menus.MenuStaticChoices.StaticChoice;
+import abstraction.menus.MenuStaticChoices.StaticChoicesMenuName;
 import control.text.menus.CMenuStaticChoices;
 
 /**

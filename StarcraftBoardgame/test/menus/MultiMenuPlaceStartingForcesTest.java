@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,9 +21,8 @@ import abstraction.Planet;
 import abstraction.Player;
 import abstraction.Route;
 import abstraction.Unit;
-import abstraction.creators.PlanetCreator;
-import abstraction.creators.UnitCreator;
-import abstraction.menus.MultiMenuPlaceStartingForces;
+import abstraction.menus.multimenus.MultiMenuPlaceStartingForces;
+import abstraction.menus.multimenus.states.MultiMenuPlaceStartingForcesChoices;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
 /**
@@ -37,21 +37,21 @@ public class MultiMenuPlaceStartingForcesTest extends Tests {
 
 	@Before
 	public void setUp() throws Exception {
-		game = new Game();
+		game = factory.newGame();
 		galaxy = game.getGalaxy();
-		player = new Player("Player");
+		player = factory.newPlayer("Player");
 	}
 
 	/**
-	 * Test method for {@link abstraction.menus.MultiMenuPlaceStartingForces#doSelection()}.
+	 * Test method for {@link abstraction.menus.multimenus.MultiMenuPlaceStartingForces#doSelection()}.
 	 */
 	@Test
 	public void testDoSelection() {
-		player.setFaction("Overmind");
+		player.setFaction("Overmind", factory);
 
-		Planet abaddon = PlanetCreator.createPlanet("Abaddon");
-		Planet tarsonis = PlanetCreator.createPlanet("Tarsonis");
-		Planet pridewater = PlanetCreator.createPlanet("Pridewater");
+		Planet abaddon = factory.newPlanet("Abaddon");
+		Planet tarsonis = factory.newPlanet("Tarsonis");
+		Planet pridewater = factory.newPlanet("Pridewater");
 
 		generateBasicGalaxy(galaxy, abaddon, tarsonis, pridewater);
 
@@ -60,7 +60,7 @@ public class MultiMenuPlaceStartingForcesTest extends Tests {
 
 			String unitType = player.getFaction().getStartingUnitTypes(i);
 			for (int j = 0; j < player.getFaction().getStartingUnitNumbers(i); j++) {
-				startingUnits.add(UnitCreator.createUnit(unitType, player));
+				startingUnits.add(factory.newUnit(unitType, player));
 			}
 		}
 
@@ -86,15 +86,15 @@ public class MultiMenuPlaceStartingForcesTest extends Tests {
 		TextIHM.scanner = new Scanner(data);
 
 		menu = new MultiMenuPlaceStartingForces(pridewater, startingUnits, player.getFaction().getStartingTransports(), player);
-		menu.doSelection();
+		MultiMenuPlaceStartingForcesChoices choices = menu.doSelection();
 
-		for (int i = 0; i < menu.getChoices().getPlacedUnits().size(); i++) {
-			Unit unit = menu.getChoices().getPlacedUnits().get(i);
-			Area area = menu.getChoices().getPlacedUnitsAreas().get(i);
+		for (int i = 0; i < choices.getPlacedUnits().size(); i++) {
+			Unit unit = choices.getPlacedUnits().get(i);
+			Area area = choices.getPlacedUnitsAreas().get(i);
 			area.addUnit(unit);
 		}
 
-		for (Route r : menu.getChoices().getPlacedTransports()) {
+		for (Route r : choices.getPlacedTransports()) {
 			r.addTransport(player);
 		}
 		

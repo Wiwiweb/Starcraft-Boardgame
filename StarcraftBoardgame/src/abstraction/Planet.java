@@ -12,10 +12,10 @@ import abstraction.patterns.PlanetPattern.Cardinal;
  */
 public class Planet implements Comparable<Planet> {
 
-	private PlanetPattern pattern;
+	private final PlanetPattern pattern;
 
 	private boolean[] entrances = new boolean[4];
-	private Route[] routes = { null, null, null, null };
+	private final Route[] routes = { null, null, null, null };
 	private final List<Area> areas;
 	private final List<Order> orderPile = new ArrayList<Order>();
 
@@ -217,7 +217,7 @@ public class Planet implements Comparable<Planet> {
 	 * @param pCardinal - The direction of planet p we'll connect to.
 	 * @param isZAxis - If the Route should be created as a ZAxis.
 	 */
-	public void connect(Planet p, Cardinal thisCardinal, Cardinal pCardinal, boolean isZAxis) {
+	public void connect(Planet p, Cardinal thisCardinal, Cardinal pCardinal, boolean isZAxis, Factory factory) {
 		if (this == p) {
 			throw new IllegalStateException("The planets are the same : " + p.getName());
 		} else if (!(isLinkable(thisCardinal) && p.isLinkable(pCardinal))) {
@@ -225,7 +225,7 @@ public class Planet implements Comparable<Planet> {
 		} else if (!isZAxis && !(thisCardinal.opposite() == pCardinal)) {
 			throw new IllegalStateException("The entrances are not opposite.");
 		} else {
-			Route route = new Route(this, p, isZAxis);
+			Route route = factory.newRoute(this, p, isZAxis);
 			addRoute(route, thisCardinal);
 			p.addRoute(route, pCardinal);
 		}

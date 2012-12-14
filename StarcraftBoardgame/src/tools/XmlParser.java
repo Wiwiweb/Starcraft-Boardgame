@@ -10,6 +10,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import abstraction.Faction;
+import abstraction.Factory;
+import abstraction.Game;
 import abstraction.Price;
 import abstraction.Resource.ResourceType;
 import abstraction.creators.BaseCreator;
@@ -29,6 +31,8 @@ import abstraction.patterns.UnitPattern.WalkType;
  * @author William Gautier
  */
 public class XmlParser {
+
+	private static Factory factory = Game.factory;
 
 	public static void getAll() {
 		getUnits();
@@ -93,7 +97,7 @@ public class XmlParser {
 				String name = unit.getAttribute("name");
 
 				// Price
-				Price price = parsePrice("price", unit);
+				Price price = parsePrice("price", unit, factory);
 
 				// Max number
 				int maxNum = parseInt("maxNum", unit);
@@ -139,7 +143,7 @@ public class XmlParser {
 				Price[] levelPrices = new Price[maxLevel];
 				Element priceList = (Element) building.getElementsByTagName("prices").item(0);
 				for (int j = 0; j < maxLevel; j++) {
-					levelPrices[j] = parsePrice("level" + (j + 1), priceList);
+					levelPrices[j] = parsePrice("level" + (j + 1), priceList, factory);
 				}
 
 				// Level units
@@ -205,19 +209,19 @@ public class XmlParser {
 				int workersMaxNum = parseInt("workersMaxNum", base);
 
 				// Worker price
-				Price workerPrice = parsePrice("workerPrice", base);
+				Price workerPrice = parsePrice("workerPrice", base, factory);
 
 				// Transports max number
 				int transportsMaxNum = parseInt("transportsMaxNum", base);
 
 				// Transport price
-				Price transportPrice = parsePrice("transportPrice", base);
+				Price transportPrice = parsePrice("transportPrice", base, factory);
 
 				// Bases max number
 				int basesMaxNum = parseInt("basesMaxNum", base);
 
 				// Base price
-				Price basePrice = parsePrice("basePrice", base);
+				Price basePrice = parsePrice("basePrice", base, factory);
 
 				BasePattern pattern = new BasePattern(name, buildingNames, modulesMaxNum, availableModules,
 						permanentResourcesType, permanentResourcesNum,
@@ -299,10 +303,10 @@ public class XmlParser {
 		return Boolean.parseBoolean(getTagValue(name, e));
 	}
 
-	private static Price parsePrice(String name, Element e) {
+	private static Price parsePrice(String name, Element e, Factory factory) {
 		Element price = (Element) e.getElementsByTagName(name).item(0);
 		int minerals = parseInt("minerals", price);
 		int gas = parseInt("gas", price);
-		return new Price(minerals, gas);
+		return factory.newPrice(minerals, gas);
 	}
 }

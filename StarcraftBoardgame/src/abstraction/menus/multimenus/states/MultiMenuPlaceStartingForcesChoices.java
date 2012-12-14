@@ -1,4 +1,4 @@
-package abstraction.menus.states;
+package abstraction.menus.multimenus.states;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import abstraction.Unit;
 /**
  * @author William Gautier
  */
-public class MultiMenuPlaceStartingForcesChoices {
+public class MultiMenuPlaceStartingForcesChoices implements MultiMenuChoices {
 
 	// placedUnit and placedUnitArea go together
 	private List<Unit> placedUnits = new ArrayList<Unit>();

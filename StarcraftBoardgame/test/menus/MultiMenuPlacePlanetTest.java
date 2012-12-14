@@ -20,8 +20,8 @@ import abstraction.Game;
 import abstraction.Planet;
 import abstraction.Player;
 import abstraction.Resource.ResourceType;
-import abstraction.creators.PlanetCreator;
-import abstraction.menus.MultiMenuPlacePlanet;
+import abstraction.menus.multimenus.MultiMenuPlacePlanet;
+import abstraction.menus.multimenus.states.MultiMenuPlacePlanetChoices;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
 /**
@@ -36,21 +36,21 @@ public class MultiMenuPlacePlanetTest extends Tests {
 
 	@Before
 	public void setUp() throws Exception {
-		game = new Game();
+		game = factory.newGame();
 		galaxy = game.getGalaxy();
-		player = new Player("Player");
+		player = factory.newPlayer("Player");
 	}
 
 	/**
-	 * Test method for {@link abstraction.menus.MultiMenuPlacePlanet#doSelection()}.
+	 * Test method for {@link abstraction.menus.multimenus.MultiMenuPlacePlanet#doSelection()}.
 	 */
 	@Test
 	public void testDoSelection() {
-		player.setFaction("Overmind");
+		player.setFaction("Overmind", factory);
 
-		Planet abaddon = PlanetCreator.createPlanet("Abaddon");
-		Planet tarsonis = PlanetCreator.createPlanet("Tarsonis");
-		Planet pridewater = PlanetCreator.createPlanet("Pridewater");
+		Planet abaddon = factory.newPlanet("Abaddon");
+		Planet tarsonis = factory.newPlanet("Tarsonis");
+		Planet pridewater = factory.newPlanet("Pridewater");
 
 		player.addPlanetToken(abaddon);
 		player.addPlanetToken(tarsonis);
@@ -60,19 +60,19 @@ public class MultiMenuPlacePlanetTest extends Tests {
 		String data = "2 1 3 1 3 1 1 ";
 		TextIHM.scanner = new Scanner(data);
 		menu = new MultiMenuPlacePlanet(galaxy, 0, player);
-		menu.doSelection();
+		MultiMenuPlacePlanetChoices choices = menu.doSelection();
 
-		Planet chosenPlanet = menu.getChoices().getChosenPlanet();
+		Planet chosenPlanet = choices.getChosenPlanet();
 		if (galaxy.isEmpty()) {
 			galaxy.add(chosenPlanet);
 		} else {
-			galaxy.add(chosenPlanet, menu.getChoices().getChosenSpot());
+			galaxy.add(chosenPlanet, choices.getChosenSpot(), factory);
 		}
 		player.removePlanetToken(chosenPlanet);
 
-		if (menu.getChoices().isPlaceFirstBase()) {
-			player.placeBase(menu.getChoices().getChosenBaseArea());
-			player.setStartingPlanet(menu.getChoices().getChosenBaseArea().getPlanet());
+		if (choices.isPlaceFirstBase()) {
+			player.placeBase(choices.getChosenBaseArea());
+			player.setStartingPlanet(choices.getChosenBaseArea().getPlanet());
 
 			for (Area a : chosenPlanet.getAreas()) {
 				if (a.getResource().getResourceType() != ResourceType.CONTROL) {
@@ -92,20 +92,20 @@ public class MultiMenuPlacePlanetTest extends Tests {
 	// @Ignore
 	@Test
 	public void testPlacePlanets() {
-		Game game = new Game();
-		Player a = new Player("A");
-		Player b = new Player("B");
+		Game game = factory.newGame();
+		Player a = factory.newPlayer("A");
+		Player b = factory.newPlayer("B");
 		game.addPlayer(a);
 		game.addPlayer(b);
 		game.setFirstPlayer(a);
 
-		a.setFaction("Overmind");
-		b.setFaction("Overmind");
+		a.setFaction("Overmind", factory);
+		b.setFaction("Overmind", factory);
 
-		Planet chauSara = PlanetCreator.createPlanet("Chau Sara");
-		Planet abaddon = PlanetCreator.createPlanet("Abaddon");
-		Planet braken = PlanetCreator.createPlanet("Braken");
-		Planet pridewater = PlanetCreator.createPlanet("Pridewater");
+		Planet chauSara = factory.newPlanet("Chau Sara");
+		Planet abaddon = factory.newPlanet("Abaddon");
+		Planet braken = factory.newPlanet("Braken");
+		Planet pridewater = factory.newPlanet("Pridewater");
 
 		a.addPlanetToken(chauSara);
 		a.addPlanetToken(abaddon);

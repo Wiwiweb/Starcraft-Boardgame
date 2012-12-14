@@ -6,12 +6,12 @@ import java.util.List;
 import presentation.text.menus.IPMenu;
 import presentation.text.menus.PMenuChooseFromList;
 import abstraction.Player;
-import abstraction.menus.AMenuChooseFromList;
+import abstraction.menus.MenuChooseFromList;
 
 /**
  * @author William Gautier
  */
-public class CMenuChooseFromList<T extends Comparable<? super T>> extends AMenuChooseFromList<T> {
+public class CMenuChooseFromList<T extends Comparable<? super T>> extends MenuChooseFromList<T> {
 
 	private final IPMenu<T> presentation;
 

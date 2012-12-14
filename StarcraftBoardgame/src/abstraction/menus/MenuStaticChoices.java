@@ -3,12 +3,12 @@ package abstraction.menus;
 import java.util.Collection;
 
 import abstraction.Player;
-import abstraction.menus.AMenuStaticChoices.StaticChoice;
+import abstraction.menus.MenuStaticChoices.StaticChoice;
 
 /**
  * @author William Gautier
  */
-public abstract class AMenuStaticChoices extends AMenu<StaticChoice> {
+public abstract class MenuStaticChoices extends Menu<StaticChoice> {
 
 	public static enum StaticChoicesMenuName {
 		ROTATE_PLANET(StaticChoice.ROTATE_PLANET_CLOCKWISE, StaticChoice.ROTATE_PLANET_COUNTERCLOCKWISE,
@@ -38,13 +38,13 @@ public abstract class AMenuStaticChoices extends AMenu<StaticChoice> {
 	private final StaticChoicesMenuName menuName;
 	private final StaticChoice[] disabledChoices;
 
-	public AMenuStaticChoices(StaticChoicesMenuName menuName, Player player) {
+	public MenuStaticChoices(StaticChoicesMenuName menuName, Player player) {
 		super(player);
 		this.menuName = menuName;
 		this.disabledChoices = new StaticChoice[0];
 	}
 
-	public AMenuStaticChoices(StaticChoicesMenuName menuName, Collection<StaticChoice> disabledChoices, Player player) {
+	public MenuStaticChoices(StaticChoicesMenuName menuName, Collection<StaticChoice> disabledChoices, Player player) {
 		super(player);
 		this.menuName = menuName;
 		this.disabledChoices = disabledChoices.toArray(new StaticChoice[disabledChoices.size()]);

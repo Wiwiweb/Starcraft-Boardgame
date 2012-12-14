@@ -17,8 +17,6 @@ import abstraction.Planet;
 import abstraction.Player;
 import abstraction.Route;
 import abstraction.Unit;
-import abstraction.creators.PlanetCreator;
-import abstraction.creators.UnitCreator;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
 /**
@@ -39,12 +37,12 @@ public class PlanetTest extends Tests {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		game = new Game();
+		game = factory.newGame();
 		galaxy = game.getGalaxy();
-		player = new Player("Player");
-		abaddon = PlanetCreator.createPlanet("Abaddon");
-		tarsonis = PlanetCreator.createPlanet("Tarsonis");
-		pridewater = PlanetCreator.createPlanet("Pridewater");
+		player = factory.newPlayer("Player");
+		abaddon = factory.newPlanet("Abaddon");
+		tarsonis = factory.newPlanet("Tarsonis");
+		pridewater = factory.newPlanet("Pridewater");
 
 		generateBasicGalaxy(galaxy, abaddon, tarsonis, pridewater);
 	}
@@ -54,11 +52,11 @@ public class PlanetTest extends Tests {
 	 */
 	@Test
 	public void testGetBuildableAreas() {
-		Player player = new Player("Player");
+		Player player = factory.newPlayer("Player");
 
-		pridewater.getArea(2).addUnit(UnitCreator.createUnit("Zergling", player));
-		pridewater.getArea(2).addUnit(UnitCreator.createUnit("Zergling", player));
-		pridewater.getArea(2).addUnit(UnitCreator.createUnit("Zergling", player));
+		pridewater.getArea(2).addUnit(factory.newUnit("Zergling", player));
+		pridewater.getArea(2).addUnit(factory.newUnit("Zergling", player));
+		pridewater.getArea(2).addUnit(factory.newUnit("Zergling", player));
 
 		List<Area> buildableAreas = pridewater.getBuildableAreas(player);
 
@@ -82,12 +80,12 @@ public class PlanetTest extends Tests {
 	 */
 	@Test
 	public void testGetBuildableAreasPlusUnits1() {
-		pridewater.getArea(1).addUnit(UnitCreator.createUnit("Zergling", player));
-		pridewater.getArea(1).addUnit(UnitCreator.createUnit("Zergling", player));
+		pridewater.getArea(1).addUnit(factory.newUnit("Zergling", player));
+		pridewater.getArea(1).addUnit(factory.newUnit("Zergling", player));
 
-		pridewater.getArea(2).addUnit(UnitCreator.createUnit("Zergling", player));
-		pridewater.getArea(2).addUnit(UnitCreator.createUnit("Zergling", player));
-		pridewater.getArea(2).addUnit(UnitCreator.createUnit("Zergling", player));
+		pridewater.getArea(2).addUnit(factory.newUnit("Zergling", player));
+		pridewater.getArea(2).addUnit(factory.newUnit("Zergling", player));
+		pridewater.getArea(2).addUnit(factory.newUnit("Zergling", player));
 
 		List<Area> additionnalUnits = Arrays.asList(pridewater.getArea(1), pridewater.getArea(1));
 
@@ -136,7 +134,7 @@ public class PlanetTest extends Tests {
 	 */
 	@Test
 	public void testHasFriendlyUnitOrBase1() {
-		player.setFaction("Overmind");
+		player.setFaction("Overmind", factory);
 		player.placeBase(tarsonis.getArea(0));
 
 		assertTrue(tarsonis.hasFriendlyUnitOrBase(player));
@@ -148,7 +146,7 @@ public class PlanetTest extends Tests {
 	 */
 	@Test
 	public void testHasFriendlyUnitOrBase2() {
-		Unit zergling = UnitCreator.createUnit("Zergling", player);
+		Unit zergling = factory.newUnit("Zergling", player);
 		tarsonis.getArea(1).addUnit(zergling);
 
 		assertTrue(tarsonis.hasFriendlyUnitOrBase(player));
@@ -160,9 +158,9 @@ public class PlanetTest extends Tests {
 	 */
 	@Test
 	public void testHasFriendlyUnitOrBase3() {
-		Player player2 = new Player("Player2");
+		Player player2 = factory.newPlayer("Player2");
 
-		Unit zergling = UnitCreator.createUnit("Zergling", player2);
+		Unit zergling = factory.newUnit("Zergling", player2);
 		tarsonis.getArea(1).addUnit(zergling);
 
 		assertFalse(tarsonis.hasFriendlyUnitOrBase(player));

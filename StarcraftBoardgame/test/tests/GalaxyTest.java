@@ -12,14 +12,14 @@ import org.junit.Test;
 
 import tools.PlanetEntrance;
 import tools.PlanetPosition;
+import abstraction.Factory;
 import abstraction.Galaxy;
 import abstraction.Game;
 import abstraction.Planet;
 import abstraction.Player;
 import abstraction.Unit;
-import abstraction.creators.PlanetCreator;
-import abstraction.creators.UnitCreator;
 import abstraction.patterns.PlanetPattern.Cardinal;
+import control.text.CFactory;
 
 /**
  * @author William Gautier
@@ -39,13 +39,14 @@ public class GalaxyTest extends Tests {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		game = new Game();
-		player = new Player("Player");
-		abaddon = PlanetCreator.createPlanet("Abaddon");
-		tarsonis = PlanetCreator.createPlanet("Tarsonis");
-		pridewater = PlanetCreator.createPlanet("Pridewater");
+		Factory factory = new CFactory();
+		game = factory.newGame();
+		player = factory.newPlayer("Player");
+		abaddon = factory.newPlanet("Abaddon");
+		tarsonis = factory.newPlanet("Tarsonis");
+		pridewater = factory.newPlanet("Pridewater");
 		galaxy = game.getGalaxy();
-		player.setFaction("Overmind");
+		player.setFaction("Overmind", factory);
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class GalaxyTest extends Tests {
 	public void testAddPlanetPlanetCardinal() {
 		galaxy.add(abaddon);
 		tarsonis.rotateClockwise();
-		galaxy.add(tarsonis, abaddon, Cardinal.WEST);
+		galaxy.add(tarsonis, abaddon, Cardinal.WEST, factory);
 		Set<Planet> planets = galaxy.getPlanets();
 
 		assertTrue(planets.contains(tarsonis));
@@ -85,7 +86,7 @@ public class GalaxyTest extends Tests {
 	public void testAddPlanetPlanetEntrance() {
 		galaxy.add(abaddon);
 		tarsonis.rotateClockwise();
-		galaxy.add(tarsonis, new PlanetEntrance(abaddon, Cardinal.EAST));
+		galaxy.add(tarsonis, new PlanetEntrance(abaddon, Cardinal.EAST), factory);
 		Set<Planet> planets = galaxy.getPlanets();
 
 		assertTrue(planets.contains(tarsonis));
@@ -133,10 +134,10 @@ public class GalaxyTest extends Tests {
 	@Test
 	public void testGetAvailableSpots() {
 		generateBasicGalaxy(galaxy, abaddon, tarsonis, pridewater);
-		Planet chauSara = PlanetCreator.createPlanet("Chau Sara");
-		Planet braken = PlanetCreator.createPlanet("Braken");
-		galaxy.add(chauSara, pridewater, Cardinal.EAST);
-		galaxy.add(braken, tarsonis, Cardinal.EAST);
+		Planet chauSara = factory.newPlanet("Chau Sara");
+		Planet braken = factory.newPlanet("Braken");
+		galaxy.add(chauSara, pridewater, Cardinal.EAST, factory);
+		galaxy.add(braken, tarsonis, Cardinal.EAST, factory);
 
 		Set<PlanetEntrance> spots = galaxy.getAvailableSpots();
 
@@ -169,7 +170,7 @@ public class GalaxyTest extends Tests {
 	@Test
 	public void testGetAvailableOrderPlanet2() {
 		generateBasicGalaxy(galaxy, abaddon, tarsonis, pridewater);
-		Unit zergling = UnitCreator.createUnit("Zergling", player);
+		Unit zergling = factory.newUnit("Zergling", player);
 		tarsonis.getArea(1).addUnit(zergling);
 		Set<Planet> planets = galaxy.getAvailableOrderPlanets(player);
 
@@ -184,7 +185,7 @@ public class GalaxyTest extends Tests {
 	@Test
 	public void testGetPlanets() {
 		galaxy.add(abaddon);
-		galaxy.add(tarsonis, new PlanetEntrance(abaddon, Cardinal.WEST));
+		galaxy.add(tarsonis, new PlanetEntrance(abaddon, Cardinal.WEST), factory);
 		Set<Planet> planets = galaxy.getPlanets();
 		assertTrue(planets.contains(abaddon));
 		assertTrue(planets.contains(tarsonis));

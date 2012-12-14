@@ -5,11 +5,11 @@ import abstraction.Player;
 /**
  * @author William Gautier
  */
-public abstract class AMenu<T> {
+public abstract class Menu<T> {
 
 	private final Player player;
 
-	public AMenu(Player player) {
+	public Menu(Player player) {
 		this.player = player;
 	}
 

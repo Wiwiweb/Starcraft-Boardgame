@@ -1,4 +1,4 @@
-package abstraction.menus;
+package abstraction.menus.multimenus;
 
 import java.util.Set;
 
@@ -6,8 +6,9 @@ import abstraction.Game;
 import abstraction.Order.OrderType;
 import abstraction.Planet;
 import abstraction.Player;
-import abstraction.menus.AMenuChooseFromList.ChooseFromListMenuName;
-import abstraction.menus.states.MultiMenuPlaceOrderChoices;
+import abstraction.menus.Menu;
+import abstraction.menus.MenuChooseFromList.ChooseFromListMenuName;
+import abstraction.menus.multimenus.states.MultiMenuPlaceOrderChoices;
 
 /**
  * @author William Gautier
@@ -26,8 +27,8 @@ public class MultiMenuPlaceOrder extends MultiMenu {
 	}
 
 	@Override
-	protected AMenu<?> getMenu(int i) {
-		AMenu<?> menu;
+	protected Menu<?> getMenu(int i) {
+		Menu<?> menu;
 
 		switch (i) {
 
@@ -64,7 +65,7 @@ public class MultiMenuPlaceOrder extends MultiMenu {
 
 		// After Choose Planet // 2 paths
 		case 2:
-			if (getChoices().getPlanet() == null) {
+			if (choices.getPlanet() == null) {
 				nextState = 1;
 			} else {
 				nextState = -1;
@@ -79,25 +80,23 @@ public class MultiMenuPlaceOrder extends MultiMenu {
 	}
 
 	@Override
-	public void doSelection() {
+	public MultiMenuPlaceOrderChoices doSelection() {
 		updateState();
 		while (state != -1) {
-			AMenu<?> menu = getMenu(state);
+			Menu<?> menu = getMenu(state);
 			switch (state) {
 			case 1:
-				getChoices().setOrderType((OrderType) menu.selectChoice());
+				choices.setOrderType((OrderType) menu.selectChoice());
 				break;
 			case 2:
-				getChoices().setPlanet((Planet) menu.selectChoice());
+				choices.setPlanet((Planet) menu.selectChoice());
 				break;
 			default:
 				throw new IllegalStateException("This state shouldn't happen.");
 			}
 			updateState();
 		}
-	}
 
-	public MultiMenuPlaceOrderChoices getChoices() {
 		return choices;
 	}
 
