@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import presentation.IHM;
 import presentation.text.TextIHM;
 import tools.PlanetEntrance;
@@ -16,10 +18,13 @@ import abstraction.creators.FactionCreator;
 import abstraction.creators.PlanetCreator;
 import abstraction.menus.MenuChooseFromList;
 import abstraction.menus.MenuChooseFromList.ChooseFromListMenuName;
+import abstraction.menus.multimenus.MultiMenuChooseOrder;
+import abstraction.menus.multimenus.MultiMenuFactory;
 import abstraction.menus.multimenus.MultiMenuPlaceOrder;
 import abstraction.menus.multimenus.MultiMenuPlacePlanet;
 import abstraction.menus.multimenus.MultiMenuPlaceStartingForces;
 import abstraction.menus.multimenus.MultiMenuPlaceZAxis;
+import abstraction.menus.multimenus.states.MultiMenuChooseOrderChoices;
 import abstraction.menus.multimenus.states.MultiMenuPlaceOrderChoices;
 import abstraction.menus.multimenus.states.MultiMenuPlacePlanetChoices;
 import abstraction.menus.multimenus.states.MultiMenuPlaceStartingForcesChoices;
@@ -43,7 +48,9 @@ public class Game {
 	public final static int NB_SPECIAL_ORDERS_OF_EACH_TYPE = 1;
 
 	public static IHM ihm = new TextIHM();
-	public static Factory factory = new CFactory();
+
+	public final Factory factory = new CFactory();
+	public final MultiMenuFactory menuFactory = new MultiMenuFactory();
 
 	private final List<Player> playerList = new ArrayList<Player>();
 	private final Galaxy galaxy = factory.newGalaxy();
@@ -64,9 +71,9 @@ public class Game {
 		List<Faction> factionList = FactionCreator.getFactionList();
 		for (Player p : getPlayerListByOrder()) {
 
-			MenuChooseFromList<Faction> menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_FACTION,
+			MenuChooseFromList<Faction> menu = factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_FACTION,
 					factionList, p);
-			Faction faction = menu.selectChoice();
+			Faction faction = menu.selectChoice(false);
 			p.setFaction(faction, factory);
 			factionList.remove(faction);
 		}
@@ -140,8 +147,8 @@ public class Game {
 					continueToNextPlayer = it.hasPrevious();
 				}
 
-				MultiMenuPlacePlanet placePlanetMenu = new MultiMenuPlacePlanet(galaxy, i, player);
-				MultiMenuPlacePlanetChoices choices = placePlanetMenu.doSelection();
+				MultiMenuPlacePlanet placePlanetMenu = menuFactory.newMultiMenuPlacePlanet(galaxy, i, player);
+				MultiMenuPlacePlanetChoices choices = placePlanetMenu.doSelection(factory);
 
 				Planet chosenPlanet = choices.getChosenPlanet();
 				if (galaxy.isEmpty()) {
@@ -193,8 +200,8 @@ public class Game {
 			}
 
 			if (hasLegalSpot) {
-				MultiMenuPlaceZAxis placeZAxisMenu = new MultiMenuPlaceZAxis(galaxy.getAvailableSpots(), player);
-				MultiMenuPlaceZAxisChoices choices = placeZAxisMenu.doSelection();
+				MultiMenuPlaceZAxis placeZAxisMenu = menuFactory.newMultiMenuPlaceZAxis(galaxy.getAvailableSpots(), player);
+				MultiMenuPlaceZAxisChoices choices = placeZAxisMenu.doSelection(factory);
 				PlanetEntrance entrance = choices.getEntrance();
 				PlanetEntrance exit = choices.getExit();
 				entrance.getPlanet().connect(exit.getPlanet(), entrance.getEntrance(), exit.getEntrance(), true, factory);
@@ -219,9 +226,9 @@ public class Game {
 				}
 			}
 
-			MultiMenuPlaceStartingForces placeForcesMenu = new MultiMenuPlaceStartingForces(startingPlanet, startingUnits,
-					player.getFaction().getStartingTransports(), player);
-			MultiMenuPlaceStartingForcesChoices choices = placeForcesMenu.doSelection();
+			MultiMenuPlaceStartingForces placeForcesMenu = menuFactory.newMultiMenuPlaceStartingForces(startingPlanet,
+					startingUnits, player.getFaction().getStartingTransports(), player);
+			MultiMenuPlaceStartingForcesChoices choices = placeForcesMenu.doSelection(factory);
 
 			for (int i = 0; i < choices.getPlacedUnits().size(); i++) {
 				Unit unit = choices.getPlacedUnits().get(i);
@@ -242,12 +249,13 @@ public class Game {
 		while (!gameIsOver) {
 			List<Player> orderedPlayerList = getPlayerListByOrder();
 			planningPhase(orderedPlayerList);
-			// TODO
+			executionPhase(orderedPlayerList);
+
 		}
 
 	}
 
-	private void planningPhase(final List<Player> orderedPlayerList) {
+	private void planningPhase(List<Player> orderedPlayerList) {
 		currentPhase = Phase.PLANNING;
 
 		for (Player p : orderedPlayerList) {
@@ -294,19 +302,59 @@ public class Game {
 						}
 					}
 
-					MultiMenuPlaceOrder placeOrderMenu = new MultiMenuPlaceOrder(galaxy.getAvailableOrderPlanets(player),
-							availableOrders, player);
-					MultiMenuPlaceOrderChoices choices = placeOrderMenu.doSelection();
+					MultiMenuPlaceOrder placeOrderMenu = menuFactory.newMultiMenuPlaceOrder(
+							galaxy.getAvailableOrderPlanets(player), availableOrders, player);
+					MultiMenuPlaceOrderChoices choices = placeOrderMenu.doSelection(factory);
 
-					player.decrementOrdersLeftToPlace();
+					player.setOrdersLeftToExecute(player.getOrdersLeftToExecute() + 1);
+					player.setOrdersLeftToPlace(player.getOrdersLeftToPlace() - 1);
 					Planet planet = choices.getPlanet();
 					OrderType orderType = choices.getOrderType();
 					planet.addOrderToTop(factory.newOrder(orderType, player, planet));
 				}
+			}
+		}
+	}
 
+	private void executionPhase(List<Player> orderedPlayerList) {
+		currentPhase = Phase.EXECUTION;
+
+		boolean ordersRemaining = true;
+
+		while (ordersRemaining) {
+
+			ordersRemaining = false;
+			ListIterator<Player> it = orderedPlayerList.listIterator();
+			while (it.hasNext()) {
+				Player player = it.next();
+
+				Set<Order> executableOrders = new HashSet<Order>();
+				for (Planet planet : galaxy.getPlanets()) {
+					Order order = planet.getTopOrder();
+					if (order.getPlayer() == player) {
+						executableOrders.add(order);
+					}
+				}
+
+				if (executableOrders.isEmpty()) {
+					// TODO Obstructed
+
+				} else {
+					MultiMenuChooseOrder chooseOrderMenu = menuFactory.newMultiMenuChooseOrder(executableOrders, player);
+					MultiMenuChooseOrderChoices choices = chooseOrderMenu.doSelection(factory);
+
+					Order order = choices.getOrderChosen();
+					order.getPlanet().removeTopOrder();
+					if (choices.isEventCard()) {
+						// TODO Draw event card
+					} else {
+						player.executeOrder(order);
+					}
+				}
 			}
 
 		}
+
 	}
 
 	public List<Player> getPlayerList() {

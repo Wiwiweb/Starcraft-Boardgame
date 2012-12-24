@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:simpleType name="cardinal">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NORTH" />
+			<xs:enumeration value="EAST" />
+			<xs:enumeration value="SOUTH" />
+			<xs:enumeration value="WEST" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="resource">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="MINERALS" />
+			<xs:enumeration value="GAS" />
+			<xs:enumeration value="CONTROL" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="planets">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="planet" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+
+							<xs:element name="entrance" maxOccurs="4" type="cardinal" />
+
+							<xs:element name="area" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="resource">
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:int">
+														<xs:attribute name="type" type="resource" />
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="unitLimit" type="xs:int" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" />
+
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+
+		<xs:unique name="planet">
+			<xs:selector xpath="faction" />
+			<xs:field xpath="@name" />
+		</xs:unique>
+
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:simpleType name="walkType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GROUND" />
+			<xs:enumeration value="AIR" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="units">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="unit" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+
+							<xs:element name="price">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="minerals" type="xs:int" />
+										<xs:element name="gas" type="xs:int" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+							<xs:element name="maxNum" type="xs:int" />
+
+							<xs:element name="walkType" type="walkType" />
+
+							<xs:element name="groundAttack" type="xs:boolean" />
+
+							<xs:element name="airAttack" type="xs:boolean" />
+
+							<xs:element name="support" type="xs:int" />
+
+							<xs:element name="isAssist" type="xs:boolean" />
+
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" />
+
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+
+		<xs:unique name="uniqueName">
+			<xs:selector xpath="unit" />
+			<xs:field xpath="@name" />
+		</xs:unique>
+
+	</xs:element>
+</xs:schema>

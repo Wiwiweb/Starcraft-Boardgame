@@ -16,9 +16,9 @@ public abstract class Tests {
 
 	@BeforeClass
 	public static void initializeXml() {
-		XmlParser.getAll();
-		Game.IS_TEST = true;
 		factory = new CFactory();
+		new XmlParser(factory).getAll();
+		Game.IS_TEST = true;
 	}
 
 	/**

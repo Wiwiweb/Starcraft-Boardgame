@@ -27,6 +27,8 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 					put(StaticChoicesMenuName.ROTATE_PLANET, "rotate this planet?");
 					put(StaticChoicesMenuName.PLACE_FIRST_BASE, "choose this planet for your first base?");
 					put(StaticChoicesMenuName.PLACE_REMOVE_UNIT, "what to do next?");
+					put(StaticChoicesMenuName.EXECUTE_OR_CARD, "execute this order or take a card?");
+
 				}
 			}
 					);
@@ -45,6 +47,9 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 					put(StaticChoice.PLACE_REMOVE_UNIT_REMOVE_UNIT, "Remove unit");
 					put(StaticChoice.PLACE_REMOVE_UNIT_PLACE_TRANSPORT, "Place transport");
 					put(StaticChoice.PLACE_REMOVE_UNIT_REMOVE_TRANSPORT, "Remove transport");
+					put(StaticChoice.EXECUTE_OR_CARD_EXECUTE, "Execute order");
+					put(StaticChoice.EXECUTE_OR_CARD_CARD, "Discard order and draw an Event Card");
+
 				}
 			}
 					);
@@ -64,7 +69,7 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 	}
 
 	@Override
-	public StaticChoice askChoice() {
+	public StaticChoice askChoice(boolean cancel) {
 		String playerName = control.getPlayer().getName();
 		System.out.println(playerName + ", " + promptMessage);
 		int choice = -1;
@@ -73,18 +78,27 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 		choices.addAll(Arrays.asList(control.getMenuName().getChoices()));
 		choices.removeAll(Arrays.asList(control.getDisabledChoices()));
 
-		while (choice < 1 || choice > choices.size()) {
+		int cancelChoiceNb = choices.size() + 1;
+		int maxSize;
+		if (cancel) {
+			maxSize = cancelChoiceNb;
+		} else {
+			maxSize = choices.size();
+		}
+
+		while (choice < 1 || choice > maxSize) {
 
 			Iterator<StaticChoice> it = choices.iterator();
 			int i = 1;
 			while (it.hasNext()) {
 				StaticChoice c = it.next();
-				String msg = CHOICE_MESSAGES.get(c);
-				if(msg == null) {
-					msg = "[No message for " + c + "]";
-				}
+				String msg = getChoiceMessage(c);
 				System.out.println(i + " : " + msg);
 				i++;
+			}
+
+			if (cancel) {
+				System.out.println(cancel + " : Cancel");
 			}
 
 			choice = TextIHM.scanner.nextInt();
@@ -94,45 +108,21 @@ public class PMenuStaticChoices implements IPMenu<StaticChoice> {
 			System.out.println();
 		}
 
-		return choices.get(choice - 1);
+		StaticChoice result;
+		if (choice == cancelChoiceNb) {
+			result = null;
+		} else {
+			result = choices.get(choice - 1);
+		}
+
+		return result;
 	}
 
-	@Override
-	public StaticChoice askChoiceWithCancel() {
-		String playerName = control.getPlayer().getName();
-		System.out.println(playerName + ", " + promptMessage);
-		int choice = -1;
-
-		List<StaticChoice> choices = new ArrayList<>();
-		choices.addAll(Arrays.asList(control.getMenuName().getChoices()));
-		choices.removeAll(Arrays.asList(control.getDisabledChoices()));
-
-		int cancel = choices.size() + 1;
-
-		while (choice < 1 || choice > cancel) {
-
-			Iterator<StaticChoice> it = choices.iterator();
-			int i = 1;
-			while (it.hasNext()) {
-				StaticChoice c = it.next();
-				String msg = CHOICE_MESSAGES.get(c);
-				System.out.println(i + " : " + msg);
-				i++;
-			}
-
-			System.out.println(cancel + " : Cancel");
-
-			choice = TextIHM.scanner.nextInt();
-			if (Game.IS_TEST) {
-				System.out.println(choice);
-			}
-			System.out.println();
+	private String getChoiceMessage(StaticChoice c) {
+		String msg = CHOICE_MESSAGES.get(c);
+		if (msg == null) {
+			msg = "[No message for " + c + "]";
 		}
-
-		if (choice == cancel) {
-			return null;
-		} else {
-			return choices.get(choice - 1);
-		}
+		return msg;
 	}
 }

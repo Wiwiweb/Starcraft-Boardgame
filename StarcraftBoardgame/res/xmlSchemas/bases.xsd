@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:simpleType name="resource">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="MINERALS" />
+			<xs:enumeration value="GAS" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="bases">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="base" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+
+							<xs:element name="buildings">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="building" maxOccurs="unbounded" type="xs:string" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+							<xs:element name="modulesMaxNum" type="xs:int" />
+							<xs:element name="availableModules">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="module" maxOccurs="unbounded" type="xs:string" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+							<xs:element name="permanentResources">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="resource" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:int">
+														<xs:attribute name="type" type="resource" />
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+							<xs:element name="workersMaxNum" type="xs:int" />
+							<xs:element name="workerPrice">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="minerals" type="xs:int" />
+										<xs:element name="gas" type="xs:int" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+							<xs:element name="transportsMaxNum" type="xs:int" />
+							<xs:element name="transportPrice">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="minerals" type="xs:int" />
+										<xs:element name="gas" type="xs:int" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+							<xs:element name="basesMaxNum" type="xs:int" />
+							<xs:element name="basePrice">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="minerals" type="xs:int" />
+										<xs:element name="gas" type="xs:int" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" />
+
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+
+		<xs:unique name="uniqueName">
+			<xs:selector xpath="base" />
+			<xs:field xpath="@name" />
+		</xs:unique>
+		
+	</xs:element>
+</xs:schema>

@@ -1,6 +1,7 @@
 package tools;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -8,15 +9,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
-import abstraction.Faction;
 import abstraction.Factory;
-import abstraction.Game;
 import abstraction.Price;
 import abstraction.Resource.ResourceType;
 import abstraction.creators.BaseCreator;
 import abstraction.creators.BuildingCreator;
-import abstraction.creators.FactionCreator;
 import abstraction.creators.PlanetCreator;
 import abstraction.creators.UnitCreator;
 import abstraction.patterns.AreaPattern;
@@ -32,18 +33,27 @@ import abstraction.patterns.UnitPattern.WalkType;
  */
 public class XmlParser {
 
-	private static Factory factory = Game.factory;
+	private static final String pathToXml = "./res/data/";
 
-	public static void getAll() {
+	private final Factory factory;
+
+	public XmlParser(Factory factory) {
+		this.factory = factory;
+	}
+
+	public void getAll() {
 		getUnits();
 		getBuildings();
 		getBases();
+		getRaces();
 		getFactions();
 		getPlanets();
 	}
 
-	public static void getPlanets() {
-		Document doc = getXmlFile("./res/data/planets.xml");
+	public void getPlanets() {
+		String filename = "planets.xml";
+		Document doc = getXmlFile(pathToXml + filename);
+
 		try {
 			NodeList allPlanets = doc.getElementsByTagName("planet");
 
@@ -79,13 +89,14 @@ public class XmlParser {
 				PlanetCreator.addPlanetPattern(name, pattern);
 			}
 		} catch (NullPointerException e) {
-			System.err.println("XML syntax error in planets.xml");
+			System.err.println("XML syntax error in " + filename);
 			e.printStackTrace();
 		}
 	}
 
-	public static void getUnits() {
-		Document doc = getXmlFile("./res/data/units.xml");
+	public void getUnits() {
+		String filename = "units.xml";
+		Document doc = getXmlFile(pathToXml + filename);
 
 		try {
 			NodeList allUnits = doc.getElementsByTagName("unit");
@@ -119,13 +130,14 @@ public class XmlParser {
 				UnitCreator.addUnitPattern(name, pattern);
 			}
 		} catch (NullPointerException e) {
-			System.err.println("XML syntax error in units.xml");
+			System.err.println("XML syntax error in " + filename);
 			e.printStackTrace();
 		}
 	}
 
-	public static void getBuildings() {
-		Document doc = getXmlFile("./res/data/buildings.xml");
+	public void getBuildings() {
+		String filename = "buildings.xml";
+		Document doc = getXmlFile(pathToXml + filename);
 
 		try {
 			NodeList allBuildings = doc.getElementsByTagName("building");
@@ -141,29 +153,50 @@ public class XmlParser {
 
 				// Level prices
 				Price[] levelPrices = new Price[maxLevel];
-				Element priceList = (Element) building.getElementsByTagName("prices").item(0);
+				Element prices = (Element) building.getElementsByTagName("prices").item(0);
+				NodeList priceList = prices.getElementsByTagName("price");
 				for (int j = 0; j < maxLevel; j++) {
-					levelPrices[j] = parsePrice("level" + (j + 1), priceList, factory);
+
+					Element price = null;
+					for (int k = 0; k < maxLevel; k++) {
+						Element e = (Element) priceList.item(k);
+						if (Integer.parseInt(e.getAttribute("level")) == j + 1) {
+							price = e;
+							break;
+						}
+					}
+					levelPrices[j] = parsePrice(price, factory);
 				}
 
 				// Level units
 				String[] levelUnits = new String[maxLevel];
-				Element unitList = (Element) building.getElementsByTagName("units").item(0);
+				Element units = (Element) building.getElementsByTagName("units").item(0);
+				NodeList unitList = units.getElementsByTagName("unit");
 				for (int j = 0; j < maxLevel; j++) {
-					levelUnits[j] = getTagValue("level" + (j + 1), unitList);
+
+					Element unit = null;
+					for (int k = 0; k < maxLevel; k++) {
+						Element e = (Element) unitList.item(k);
+						if (Integer.parseInt(e.getAttribute("level")) == j + 1) {
+							unit = e;
+							break;
+						}
+					}
+					levelUnits[j] = unit.getTextContent();
 				}
 
 				BuildingPattern pattern = new BuildingPattern(name, maxLevel, levelPrices, levelUnits);
 				BuildingCreator.addBuildingPattern(name, pattern);
 			}
 		} catch (NullPointerException e) {
-			System.err.println("XML syntax error in buildings.xml");
+			System.err.println("XML syntax error in " + filename);
 			e.printStackTrace();
 		}
 	}
 
-	public static void getBases() {
-		Document doc = getXmlFile("./res/data/bases.xml");
+	public void getBases() {
+		String filename = "bases.xml";
+		Document doc = getXmlFile(pathToXml + filename);
 
 		try {
 			NodeList allBases = doc.getElementsByTagName("base");
@@ -178,7 +211,7 @@ public class XmlParser {
 				String[] buildingNames = new String[3];
 				Element buildingList = (Element) base.getElementsByTagName("buildings").item(0);
 				for (int j = 0; j < buildingNames.length; j++) {
-					buildingNames[j] = getTagValue("building" + (j + 1), buildingList);
+					buildingNames[j] = buildingList.getElementsByTagName("building").item(j).getTextContent();
 				}
 
 				// Modules max number
@@ -229,13 +262,14 @@ public class XmlParser {
 				BaseCreator.addBasePattern(name, pattern);
 			}
 		} catch (NullPointerException e) {
-			System.err.println("XML syntax error in bases.xml");
+			System.err.println("XML syntax error in " + filename);
 			e.printStackTrace();
 		}
 	}
 
-	public static void getFactions() {
-		Document doc = getXmlFile("./res/data/factions.xml");
+	public void getFactions() {
+		String filename = "factions.xml";
+		Document doc = getXmlFile(pathToXml + filename);
 
 		try {
 			NodeList allFactions = doc.getElementsByTagName("faction");
@@ -245,6 +279,9 @@ public class XmlParser {
 
 				// Name
 				String name = faction.getAttribute("name");
+
+				// Race
+				String raceName = getTagValue("race", faction);
 
 				// Base
 				String baseName = getTagValue("base", faction);
@@ -267,23 +304,64 @@ public class XmlParser {
 					startingUnitNumbers[j] = Integer.parseInt(startingUnit.getTextContent());
 				}
 
-				Faction pattern = new Faction(name, baseName, startingWorkers, startingTransports, startingUnitTypes,
+				factory.newFaction(name, raceName, baseName, startingWorkers, startingTransports, startingUnitTypes,
 						startingUnitNumbers);
-				FactionCreator.addFaction(name, pattern);
 			}
 		} catch (NullPointerException e) {
-			System.err.println("XML syntax error in faction.xml");
+			System.err.println("XML syntax error in " + filename);
 			e.printStackTrace();
 		}
 	}
 
-	private static Document getXmlFile(String filename) {
+	public void getRaces() {
+		String filename = "races.xml";
+		Document doc = getXmlFile(pathToXml + filename);
+
+		try {
+			NodeList allRaces = doc.getElementsByTagName("race");
+
+			for (int i = 0; i < allRaces.getLength(); i++) {
+				Element race = (Element) allRaces.item(i);
+
+				// Name
+				String name = race.getAttribute("name");
+
+				// Abilities
+				NodeList abilities = race.getElementsByTagName("ability");
+				String[] abilityList = new String[abilities.getLength()];
+				for (int j = 0; j < abilities.getLength(); j++) {
+					Element ability = (Element) abilities.item(j);
+					abilityList[j] = ability.getTextContent();
+				}
+
+				factory.newRace(name, abilityList);
+
+			}
+		} catch (NullPointerException e) {
+			System.err.println("XML syntax error in " + filename);
+			e.printStackTrace();
+		}
+	}
+
+	private Document getXmlFile(String filename) {
 		try {
 			File xmlFile = new File(filename);
+			if (!xmlFile.exists()) {
+				throw new FileNotFoundException(filename + " is missing.");
+			}
+
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			dbFactory.setNamespaceAware(true);
+			dbFactory.setValidating(true);
+			dbFactory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+					"http://www.w3.org/2001/XMLSchema");
+
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			dBuilder.setErrorHandler(new SimpleErrorHandler());
+
 			Document doc = dBuilder.parse(xmlFile);
 			doc.getDocumentElement().normalize();
+
 			return doc;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -291,20 +369,46 @@ public class XmlParser {
 		return null;
 	}
 
-	private static String getTagValue(String tag, Element e) {
-		return e.getElementsByTagName(tag).item(0).getTextContent();
+	private class SimpleErrorHandler implements ErrorHandler {
+
+		@Override
+		public void warning(SAXParseException e) throws SAXException {
+			System.out.println("Warning : " + e.getMessage());
+		}
+
+		@Override
+		public void error(SAXParseException e) throws SAXException {
+			System.err.println("Error : " + e.getMessage());
+			throw e;
+		}
+
+		@Override
+		public void fatalError(SAXParseException e) throws SAXException {
+			System.err.println("Fatal : " + e.getMessage());
+			throw e;
+		}
 	}
 
-	private static int parseInt(String name, Element e) {
-		return Integer.parseInt(getTagValue(name, e));
+	private String getTagValue(String tag, Element parent) {
+		return parent.getElementsByTagName(tag).item(0).getTextContent();
 	}
 
-	private static boolean parseBoolean(String name, Element e) {
-		return Boolean.parseBoolean(getTagValue(name, e));
+	private int parseInt(String name, Element parent) {
+		return Integer.parseInt(getTagValue(name, parent));
 	}
 
-	private static Price parsePrice(String name, Element e, Factory factory) {
-		Element price = (Element) e.getElementsByTagName(name).item(0);
+	private boolean parseBoolean(String name, Element parent) {
+		return Boolean.parseBoolean(getTagValue(name, parent));
+	}
+
+	private Price parsePrice(String name, Element parent, Factory factory) {
+		Element price = (Element) parent.getElementsByTagName(name).item(0);
+		int minerals = parseInt("minerals", price);
+		int gas = parseInt("gas", price);
+		return factory.newPrice(minerals, gas);
+	}
+
+	private Price parsePrice(Element price, Factory factory) {
 		int minerals = parseInt("minerals", price);
 		int gas = parseInt("gas", price);
 		return factory.newPrice(minerals, gas);

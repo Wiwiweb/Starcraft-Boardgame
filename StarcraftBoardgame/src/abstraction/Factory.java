@@ -9,12 +9,14 @@ import abstraction.creators.BuildingCreator;
 import abstraction.creators.FactionCreator;
 import abstraction.creators.ModuleCreator;
 import abstraction.creators.PlanetCreator;
+import abstraction.creators.RaceCreator;
 import abstraction.creators.UnitCreator;
 import abstraction.menus.MenuChooseFromList;
 import abstraction.menus.MenuChooseFromList.ChooseFromListMenuName;
 import abstraction.menus.MenuStaticChoices;
 import abstraction.menus.MenuStaticChoices.StaticChoice;
 import abstraction.menus.MenuStaticChoices.StaticChoicesMenuName;
+import abstraction.menus.multimenus.MultiMenu;
 
 /**
  * @author William Gautier
@@ -29,8 +31,24 @@ public abstract class Factory {
 		return new Player(name);
 	}
 
+	public void newFaction(String name, String raceName, String baseName, int startingWorkers, int startingTransports,
+			String[] startingUnitTypes, int[] startingUnitNumbers) {
+		Faction faction = new Faction(name, raceName, baseName, startingWorkers, startingTransports, startingUnitTypes,
+				startingUnitNumbers);
+		FactionCreator.addFaction(name, faction);
+	}
+
 	public Faction getFaction(String name) {
 		return FactionCreator.getFaction(name);
+	}
+
+	public void newRace(String name, String[] abilities) {
+		Race race = new Race(name, abilities);
+		RaceCreator.addRace(name, race);
+	}
+
+	public Race getRace(String name) {
+		return RaceCreator.getRace(name);
 	}
 
 	public Galaxy newGalaxy() {
@@ -77,12 +95,20 @@ public abstract class Factory {
 		return new Price(minerals, gas);
 	}
 
+	public abstract MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName, Player player, MultiMenu multiMenu);
+
 	public abstract MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName, Player player);
 
+	public abstract <T extends Comparable<? super T>> MenuChooseFromList<T> newMenuChooseFromList(
+			ChooseFromListMenuName menuName, Collection<T> listChoices, Player player, MultiMenu multiMenu);
+
 	public abstract MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName,
-			Collection<StaticChoice> disabledChoices, Player player);
+			Collection<StaticChoice> disabledChoices, Player player, MultiMenu multiMenu);
 
 	public abstract <T extends Comparable<? super T>> MenuChooseFromList<T> newMenuChooseFromList(
 			ChooseFromListMenuName menuName, Collection<T> listChoices, Player player);
+
+	public abstract MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName,
+			Collection<StaticChoice> disabledChoices, Player player);
 
 }

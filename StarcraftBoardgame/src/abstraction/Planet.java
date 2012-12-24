@@ -139,6 +139,9 @@ public class Planet implements Comparable<Planet> {
 		return result;
 	}
 
+	/**
+	 * Returns routes with transports owned by the player
+	 */
 	public List<Route> getRoutesWithTransports(Player player) {
 		List<Route> result = new ArrayList<Route>();
 		for (Route r : getRoutes()) {
@@ -149,11 +152,28 @@ public class Planet implements Comparable<Planet> {
 		return result;
 	}
 
+	/**
+	 * Returns routes without transports owned by the player
+	 */
 	public List<Route> getRoutesWithNoTransports(Player player) {
 		List<Route> result = new ArrayList<Route>();
 		for (Route r : getRoutes()) {
 			if (!player.hasTransport(r)) {
 				result.add(r);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Returns true if the player has a base on the planet.
+	 */
+	public boolean hasBaseOnPlanet(Player player) {
+		boolean result = false;
+		for (Area a : areas) {
+			if (a.getBaseOwner() == player) {
+				result = true;
+				break;
 			}
 		}
 		return result;

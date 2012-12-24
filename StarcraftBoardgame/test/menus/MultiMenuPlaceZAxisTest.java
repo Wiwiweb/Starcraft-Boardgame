@@ -54,7 +54,7 @@ public class MultiMenuPlaceZAxisTest extends Tests {
 		String data = "1 4 2 3 2 1 ";
 		TextIHM.scanner = new Scanner(data);
 		menu = new MultiMenuPlaceZAxis(galaxy.getAvailableSpots(), player);
-		MultiMenuPlaceZAxisChoices choices = menu.doSelection();
+		MultiMenuPlaceZAxisChoices choices = menu.doSelection(factory);
 
 		PlanetEntrance entrance = choices.getEntrance();
 		PlanetEntrance exit = choices.getExit();

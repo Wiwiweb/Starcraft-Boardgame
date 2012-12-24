@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import tools.PlanetEntrance;
-import abstraction.Game;
+import abstraction.Factory;
 import abstraction.Planet;
 import abstraction.Player;
 import abstraction.menus.Menu;
@@ -28,13 +28,13 @@ public class MultiMenuPlaceZAxis extends MultiMenu {
 	}
 
 	@Override
-	protected Menu<?> getMenu(int i) {
+	protected Menu<?> getMenu(int i, Factory factory) {
 		Menu<?> menu;
 
 		switch (i) {
 
 		case 1:
-			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_ZAXIS_ENTRANCE, availableEntrances, player);
+			menu = factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_ZAXIS_ENTRANCE, availableEntrances, player);
 			break;
 
 		case 2:
@@ -45,7 +45,7 @@ public class MultiMenuPlaceZAxis extends MultiMenu {
 				availableExits.remove(new PlanetEntrance(planet, c));
 			}
 
-			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_ZAXIS_EXIT, availableExits, player);
+			menu = factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_ZAXIS_EXIT, availableExits, player);
 			break;
 
 		default:
@@ -88,16 +88,16 @@ public class MultiMenuPlaceZAxis extends MultiMenu {
 	}
 
 	@Override
-	public MultiMenuPlaceZAxisChoices doSelection() {
+	public MultiMenuPlaceZAxisChoices doSelection(Factory factory) {
 		updateState();
 		while (state != -1) {
-			Menu<?> menu = getMenu(state);
+			Menu<?> menu = getMenu(state, factory);
 			switch (state) {
 			case 1:
-				choices.setEntrance((PlanetEntrance) menu.selectChoice());
+				choices.setEntrance((PlanetEntrance) menu.selectChoice(false));
 				break;
 			case 2:
-				choices.setExit((PlanetEntrance) menu.selectChoiceWithCancel());
+				choices.setExit((PlanetEntrance) menu.selectChoice(true));
 				break;
 			default:
 				throw new IllegalStateException("This state shouldn't happen.");

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:element name="factions">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="faction" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+
+							<xs:element name="race" type="xs:string" />
+
+							<xs:element name="base" type="xs:string" />
+
+							<xs:element name="startingUnits">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="workers" type="xs:int" />
+										<xs:element name="transports" type="xs:int" />
+										<xs:element name="unit" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:int">
+														<xs:attribute name="type" type="xs:string" />
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" />
+
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+
+		<xs:unique name="uniqueName">
+			<xs:selector xpath="faction" />
+			<xs:field xpath="@name" />
+		</xs:unique>
+
+	</xs:element>
+</xs:schema>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<factions>
+<factions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../xmlSchemas/factions.xsd">
 
 	<faction name="Jim Raynor">
+		<race>Terran</race>
 		<base>Terran Base</base>
 		<startingUnits>
 			<workers>8</workers>
@@ -13,6 +15,7 @@
 	</faction>
 
 	<faction name="Arcturus Mengsk">
+		<race>Terran</race>
 		<base>Terran Base</base>
 		<startingUnits>
 			<workers>8</workers>
@@ -24,16 +27,8 @@
 	</faction>
 
 	<faction name="Overmind">
-		<base>Zerg Base</base>
-		<startingUnits>
-			<workers>8</workers>
-			<transports>1</transports>
-			<unit type="Zergling">4</unit>
-			<unit type="Hydralisk">1</unit>
-		</startingUnits>
-	</faction>
+		<race>Zerg</race>
 
-	<faction name="Overmind">
 		<base>Zerg Base</base>
 		<startingUnits>
 			<workers>8</workers>
@@ -44,6 +39,7 @@
 	</faction>
 
 	<faction name="Queen of Blades">
+		<race>Zerg</race>
 		<base>Zerg Base</base>
 		<startingUnits>
 			<workers>7</workers>
@@ -54,6 +50,7 @@
 	</faction>
 
 	<faction name="Tassadar">
+		<race>Protoss</race>
 		<base>Protoss Base</base>
 		<startingUnits>
 			<workers>8</workers>
@@ -63,6 +60,7 @@
 	</faction>
 
 	<faction name="Aldaris">
+		<race>Protoss</race>
 		<base>Protoss Base</base>
 		<startingUnits>
 			<workers>7</workers>

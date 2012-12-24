@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bases>
+<bases xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xmlSchemas/bases.xsd">
 
 	<base name="Terran Base">
 		<buildings>
-			<building1>Barracks</building1>
-			<building2>Factory</building2>
-			<building3>Starport</building3>
+			<building>Barracks</building>
+			<building>Factory</building>
+			<building>Starport</building>
 		</buildings>
 
 		<modulesMaxNum>5</modulesMaxNum>
@@ -41,9 +41,9 @@
 
 	<base name="Zerg Base">
 		<buildings>
-			<building1>Spawning Pool</building1>
-			<building2>Queen's Nest</building2>
-			<building3>Spire</building3>
+			<building>Spawning Pool</building>
+			<building>Queen's Nest</building>
+			<building>Spire</building>
 		</buildings>
 
 		<modulesMaxNum>3</modulesMaxNum>
@@ -78,9 +78,9 @@
 
 	<base name="Protoss Base">
 		<buildings>
-			<building1>Gateway</building1>
-			<building2>Robotics Facility</building2>
-			<building3>Stargate</building3>
+			<building>Gateway</building>
+			<building>Robotics Facility</building>
+			<building>Stargate</building>
 		</buildings>
 
 		<modulesMaxNum>5</modulesMaxNum>

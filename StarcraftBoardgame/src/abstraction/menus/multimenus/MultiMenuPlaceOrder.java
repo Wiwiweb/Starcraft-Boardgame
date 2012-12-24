@@ -2,7 +2,7 @@ package abstraction.menus.multimenus;
 
 import java.util.Set;
 
-import abstraction.Game;
+import abstraction.Factory;
 import abstraction.Order.OrderType;
 import abstraction.Planet;
 import abstraction.Player;
@@ -27,17 +27,17 @@ public class MultiMenuPlaceOrder extends MultiMenu {
 	}
 
 	@Override
-	protected Menu<?> getMenu(int i) {
+	protected Menu<?> getMenu(int i, Factory factory) {
 		Menu<?> menu;
 
 		switch (i) {
 
 		case 1:
-			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_ORDER_TYPE, availableOrders, player);
+			menu = factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_ORDER_TYPE, availableOrders, player);
 			break;
 
 		case 2:
-			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_PLANET_FOR_ORDER, availablePlanets, player);
+			menu = factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_PLANET_FOR_ORDER, availablePlanets, player);
 			break;
 
 		default:
@@ -80,16 +80,16 @@ public class MultiMenuPlaceOrder extends MultiMenu {
 	}
 
 	@Override
-	public MultiMenuPlaceOrderChoices doSelection() {
+	public MultiMenuPlaceOrderChoices doSelection(Factory factory) {
 		updateState();
 		while (state != -1) {
-			Menu<?> menu = getMenu(state);
+			Menu<?> menu = getMenu(state, factory);
 			switch (state) {
 			case 1:
-				choices.setOrderType((OrderType) menu.selectChoice());
+				choices.setOrderType((OrderType) menu.selectChoice(false));
 				break;
 			case 2:
-				choices.setPlanet((Planet) menu.selectChoice());
+				choices.setPlanet((Planet) menu.selectChoice(true));
 				break;
 			default:
 				throw new IllegalStateException("This state shouldn't happen.");

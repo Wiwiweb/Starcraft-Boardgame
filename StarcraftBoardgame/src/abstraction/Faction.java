@@ -7,6 +7,7 @@ public class Faction implements Comparable<Faction> {
 
 	private final String name;
 
+	private final String raceName;
 	private final String baseName;
 
 	private final int startingWorkers;
@@ -15,9 +16,10 @@ public class Faction implements Comparable<Faction> {
 	private final String[] startingUnitTypes;
 	private final int[] startingUnitNumbers;
 
-	public Faction(String name, String baseName, int startingWorkers, int startingTransports, String[] startingUnitTypes,
-			int[] startingUnitNumbers) {
+	public Faction(String name, String raceName, String baseName, int startingWorkers, int startingTransports,
+			String[] startingUnitTypes, int[] startingUnitNumbers) {
 		this.name = name;
+		this.raceName = raceName;
 		this.baseName = baseName;
 		this.startingWorkers = startingWorkers;
 		this.startingTransports = startingTransports;
@@ -27,6 +29,10 @@ public class Faction implements Comparable<Faction> {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getRaceName() {
+		return raceName;
 	}
 
 	public String getBaseName() {

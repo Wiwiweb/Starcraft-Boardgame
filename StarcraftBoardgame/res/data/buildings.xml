@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<buildings>
+<buildings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xmlSchemas/buildings.xsd">
 
 	<building name="Spawning Pool">
 		<maxLevel>3</maxLevel>
 		<prices>
-			<level1>
+			<price level="1">
 				<minerals>0</minerals>
 				<gas>0</gas>
-			</level1>
-			<level2>
+			</price>
+			<price level="2">
 				<minerals>1</minerals>
 				<gas>0</gas>
-			</level2>
-			<level3>
+			</price>
+			<price level="3">
 				<minerals>2</minerals>
 				<gas>0</gas>
-			</level3>
+			</price>
 		</prices>
 		<units>
-			<level1>Zergling</level1>
-			<level2>Hydralisk</level2>
-			<level3>Ultralisk</level3>
+			<unit level="1">Zergling</unit>
+			<unit level="2">Hydralisk</unit>
+			<unit level="3">Ultralisk</unit>
 		</units>
 	</building>
 	
 	<building name="Queen's Nest">
 		<maxLevel>2</maxLevel>
 		<prices>
-			<level1>
+			<price level="1">
 				<minerals>0</minerals>
 				<gas>1</gas>
-			</level1>
-			<level2>
+			</price>
+			<price level="2">
 				<minerals>1</minerals>
 				<gas>1</gas>
-			</level2>
+			</price>
 		</prices>
 		<units>
-			<level1>Queen</level1>
-			<level2>Defiler</level2>
+			<unit level="1">Queen</unit>
+			<unit level="2">Defiler</unit>
 		</units>
 	</building>
 	
 	<building name="Spire">
 		<maxLevel>2</maxLevel>
 		<prices>
-			<level1>
+			<price level="1">
 				<minerals>2</minerals>
 				<gas>0</gas>
-			</level1>
-			<level2>
+			</price>
+			<price level="2">
 				<minerals>1</minerals>
 				<gas>1</gas>
-			</level2>
+			</price>
 		</prices>
 		<units>
-			<level1>Scourge</level1>
-			<level2>Mutalisk</level2>
+			<unit level="1">Scourge</unit>
+			<unit level="2">Mutalisk</unit>
 		</units>
 	</building>
 	

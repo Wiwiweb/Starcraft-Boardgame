@@ -3,7 +3,7 @@ package abstraction;
 /**
  * @author William Gautier
  */
-public class Order {
+public class Order implements Comparable<Order> {
 
 	public static enum OrderType {
 		BUILD, MOBILIZE, RESEARCH,
@@ -58,5 +58,15 @@ public class Order {
 
 	public Planet getPlanet() {
 		return planet;
+	}
+
+	@Override
+	public String toString() {
+		return "Order on " + planet;
+	}
+
+	@Override
+	public int compareTo(Order o) {
+		return this.getPlanet().compareTo(o.getPlanet());
 	}
 }

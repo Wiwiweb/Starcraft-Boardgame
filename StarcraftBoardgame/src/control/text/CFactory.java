@@ -10,6 +10,7 @@ import abstraction.menus.MenuChooseFromList.ChooseFromListMenuName;
 import abstraction.menus.MenuStaticChoices;
 import abstraction.menus.MenuStaticChoices.StaticChoice;
 import abstraction.menus.MenuStaticChoices.StaticChoicesMenuName;
+import abstraction.menus.multimenus.MultiMenu;
 import control.text.menus.CMenuChooseFromList;
 import control.text.menus.CMenuStaticChoices;
 
@@ -19,8 +20,19 @@ import control.text.menus.CMenuStaticChoices;
 public class CFactory extends Factory {
 
 	@Override
+	public MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName, Player player, MultiMenu multiMenu) {
+		return new CMenuStaticChoices(menuName, player, multiMenu);
+	}
+
+	@Override
 	public MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName, Player player) {
 		return new CMenuStaticChoices(menuName, player);
+	}
+
+	@Override
+	public MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName, Collection<StaticChoice> disabledChoices,
+			Player player, MultiMenu multiMenu) {
+		return new CMenuStaticChoices(menuName, disabledChoices, player, multiMenu);
 	}
 
 	@Override
@@ -33,5 +45,12 @@ public class CFactory extends Factory {
 	public <T extends Comparable<? super T>> MenuChooseFromList<T> newMenuChooseFromList(ChooseFromListMenuName menuName,
 			Collection<T> listChoices, Player player) {
 		return new CMenuChooseFromList<T>(menuName, new ArrayList<T>(listChoices), player);
+	}
+
+	@Override
+	public <T extends Comparable<? super T>> MenuChooseFromList<T> newMenuChooseFromList(ChooseFromListMenuName menuName,
+			Collection<T> listChoices, Player player, MultiMenu multiMenu) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

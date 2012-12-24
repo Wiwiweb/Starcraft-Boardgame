@@ -7,6 +7,7 @@ import presentation.text.menus.IPMenu;
 import presentation.text.menus.PMenuChooseFromList;
 import abstraction.Player;
 import abstraction.menus.MenuChooseFromList;
+import abstraction.menus.multimenus.MultiMenu;
 
 /**
  * @author William Gautier
@@ -15,20 +16,19 @@ public class CMenuChooseFromList<T extends Comparable<? super T>> extends MenuCh
 
 	private final IPMenu<T> presentation;
 
-	public CMenuChooseFromList(ChooseFromListMenuName menuName, List<T> choices, Player player) {
-		super(menuName, choices, player);
+	public CMenuChooseFromList(ChooseFromListMenuName menuName, List<T> choices, Player player, MultiMenu multimenu) {
+		super(menuName, choices, player, multimenu);
 		Collections.sort(choices);
 		presentation = new PMenuChooseFromList<T>(this);
 	}
 
-	@Override
-	public T selectChoice() {
-		return presentation.askChoice();
+	public CMenuChooseFromList(ChooseFromListMenuName menuName, List<T> choices, Player player) {
+		this(menuName, choices, player, null);
 	}
 
 	@Override
-	public T selectChoiceWithCancel() {
-		return presentation.askChoiceWithCancel();
+	public T selectChoice(boolean cancel) {
+		return presentation.askChoice(cancel);
 	}
 
 }

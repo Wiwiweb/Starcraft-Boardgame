@@ -60,7 +60,7 @@ public class MultiMenuPlacePlanetTest extends Tests {
 		String data = "2 1 3 1 3 1 1 ";
 		TextIHM.scanner = new Scanner(data);
 		menu = new MultiMenuPlacePlanet(galaxy, 0, player);
-		MultiMenuPlacePlanetChoices choices = menu.doSelection();
+		MultiMenuPlacePlanetChoices choices = menu.doSelection(factory);
 
 		Planet chosenPlanet = choices.getChosenPlanet();
 		if (galaxy.isEmpty()) {

@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import abstraction.Area;
-import abstraction.Game;
+import abstraction.Factory;
 import abstraction.Planet;
 import abstraction.Player;
 import abstraction.Route;
 import abstraction.Unit;
 import abstraction.menus.Menu;
-import abstraction.menus.MenuStaticChoices;
 import abstraction.menus.MenuChooseFromList.ChooseFromListMenuName;
 import abstraction.menus.MenuStaticChoices.StaticChoice;
 import abstraction.menus.MenuStaticChoices.StaticChoicesMenuName;
@@ -22,7 +21,7 @@ import abstraction.menus.multimenus.states.MultiMenuPlaceStartingForcesChoices;
 public class MultiMenuPlaceStartingForces extends MultiMenu {
 
 	private final Planet startingPlanet;
-	private List<Unit> remainingUnits;
+	private final List<Unit> remainingUnits;
 	private int remainingTransports;
 
 	private StaticChoice unitPlaceRemoveChoice;
@@ -40,7 +39,7 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 	}
 
 	@Override
-	protected Menu<?> getMenu(int i) {
+	protected Menu<?> getMenu(int i, Factory factory) {
 		Menu<?> menu;
 
 		switch (i) {
@@ -60,32 +59,31 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 				disabledChoices.add(StaticChoice.PLACE_REMOVE_UNIT_REMOVE_TRANSPORT);
 			}
 
-			menu = Game.factory.newMenuStaticChoices(StaticChoicesMenuName.PLACE_REMOVE_UNIT, disabledChoices, player);
+			menu = factory.newMenuStaticChoices(StaticChoicesMenuName.PLACE_REMOVE_UNIT, disabledChoices, player);
 			break;
 
 		case 2:
-			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_TO_PLACE, remainingUnits, player);
+			menu = factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_TO_PLACE, remainingUnits, player);
 			break;
 
 		case 3:
-			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_PLACEMENT,
+			menu = factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_PLACEMENT,
 					startingPlanet.getBuildableAreasPlusUnits(player, choices.getPlacedUnitsAreas()), player);
 			break;
 
 		case 4:
-			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_TO_REMOVE,
+			menu = factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_UNIT_TO_REMOVE,
 					choices.getPlacedUnits(), player);
 			break;
 
 		case 5:
-			menu = Game.factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_TRANSPORT_PLACEMENT,
+			menu = factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_TRANSPORT_PLACEMENT,
 					startingPlanet.getRoutesWithNoTransports(player), player);
 			break;
 
 		case 6:
-			menu = Game.factory
-					.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_TRANSPORT_PLACEMENT, choices.getPlacedTransports(),
-							player);
+			menu = factory.newMenuChooseFromList(ChooseFromListMenuName.CHOOSE_TRANSPORT_PLACEMENT,
+					choices.getPlacedTransports(), player);
 			break;
 
 		default:
@@ -205,29 +203,29 @@ public class MultiMenuPlaceStartingForces extends MultiMenu {
 	}
 
 	@Override
-	public MultiMenuPlaceStartingForcesChoices doSelection() {
+	public MultiMenuPlaceStartingForcesChoices doSelection(Factory factory) {
 		updateState();
 		while (state != -1) {
-			Menu<?> menu = getMenu(state);
+			Menu<?> menu = getMenu(state, factory);
 
 			switch (state) {
 			case 1:
-				unitPlaceRemoveChoice = (StaticChoice) menu.selectChoice();
+				unitPlaceRemoveChoice = (StaticChoice) menu.selectChoice(false);
 				break;
 			case 2:
-				chosenUnit = (Unit) menu.selectChoiceWithCancel();
+				chosenUnit = (Unit) menu.selectChoice(true);
 				break;
 			case 3:
-				chosenArea = (Area) menu.selectChoiceWithCancel();
+				chosenArea = (Area) menu.selectChoice(true);
 				break;
 			case 4:
-				chosenUnit = (Unit) menu.selectChoiceWithCancel();
+				chosenUnit = (Unit) menu.selectChoice(true);
 				break;
 			case 5:
-				chosenRoute = (Route) menu.selectChoiceWithCancel();
+				chosenRoute = (Route) menu.selectChoice(true);
 				break;
 			case 6:
-				chosenRoute = (Route) menu.selectChoiceWithCancel();
+				chosenRoute = (Route) menu.selectChoice(true);
 				break;
 			default:
 				throw new IllegalStateException("This state shouldn't happen.");

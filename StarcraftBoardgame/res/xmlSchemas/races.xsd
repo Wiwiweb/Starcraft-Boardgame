@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:element name="races">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="race" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+
+							<xs:element name="ability" type="xs:string" maxOccurs="unbounded" />
+
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" />
+
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+
+		<xs:unique name="race">
+			<xs:selector xpath="faction" />
+			<xs:field xpath="@name" />
+		</xs:unique>
+
+	</xs:element>
+</xs:schema>

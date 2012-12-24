@@ -1,5 +1,6 @@
 package abstraction.menus.multimenus;
 
+import abstraction.Factory;
 import abstraction.Player;
 import abstraction.menus.Menu;
 import abstraction.menus.multimenus.states.MultiMenuChoices;
@@ -28,7 +29,7 @@ public abstract class MultiMenu {
 	 * 
 	 * @return
 	 */
-	abstract protected Menu<?> getMenu(int i);
+	abstract protected Menu<?> getMenu(int i, Factory factory);
 
 	/**
 	 * Updates the state based on current state and selection of menus. Does internal operations after a selection of a
@@ -39,6 +40,6 @@ public abstract class MultiMenu {
 	/**
 	 * Main loop.
 	 */
-	abstract public MultiMenuChoices doSelection();
+	abstract public MultiMenuChoices doSelection(Factory factory);
 
 }

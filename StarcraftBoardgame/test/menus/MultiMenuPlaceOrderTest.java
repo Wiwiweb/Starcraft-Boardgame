@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,7 +59,7 @@ public class MultiMenuPlaceOrderTest extends Tests {
 		TextIHM.scanner = new Scanner(data);
 		menu = new MultiMenuPlaceOrder(galaxy.getAvailableOrderPlanets(player),
 				new HashSet<OrderType>(Arrays.asList(OrderType.values())), player);
-		MultiMenuPlaceOrderChoices choices = menu.doSelection();
+		MultiMenuPlaceOrderChoices choices = menu.doSelection(factory);
 
 		assertEquals(OrderType.MOBILIZE, choices.getOrderType());
 		assertSame(pridewater, choices.getPlanet());

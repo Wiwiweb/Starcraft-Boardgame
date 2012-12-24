@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<races xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xmlSchemas/races.xsd">
+
+	<race name="Terran">
+		<ability>TERRAN_LIFTOFF</ability>
+		<ability>TERRAN_VERSATILITY</ability>
+	</race>
+	
+	<race name="Zerg">
+		<ability>ZERG_CREEP</ability>
+		<ability>ZERG_HEALING</ability>
+	</race>
+	
+	<race name="Protoss">
+		<ability>PROTOSS_SHIELDS</ability>
+	</race>
+
+</races>

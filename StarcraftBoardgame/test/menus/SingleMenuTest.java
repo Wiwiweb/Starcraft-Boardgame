@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import presentation.text.TextIHM;
 import tests.Tests;
-import abstraction.Game;
 import abstraction.Player;
 import abstraction.menus.MenuStaticChoices;
 import abstraction.menus.MenuStaticChoices.StaticChoice;
@@ -19,7 +18,7 @@ import abstraction.menus.MenuStaticChoices.StaticChoicesMenuName;
 /**
  * @author William Gautier
  */
-public class MenuTest extends Tests {
+public class SingleMenuTest extends Tests {
 
 	private Player player;
 
@@ -30,26 +29,26 @@ public class MenuTest extends Tests {
 	public void setUp() throws Exception {
 		player = factory.newPlayer("Player");
 	}
-	
+
 	@Test
 	public void testDisabledStaticMenu() {
 		StaticChoice[] disabledChoices = { StaticChoice.PLACE_REMOVE_UNIT_REMOVE_UNIT };
-		MenuStaticChoices menu = Game.factory.newMenuStaticChoices(StaticChoicesMenuName.PLACE_REMOVE_UNIT,
+		MenuStaticChoices menu = factory.newMenuStaticChoices(StaticChoicesMenuName.PLACE_REMOVE_UNIT,
 				Arrays.asList(disabledChoices), player);
 		String data = "2 ";
 
 		TextIHM.scanner = new Scanner(data);
-		StaticChoice choice = menu.selectChoice();
+		StaticChoice choice = menu.selectChoice(false);
 		assertEquals(StaticChoice.PLACE_REMOVE_UNIT_PLACE_TRANSPORT, choice);
 	}
 
 	@Test
 	public void testStaticMenu() {
-		MenuStaticChoices menu = Game.factory.newMenuStaticChoices(StaticChoicesMenuName.PLACE_REMOVE_UNIT, player);
+		MenuStaticChoices menu = factory.newMenuStaticChoices(StaticChoicesMenuName.PLACE_REMOVE_UNIT, player);
 		String data = "2 ";
 
 		TextIHM.scanner = new Scanner(data);
-		StaticChoice choice = menu.selectChoice();
+		StaticChoice choice = menu.selectChoice(false);
 		assertEquals(StaticChoice.PLACE_REMOVE_UNIT_REMOVE_UNIT, choice);
 	}
 

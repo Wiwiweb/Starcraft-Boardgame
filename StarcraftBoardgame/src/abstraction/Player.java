@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import abstraction.Order.OrderType;
+import abstraction.Race.Ability;
 import abstraction.Resource.ResourceType;
 import abstraction.creators.UnitCreator;
 
@@ -23,6 +24,7 @@ public class Player {
 	private final List<Planet> planetTokens = new ArrayList<Planet>();
 
 	private Faction faction;
+	private Race race;
 	private Base base;
 	private Planet startingPlanet;
 
@@ -33,10 +35,60 @@ public class Player {
 	// Attributes for a single round
 	private int ordersLeftToPlace;
 	private int specialOrdersAvailable;
+	private int ordersLeftToExecute;
 	private HashMap<OrderType, Integer> orderTypePlaced = new HashMap<OrderType, Integer>();
 
 	public Player(String name) {
 		this.name = name;
+	}
+
+	public void executeOrder(Order order) {
+		Planet planet = order.getPlanet();
+
+		switch (order.getType()) {
+		case BUILD:
+			buildOrder(planet, false);
+			break;
+		case SPECIAL_BUILD:
+			buildOrder(planet, true);
+			break;
+		case MOBILIZE:
+			mobilizeOrder(planet, false);
+			break;
+		case SPECIAL_MOBILIZE:
+			mobilizeOrder(planet, true);
+			break;
+		case RESEARCH:
+			researchOrder(planet, false);
+			break;
+		case SPECIAL_RESEARCH:
+			researchOrder(planet, true);
+			break;
+		default:
+			throw new IllegalArgumentException("Unknown order type.");
+		}
+	}
+
+	private void buildOrder(Planet planet, boolean isSpecial) {
+		boolean specialDiscountAvailable = isSpecial;
+		int unitLimitBonus = 0;
+		if (isSpecial) {
+			unitLimitBonus++;
+		}
+
+		// Build units, workers, transports, if you have a base
+
+		// Build base upgrades, if you have a unit or base
+
+		// Build a base, if you have a unit and no base
+	}
+
+	private void mobilizeOrder(Planet planet, boolean isSpecial) {
+		// TODO mobilize order
+	}
+
+	private void researchOrder(Planet planet, boolean isSpecial) {
+		// TODO research order
 	}
 
 	public void buyUnit(String unitName, Planet orderPlanet, Factory factory) {
@@ -131,14 +183,26 @@ public class Player {
 
 	public Faction getFaction() {
 		if (faction == null) {
-			throw new IllegalStateException("This player has no faction");
+			throw new IllegalStateException("This player has no faction.");
 		}
 		return faction;
+	}
+
+	public Race getRace() {
+		if (race == null) {
+			throw new IllegalStateException("This player has no race.");
+		}
+		return race;
+	}
+
+	public boolean hasAbility(Ability ability) {
+		return getRace().getAbilities().contains(ability);
 	}
 
 	public void setFaction(Faction faction, Factory factory) {
 		if (this.faction == null) {
 			this.faction = faction;
+			this.race = factory.getRace(faction.getRaceName());
 			this.base = factory.newBase(faction.getBaseName(), this);
 			controlledResources.addAll(Arrays.asList(base.getPermanentResources()));
 		} else {
@@ -226,16 +290,8 @@ public class Player {
 		this.ordersLeftToPlace = ordersLeftToPlace;
 	}
 
-	public void decrementOrdersLeftToPlace() {
-		this.ordersLeftToPlace--;
-	}
-
 	public int getSpecialOrdersAvailable() {
 		return specialOrdersAvailable;
-	}
-
-	public void decrementSpecialOrdersAvailable() {
-		this.specialOrdersAvailable--;
 	}
 
 	int getSpecialOrdersMaxAmount() {
@@ -254,6 +310,14 @@ public class Player {
 
 	public void setOrderTypePlaced(HashMap<OrderType, Integer> orderTypePlaced) {
 		this.orderTypePlaced = orderTypePlaced;
+	}
+
+	public int getOrdersLeftToExecute() {
+		return ordersLeftToExecute;
+	}
+
+	public void setOrdersLeftToExecute(int ordersLeftToExecute) {
+		this.ordersLeftToExecute = ordersLeftToExecute;
 	}
 
 	public void resetOrdersAttributes() {

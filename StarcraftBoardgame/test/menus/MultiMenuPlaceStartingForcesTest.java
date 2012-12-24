@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -86,7 +85,7 @@ public class MultiMenuPlaceStartingForcesTest extends Tests {
 		TextIHM.scanner = new Scanner(data);
 
 		menu = new MultiMenuPlaceStartingForces(pridewater, startingUnits, player.getFaction().getStartingTransports(), player);
-		MultiMenuPlaceStartingForcesChoices choices = menu.doSelection();
+		MultiMenuPlaceStartingForcesChoices choices = menu.doSelection(factory);
 
 		for (int i = 0; i < choices.getPlacedUnits().size(); i++) {
 			Unit unit = choices.getPlacedUnits().get(i);
@@ -97,11 +96,11 @@ public class MultiMenuPlaceStartingForcesTest extends Tests {
 		for (Route r : choices.getPlacedTransports()) {
 			r.addTransport(player);
 		}
-		
+
 		assertEquals(Arrays.asList("Zergling", "Zergling"), pridewater.getArea(0).getUnitNamesList());
 		assertEquals(Arrays.asList("Hydralisk", "Zergling", "Zergling"), pridewater.getArea(2).getUnitNamesList());
 		assertTrue(pridewater.getArea(2).isFull());
 		assertTrue(pridewater.getRoute(Cardinal.NORTH).hasTransport(player));
 	}
-	
+
 }
