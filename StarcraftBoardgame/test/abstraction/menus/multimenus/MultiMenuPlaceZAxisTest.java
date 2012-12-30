@@ -1,4 +1,4 @@
-package menus;
+package abstraction.menus.multimenus;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -12,20 +12,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import presentation.text.TextIHM;
-import tests.Tests;
+import testsSetup.GameTests;
 import tools.PlanetEntrance;
 import abstraction.Galaxy;
 import abstraction.Game;
 import abstraction.Planet;
 import abstraction.Player;
-import abstraction.menus.multimenus.MultiMenuPlaceZAxis;
 import abstraction.menus.multimenus.states.MultiMenuPlaceZAxisChoices;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
 /**
  * @author William Gautier
  */
-public class MultiMenuPlaceZAxisTest extends Tests {
+public class MultiMenuPlaceZAxisTest extends GameTests {
 
 	private Game game;
 	private Galaxy galaxy;

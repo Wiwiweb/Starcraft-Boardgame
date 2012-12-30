@@ -1,4 +1,4 @@
-package tests;
+package abstraction;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -8,15 +8,13 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import abstraction.Base;
-import abstraction.Game;
-import abstraction.Player;
+import testsSetup.GameTests;
 import abstraction.creators.UnitCreator;
 
 /**
  * @author William Gautier
  */
-public class VariousTest extends Tests {
+public class VariousTest extends GameTests {
 
 	@Test
 	public void testOrderedPlayers() {

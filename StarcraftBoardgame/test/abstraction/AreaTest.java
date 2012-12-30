@@ -1,4 +1,4 @@
-package tests;
+package abstraction;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -10,17 +10,13 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import abstraction.Area;
-import abstraction.Planet;
-import abstraction.Player;
-import abstraction.Resource;
+import testsSetup.GameTests;
 import abstraction.Resource.ResourceType;
-import abstraction.Unit;
 
 /**
  * @author William Gautier
  */
-public class AreaTest extends Tests {
+public class AreaTest extends GameTests {
 
 	private Player player;
 	private Planet abaddon;

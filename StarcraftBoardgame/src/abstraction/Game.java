@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import presentation.IHM;
 import presentation.text.TextIHM;
 import tools.PlanetEntrance;

@@ -6,10 +6,10 @@ import java.util.Set;
 import tools.PlanetEntrance;
 import abstraction.Galaxy;
 import abstraction.Order;
+import abstraction.Order.OrderType;
 import abstraction.Planet;
 import abstraction.Player;
 import abstraction.Unit;
-import abstraction.Order.OrderType;
 
 /**
  * @author William Gautier

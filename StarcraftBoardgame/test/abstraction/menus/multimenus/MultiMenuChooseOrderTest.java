@@ -1,4 +1,4 @@
-package menus;
+package abstraction.menus.multimenus;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
@@ -12,20 +12,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import presentation.text.TextIHM;
-import tests.Tests;
+import testsSetup.GameTests;
 import abstraction.Galaxy;
 import abstraction.Game;
 import abstraction.Order;
 import abstraction.Order.OrderType;
 import abstraction.Planet;
 import abstraction.Player;
-import abstraction.menus.multimenus.MultiMenuChooseOrder;
 import abstraction.menus.multimenus.states.MultiMenuChooseOrderChoices;
 
 /**
  * @author William Gautier
  */
-public class MultiMenuChooseOrderTest extends Tests {
+public class MultiMenuChooseOrderTest extends GameTests {
 
 	private Game game;
 	private Galaxy galaxy;

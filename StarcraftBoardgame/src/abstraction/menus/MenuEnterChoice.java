@@ -15,14 +15,14 @@ public abstract class MenuEnterChoice<T> extends Menu<T> {
 	private final EnterChoiceMenuName menuName;
 	private final Class<T> inputClass;
 
-	public MenuEnterChoice(EnterChoiceMenuName menuName, Player player, Class<T> inputClass, MultiMenu multimenu) {
+	public MenuEnterChoice(EnterChoiceMenuName menuName, Class<T> inputClass, Player player, MultiMenu multimenu) {
 		super(player, multimenu);
 		this.menuName = menuName;
 		this.inputClass = inputClass;
 	}
 
-	public MenuEnterChoice(EnterChoiceMenuName menuName, Player player, Class<T> inputClass) {
-		this(menuName, player, inputClass, null);
+	public MenuEnterChoice(EnterChoiceMenuName menuName, Class<T> inputClass, Player player) {
+		this(menuName, inputClass, player, null);
 	}
 
 	public EnterChoiceMenuName getMenuName() {

@@ -13,6 +13,8 @@ import abstraction.creators.RaceCreator;
 import abstraction.creators.UnitCreator;
 import abstraction.menus.MenuChooseFromList;
 import abstraction.menus.MenuChooseFromList.ChooseFromListMenuName;
+import abstraction.menus.MenuEnterChoice;
+import abstraction.menus.MenuEnterChoice.EnterChoiceMenuName;
 import abstraction.menus.MenuStaticChoices;
 import abstraction.menus.MenuStaticChoices.StaticChoice;
 import abstraction.menus.MenuStaticChoices.StaticChoicesMenuName;
@@ -95,20 +97,24 @@ public abstract class Factory {
 		return new Price(minerals, gas);
 	}
 
-	public abstract MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName, Player player, MultiMenu multiMenu);
-
-	public abstract MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName, Player player);
-
 	public abstract <T extends Comparable<? super T>> MenuChooseFromList<T> newMenuChooseFromList(
 			ChooseFromListMenuName menuName, Collection<T> listChoices, Player player, MultiMenu multiMenu);
-
-	public abstract MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName,
-			Collection<StaticChoice> disabledChoices, Player player, MultiMenu multiMenu);
 
 	public abstract <T extends Comparable<? super T>> MenuChooseFromList<T> newMenuChooseFromList(
 			ChooseFromListMenuName menuName, Collection<T> listChoices, Player player);
 
+	public abstract MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName, Player player, MultiMenu multiMenu);
+
+	public abstract MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName, Player player);
+
+	public abstract MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName,
+			Collection<StaticChoice> disabledChoices, Player player, MultiMenu multiMenu);
+
 	public abstract MenuStaticChoices newMenuStaticChoices(StaticChoicesMenuName menuName,
 			Collection<StaticChoice> disabledChoices, Player player);
 
+	public abstract <T> MenuEnterChoice<T> newMenuEnterChoice(EnterChoiceMenuName menuName, Class<T> inputClass, Player player,
+			MultiMenu multiMenu);
+
+	public abstract <T> MenuEnterChoice<T> newMenuEnterChoice(EnterChoiceMenuName menuName, Class<T> inputClass, Player player);
 }

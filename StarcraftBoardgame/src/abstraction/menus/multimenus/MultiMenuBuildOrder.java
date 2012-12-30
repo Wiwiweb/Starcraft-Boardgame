@@ -31,7 +31,7 @@ public class MultiMenuBuildOrder extends MultiMenu {
 		case 1:
 			break;
 		}
-		return menu;
+		return null;
 	}
 
 	@Override

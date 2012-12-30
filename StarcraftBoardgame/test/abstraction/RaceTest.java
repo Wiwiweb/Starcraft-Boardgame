@@ -1,4 +1,4 @@
-package tests;
+package abstraction;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -9,13 +9,13 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import abstraction.Race;
+import testsSetup.GameTests;
 import abstraction.Race.Ability;
 
 /**
  * @author William Gautier
  */
-public class RaceTest extends Tests {
+public class RaceTest extends GameTests {
 
 	private Race zerg;
 

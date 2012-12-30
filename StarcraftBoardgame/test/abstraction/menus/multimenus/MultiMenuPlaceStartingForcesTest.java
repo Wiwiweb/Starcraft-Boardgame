@@ -1,4 +1,4 @@
-package menus;
+package abstraction.menus.multimenus;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import presentation.text.TextIHM;
-import tests.Tests;
+import testsSetup.GameTests;
 import abstraction.Area;
 import abstraction.Galaxy;
 import abstraction.Game;
@@ -20,14 +20,13 @@ import abstraction.Planet;
 import abstraction.Player;
 import abstraction.Route;
 import abstraction.Unit;
-import abstraction.menus.multimenus.MultiMenuPlaceStartingForces;
 import abstraction.menus.multimenus.states.MultiMenuPlaceStartingForcesChoices;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
 /**
  * @author William Gautier
  */
-public class MultiMenuPlaceStartingForcesTest extends Tests {
+public class MultiMenuPlaceStartingForcesTest extends GameTests {
 
 	private Game game;
 	private Galaxy galaxy;

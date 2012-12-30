@@ -1,4 +1,4 @@
-package tests;
+package abstraction;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,18 +6,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import abstraction.Area;
-import abstraction.Building;
-import abstraction.Galaxy;
-import abstraction.Planet;
-import abstraction.Player;
-import abstraction.Unit;
+import testsSetup.GameTests;
 import abstraction.patterns.PlanetPattern.Cardinal;
 
 /**
  * @author William Gautier
  */
-public class CreatorTest extends Tests {
+public class CreatorTest extends GameTests {
 
 	@Test
 	public void testCreateBuilding() {

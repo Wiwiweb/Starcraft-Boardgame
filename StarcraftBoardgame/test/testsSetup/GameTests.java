@@ -1,4 +1,4 @@
-package tests;
+package testsSetup;
 
 import org.junit.BeforeClass;
 
@@ -10,7 +10,7 @@ import abstraction.Planet;
 import abstraction.patterns.PlanetPattern.Cardinal;
 import control.text.CFactory;
 
-public abstract class Tests {
+public abstract class GameTests {
 
 	protected static Factory factory;
 

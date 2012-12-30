@@ -13,13 +13,13 @@ public class CMenuEnterChoice<T> extends MenuEnterChoice<T> {
 
 	private final IPMenu<T> presentation;
 
-	public CMenuEnterChoice(EnterChoiceMenuName menuName, Player player, Class<T> inputClass, MultiMenu multimenu) {
-		super(menuName, player, inputClass, multimenu);
+	public CMenuEnterChoice(EnterChoiceMenuName menuName, Class<T> inputClass, Player player, MultiMenu multimenu) {
+		super(menuName, inputClass, player, multimenu);
 		presentation = new PMenuEnterChoice<T>(this, inputClass);
 	}
 
 	public CMenuEnterChoice(EnterChoiceMenuName menuName, Class<T> inputClass, Player player) {
-		this(menuName, player, inputClass, null);
+		this(menuName, inputClass, player, null);
 	}
 
 	@Override
